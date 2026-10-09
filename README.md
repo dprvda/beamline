@@ -13,8 +13,8 @@ AI agent workspaces, voice and trading screens) is at **[beamline.io](https://be
 ## Run it
 
 ```bash
-git clone https://github.com/dprvda/beamline-ui.git
-cd beamline-ui
+git clone https://github.com/dprvda/beamline.git
+cd beamline
 npm install
 npm run dev
 ```
