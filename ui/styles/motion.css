@@ -1,0 +1,112 @@
+/* Generated from ui/lib/motion-source.ts. Source: 8ab60d118806ef97b7b3727a1ad4199799ddd450; sha256: d4ef34634324582d3a7679b0d6427346a484c5c34b2405462260733d865e0573. */
+@layer theme {
+  .pui {
+    --pui-motion-in: max(1ms, calc(90ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-motion-out: max(1ms, calc(180ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-instant: max(1ms, calc(90ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-fast: max(1ms, calc(120ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-standard: max(1ms, calc(200ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-considered: max(1ms, calc(360ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-spring: max(1ms, calc(320ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-flash: max(1ms, calc(600ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-chart: max(1ms, calc(500ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-sweep: max(1ms, calc(600ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-page: max(1ms, calc(240ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-feedback: max(1ms, calc(160ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-duration-morph: max(1ms, calc(280ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-spring-snappy: max(1ms, calc(200ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-spring-smooth: max(1ms, calc(300ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-spring-morph: max(1ms, calc(300ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-spring-held: max(1ms, calc(320ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-ease-default: cubic-bezier(0.42, 0, 0.58, 1);
+    --pui-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+    --pui-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+    --pui-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+    --pui-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --pui-ease-exception: cubic-bezier(0.2, 0.8, 0.24, 1);
+    --pui-ease-chart: cubic-bezier(0.2, 0, 0, 1);
+    --pui-stagger-char: calc(12ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1));
+    --pui-stagger-word: calc(30ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1));
+    --pui-stagger-line: calc(60ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1));
+    --pui-stagger-item: calc(30ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1));
+    --pui-fade-in: max(1ms, calc(90ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-fade-out: max(1ms, calc(180ms * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)));
+    --pui-motion-travel: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pui {
+      --pui-motion-in: 1ms !important;
+      --pui-motion-out: 1ms !important;
+      --pui-duration-instant: 1ms !important;
+      --pui-duration-fast: 1ms !important;
+      --pui-duration-standard: 1ms !important;
+      --pui-duration-considered: 1ms !important;
+      --pui-duration-spring: 1ms !important;
+      --pui-duration-flash: 1ms !important;
+      --pui-duration-chart: 1ms !important;
+      --pui-duration-sweep: 1ms !important;
+      --pui-duration-page: 1ms !important;
+      --pui-duration-feedback: 1ms !important;
+      --pui-duration-morph: 1ms !important;
+      --pui-spring-snappy: 1ms !important;
+      --pui-spring-smooth: 1ms !important;
+      --pui-spring-morph: 1ms !important;
+      --pui-spring-held: 1ms !important;
+      --pui-stagger-char: 0ms !important;
+      --pui-stagger-word: 0ms !important;
+      --pui-stagger-line: 0ms !important;
+      --pui-stagger-item: 0ms !important;
+      --pui-motion-travel: 0 !important;
+    }
+  }
+  .pui[data-motion="reduced"] {
+    --pui-motion-in: 1ms !important;
+    --pui-motion-out: 1ms !important;
+    --pui-duration-instant: 1ms !important;
+    --pui-duration-fast: 1ms !important;
+    --pui-duration-standard: 1ms !important;
+    --pui-duration-considered: 1ms !important;
+    --pui-duration-spring: 1ms !important;
+    --pui-duration-flash: 1ms !important;
+    --pui-duration-chart: 1ms !important;
+    --pui-duration-sweep: 1ms !important;
+    --pui-duration-page: 1ms !important;
+    --pui-duration-feedback: 1ms !important;
+    --pui-duration-morph: 1ms !important;
+    --pui-spring-snappy: 1ms !important;
+    --pui-spring-smooth: 1ms !important;
+    --pui-spring-morph: 1ms !important;
+    --pui-spring-held: 1ms !important;
+    --pui-stagger-char: 0ms !important;
+    --pui-stagger-word: 0ms !important;
+    --pui-stagger-line: 0ms !important;
+    --pui-stagger-item: 0ms !important;
+    --pui-motion-travel: 0 !important;
+  }
+  .pui[data-motion="none"] {
+    --pui-motion-in: 1ms !important;
+    --pui-motion-out: 1ms !important;
+    --pui-duration-instant: 1ms !important;
+    --pui-duration-fast: 1ms !important;
+    --pui-duration-standard: 1ms !important;
+    --pui-duration-considered: 1ms !important;
+    --pui-duration-spring: 1ms !important;
+    --pui-duration-flash: 1ms !important;
+    --pui-duration-chart: 1ms !important;
+    --pui-duration-sweep: 1ms !important;
+    --pui-duration-page: 1ms !important;
+    --pui-duration-feedback: 1ms !important;
+    --pui-duration-morph: 1ms !important;
+    --pui-spring-snappy: 1ms !important;
+    --pui-spring-smooth: 1ms !important;
+    --pui-spring-morph: 1ms !important;
+    --pui-spring-held: 1ms !important;
+    --pui-stagger-char: 0ms !important;
+    --pui-stagger-word: 0ms !important;
+    --pui-stagger-line: 0ms !important;
+    --pui-stagger-item: 0ms !important;
+    --pui-motion-travel: 0 !important;
+    --pui-fade-in: 1ms !important;
+    --pui-fade-out: 1ms !important;
+  }
+}

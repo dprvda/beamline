@@ -1,0 +1,138 @@
+{
+  "name": "avatar",
+  "title": "Avatar",
+  "description": "A person or account in a small space: a photo, or initials on the hue their name always gets; presence dot; circle for people, square for companies.",
+  "kind": "component",
+  "category": "display",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [],
+  "tags": [
+    "person",
+    "initials",
+    "presence"
+  ],
+  "whenToUse": [
+    "People and accounts in lists, comments, menus and headers.",
+    "A presence mark next to a name (PresenceDot) where the status needs a glance, not a sentence."
+  ],
+  "notFor": [
+    "Brand logos in lists (an image in item)."
+  ],
+  "spec": {
+    "anatomy": [
+      "face: initials on the name's hue, or a photo",
+      "presence mark, cut out of the face (bottom inline-end)"
+    ],
+    "states": [
+      "initials",
+      "photo",
+      "photo failed (initials)",
+      "with presence"
+    ],
+    "keyboard": [
+      "Not focusable on its own"
+    ],
+    "motion": "None.",
+    "props": [
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "src",
+        "type": "string"
+      },
+      {
+        "name": "size",
+        "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\""
+      },
+      {
+        "name": "shape",
+        "type": "\"circle\" | \"square\""
+      },
+      {
+        "name": "status",
+        "type": "\"online\" | \"away\" | \"busy\" | \"offline\""
+      },
+      {
+        "name": "PresenceDot / hueOf / initialsOf",
+        "type": "exports"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native span; PresenceDot span"
+      },
+      {
+        "name": "classNames",
+        "type": "AvatarClassNames"
+      }
+    ],
+    "variants": {
+      "size": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "shape": [
+        "circle (people)",
+        "square (companies, workspaces)"
+      ],
+      "presence": [
+        "online: disc",
+        "away: crescent",
+        "busy: disc with a bar",
+        "offline: hollow ring"
+      ]
+    },
+    "scopeDefaults": {
+      "keys": [
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the visual root; typed classNames addresses documented closed internal parts. Public refs retain the actual native root."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "notes": [
+    "Nesting input (O1 §14.1, as Button): reads --pui-nest-radius / --pui-nest-inset from a parent and rounds to max(0, radius − inset); otherwise its own corner. --pui-avatar-radius (square faces; circles stay circles) overrides both."
+  ],
+  "visualContract": {
+    "version": 1,
+    "root": "avatar span",
+    "refTarget": "native span; PresenceDot span",
+    "slots": [
+      "root:avatar",
+      "face:avatar-face",
+      "photo:avatar-photo",
+      "presence:presence-dot"
+    ],
+    "states": [
+      "initials",
+      "photo",
+      "photo failed (initials)",
+      "with presence"
+    ],
+    "roles": [],
+    "geometryInputs": [
+      "size",
+      "shape"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/avatar"
+    ],
+    "features": []
+  }
+}

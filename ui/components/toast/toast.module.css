@@ -1,0 +1,164 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* The toast stack. Collapsed, the newest card sits at the edge and up to two older ones peek behind it as clipped
+   edges; pointing at or focusing the stack fans every card out at its own height. Cards arrive from the edge on
+   --pui-ease-drawer and leave by fading over --pui-motion-out; reduced motion makes both instant. */
+  .stack {
+    z-index: var(--pui-z-toast);
+    width: min(360px, calc(100% - 32px));
+    outline: none;
+  }
+  .stack[data-reduced] :is(.list, .toast, .body, .close) {
+    transition: none;
+  }
+  .fixed {
+    position: fixed;
+  }
+  .contained {
+    position: absolute;
+  }
+  .stack[data-position="bottom-right"] {
+    right: 16px;
+    bottom: 16px;
+  }
+  .stack[data-position="bottom-left"] {
+    left: 16px;
+    bottom: 16px;
+  }
+  .stack[data-position="bottom-center"] {
+    left: 50%;
+    bottom: 16px;
+    translate: -50% 0;
+  }
+  .stack[data-position="top-right"] {
+    right: 16px;
+    top: 16px;
+  }
+  .stack[data-position="top-left"] {
+    left: 16px;
+    top: 16px;
+  }
+  .stack[data-position="top-center"] {
+    left: 50%;
+    top: 16px;
+    translate: -50% 0;
+  }
+
+  .list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transition: height var(--pui-duration-considered) var(--pui-ease-drawer);
+  }
+
+  .toast {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    transform-origin: 50% 0;
+    transition:
+      transform var(--pui-duration-considered) var(--pui-ease-drawer),
+      opacity var(--pui-duration-standard) var(--pui-ease-default),
+      height var(--pui-duration-considered) var(--pui-ease-drawer);
+    touch-action: pan-y;
+    outline: none;
+  }
+  .stack[data-position^="top"] .toast {
+    bottom: auto;
+    top: 0;
+    transform-origin: 50% 100%;
+  }
+  .toast[data-leaving] {
+    opacity: 0;
+    transition-duration: var(--pui-motion-out);
+    pointer-events: none;
+  }
+  .toast[data-hidden] {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .toast[data-dragging] {
+    transition: none;
+  }
+
+  .card {
+    composes: m-overlay from global;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    border-radius: var(--pui-radius-card);
+    color: var(--pui-ink);
+  }
+  .toast:focus-visible .card {
+    outline: 2px solid var(--pui-focus-ring);
+    outline-offset: 2px;
+  }
+  .body {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--pui-space-2-5);
+    padding: var(--pui-space-3);
+    transition: opacity var(--pui-duration-standard) var(--pui-ease-default);
+  }
+  .toast[data-behind] .body {
+    opacity: 0;
+  }
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 1lh;
+    font-size: var(--pui-text-sm);
+    line-height: var(--pui-leading-body);
+  }
+  .icon :where(svg) {
+    width: 16px;
+    height: 16px;
+  }
+  .title {
+    font-size: var(--pui-text-sm);
+    font-weight: var(--pui-weight-medium);
+    line-height: var(--pui-leading-body);
+  }
+  .description {
+    margin-top: var(--pui-space-px);
+    color: var(--pui-ink-2);
+    font-size: var(--pui-text-xs);
+    line-height: 1.45;
+  }
+  /* dismiss: a small round button on the card's leading top corner, shown while the card is pointed at or focused */
+  .close {
+    composes: m-control from global;
+    position: absolute;
+    top: -7px;
+    inset-inline-start: -7px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: var(--pui-ink-3);
+    opacity: 0;
+    transition: opacity var(--pui-motion-out) var(--pui-ease-default);
+  }
+  .close:hover {
+    color: var(--pui-ink);
+  }
+  .toast:hover .close,
+  .toast:focus-within .close,
+  .close:focus-visible {
+    opacity: 1;
+    transition-duration: 0ms;
+  }
+  .toast[data-behind] .close {
+    display: none;
+  }
+  @media (hover: none) {
+    .close {
+      opacity: 1;
+    }
+  }
+}

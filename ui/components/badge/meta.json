@@ -1,0 +1,131 @@
+{
+  "name": "badge",
+  "title": "Badge",
+  "description": "A short status, category or count label: six tones, an icon or a status dot, two sizes.",
+  "kind": "component",
+  "category": "display",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "motion"
+  ],
+  "tags": [
+    "status",
+    "label",
+    "tag",
+    "pill",
+    "count"
+  ],
+  "whenToUse": [
+    "Short status, category or count labels next to content: Paid, Trial · 5 days, Beta, 12."
+  ],
+  "notFor": [
+    "Actions (button).",
+    "Removable values (tag-input or chip-group).",
+    "A number that changes live (slot-text inside your own label)."
+  ],
+  "spec": {
+    "anatomy": [
+      "root (span)",
+      "leading icon or status dot",
+      "text"
+    ],
+    "variants": {
+      "tone": [
+        "neutral",
+        "accent",
+        "success",
+        "warning",
+        "danger",
+        "info"
+      ],
+      "size": [
+        "sm",
+        "md"
+      ]
+    },
+    "states": [
+      "static"
+    ],
+    "keyboard": [
+      "Not focusable; it labels, it does not act."
+    ],
+    "motion": "None: badges sit in dense tables and must cost nothing.",
+    "props": [
+      {
+        "name": "tone",
+        "type": "\"neutral\" | \"accent\" | \"success\" | \"warning\" | \"danger\" | \"info\"",
+        "default": "\"neutral\"",
+        "description": "Semantic colour; pair it with a word or icon (colour is never the only signal)."
+      },
+      {
+        "name": "size",
+        "type": "\"sm\" | \"md\"",
+        "default": "\"md\"",
+        "description": "Height 20 / 22 px."
+      },
+      {
+        "name": "icon",
+        "type": "ReactNode",
+        "description": "A leading icon element."
+      },
+      {
+        "name": "dot",
+        "type": "boolean",
+        "description": "A leading status dot in the tone colour (instead of an icon)."
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native span"
+      },
+      {
+        "name": "classNames",
+        "type": "BadgeClassNames"
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "tone",
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the visual root; typed classNames addresses documented closed internal parts. Public refs retain the actual native root."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "notes": [
+    "Nesting input (O1 §14.1, as Button): reads --pui-nest-radius / --pui-nest-inset from a parent and rounds to max(0, radius − inset); otherwise its own corner. --pui-badge-radius overrides both."
+  ],
+  "visualContract": {
+    "version": 1,
+    "root": "badge span",
+    "refTarget": "native span",
+    "slots": [
+      "root:badge",
+      "dot:badge-dot"
+    ],
+    "states": [
+      "static"
+    ],
+    "roles": [
+      "m-tag"
+    ],
+    "geometryInputs": [
+      "size"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/badge"
+    ],
+    "features": []
+  }
+}

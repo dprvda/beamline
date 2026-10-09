@@ -1,0 +1,154 @@
+{
+  "name": "radio-cards",
+  "title": "Radio cards",
+  "description": "One choice among rich options as cards with optional media, icon, detail and a figure; one selection ring follows the stable choice.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-radio-group"
+  ],
+  "tags": [
+    "plans",
+    "choice",
+    "radio"
+  ],
+  "whenToUse": [
+    "Choosing one of a few rich options with a description or price.",
+    "Choosing one of a few image variants or output formats while keeping every option in a stable row.",
+    "The main choice of a form (a goal, a plan) as a field with its label, help and error."
+  ],
+  "notFor": [
+    "Short plain options (radio-group).",
+    "More than about five options (select)."
+  ],
+  "spec": {
+    "anatomy": [
+      "group visual root",
+      "card (m-control): optional media, head (icon tile, label, detail, radio mark = RadioGroup's m-toggle dot), figure",
+      "figure: closes a grid card under a line-soft seam (body face, tabular digits); inline-end in stacked rows",
+      "one measured selection ring (1.5px accent) that glides"
+    ],
+    "variants": {
+      "stacked": [
+        "false (side by side)",
+        "true (rows)"
+      ],
+      "layout": [
+        "grid (responsive cards)",
+        "stacked (rows)",
+        "row (one nonwrapping, horizontally scrollable row)"
+      ]
+    },
+    "states": [
+      "chosen (ring + filled mark)",
+      "other",
+      "hover (mark ring strengthens)",
+      "disabled (--pui-opacity-disabled)"
+    ],
+    "keyboard": [
+      "Tab enters the group",
+      "arrows move and choose",
+      "The selected card keeps its stable value and focus when the caller updates its media or labels."
+    ],
+    "motion": "The ring stretches toward the chosen card on both axes and gathers there: the edges on the side it travels lead and the others follow a beat later, critically damped, never overshooting. Reduced motion: it jumps.",
+    "props": [
+      {
+        "name": "cards",
+        "type": "{ value, label, media?, detail?, figure?, icon?, disabled? }[]"
+      },
+      {
+        "name": "value / defaultValue / onValueChange",
+        "type": "string"
+      },
+      {
+        "name": "stacked / cardWidth",
+        "type": "boolean / number",
+        "default": "false / 180"
+      },
+      {
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "name": "name / required / disabled",
+        "type": "form"
+      },
+      {
+        "name": "layout",
+        "type": "\"grid\" | \"stacked\" | \"row\"",
+        "description": "Explicit layout wins the existing stacked shorthand. Row preserves source order and uses cardWidth or the inherited card-width token."
+      },
+      {
+        "name": "classNames",
+        "type": "RadioCardsClassNames",
+        "description": "Visual parts: root, item, media, head, icon, text, label, detail, mark, figure and ring. Styling does not replace radio semantics or indicator measurement."
+      },
+      {
+        "name": "style",
+        "type": "CSSProperties",
+        "description": "The visual root; inherited --pui-radio-cards-card-width controls responsive sizing unless cardWidth is explicit."
+      },
+      {
+        "name": "field / hideLabel / description / error",
+        "type": "boolean / ReactNode",
+        "description": "A form field: label above, help or error below, on whenever the label shows; hideLabel for a view switch or quick filter (the label stays the accessible name). name submits with a native form."
+      }
+    ]
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "radio-cards (the radiogroup visual root)",
+    "refTarget": "Internal group measurement; no public ref is exposed.",
+    "slots": [
+      "root",
+      "item",
+      "media",
+      "head",
+      "icon",
+      "text",
+      "label",
+      "detail",
+      "mark",
+      "figure",
+      "ring"
+    ],
+    "states": [
+      "data-state=checked|unchecked on each item",
+      "disabled",
+      "hover",
+      "focus-visible",
+      "data-layout=grid|stacked|row"
+    ],
+    "roles": [
+      "m-control"
+    ],
+    "geometryInputs": [
+      "cardWidth",
+      "--pui-radio-cards-card-width",
+      "--pui-radius-card",
+      "--pui-radius-control"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/radio-cards"
+    ],
+    "features": []
+  },
+  "notes": "Foundations exception (O1 §14.2 geometry): the selection ring is a 1.5px accent mark drawn inside the card edge (DESIGN: selection = tint/edge + mark); a line width, not a scale step. Corner nesting exception: the radio mark is a circle in every look and at every roundness (it is RadioGroup's own indicator, a shape with meaning), so it does not follow the card's corner; it sits inside the card padding.",
+  "usage": [
+    {
+      "name": "As a form field",
+      "code": "<RadioCards\n  label=\"Main goal\"\n  required\n  value={goal}\n  onValueChange={setGoal}\n  description=\"We plan the first four weeks around it.\"\n  error={submitted && !goal ? \"Choose the goal that matters most.\" : undefined}\n  cards={[\n    { value: \"fat\", label: \"Lose fat\", detail: \"Steady deficit, keep strength\", icon: <Flame /> },\n    { value: \"muscle\", label: \"Build muscle\", detail: \"Progressive overload\", icon: <Dumbbell /> },\n  ]}\n/>"
+    }
+  ]
+}

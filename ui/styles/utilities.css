@@ -1,0 +1,688 @@
+/* ui/styles/utilities.css — the system's shared motion, interaction and texture utilities, restored from the legacy
+   bricks (legacy/landing-sites/primitives/general/*) onto this system's tokens. Plain classes, no JS; each one encodes a
+   rule that is easy to get subtly wrong by hand. Component CSS modules keep their own rules; these are for app code,
+   blocks and new components. Class rules sit in @layer components, so a Tailwind utility on the same element wins. */
+
+/* ── keyframes ─────────────────────────────────────────────────────────────────────────────────────────────────
+   Named so they do not collide with Tailwind (spin, ping, pulse, bounce) or the Beautiful UI vendor sheet (fade-in,
+   fade-up, pop-in). Every one is also an animate-* utility (theme.css). Loops are for a state that ends (loading,
+   live) and die under reduced motion at the bottom of this file. */
+@keyframes pui-enter-fade {
+  from {
+    opacity: 0;
+  }
+}
+/* --pui-motion-travel is 0 under reduced motion, so these entrances and the scale exit stay fades (motion.css). */
+@keyframes pui-enter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(4px * var(--pui-motion-travel, 1)));
+  }
+}
+@keyframes pui-enter-scale {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-6px * var(--pui-motion-travel, 1))) scale(calc(1 - 0.03 * var(--pui-motion-travel, 1)));
+  }
+}
+@keyframes pui-exit-fade {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pui-exit-scale {
+  to {
+    opacity: 0;
+    transform: translateY(calc(-6px * var(--pui-motion-travel, 1))) scale(calc(1 - 0.03 * var(--pui-motion-travel, 1)));
+  }
+}
+@keyframes pui-slide-in-top {
+  from {
+    transform: translateY(-100%);
+  }
+}
+@keyframes pui-slide-in-bottom {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes pui-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes pui-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+/* Radix accordion/collapsible publish their content height; these animate to it. */
+@keyframes pui-accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height, auto);
+  }
+}
+@keyframes pui-accordion-up {
+  from {
+    height: var(--radix-accordion-content-height, auto);
+  }
+  to {
+    height: 0;
+  }
+}
+@keyframes pui-collapsible-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height, auto);
+  }
+}
+@keyframes pui-collapsible-up {
+  from {
+    height: var(--radix-collapsible-content-height, auto);
+  }
+  to {
+    height: 0;
+  }
+}
+/* The skeleton sheen: the shimmer's gradient (220% wide, sliding from 150% to -50%) on a layer three tiles wide that moves
+   with transform, so the compositor animates it and nothing repaints per frame. Same travel and speed as pui-shimmer. */
+@keyframes pui-sheen {
+  from {
+    transform: translateX(-60.6061%);
+  }
+  to {
+    transform: translateX(-24.2424%);
+  }
+}
+@keyframes pui-shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+@keyframes pui-pulse-soft {
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes pui-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes pui-sr-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pui-sr-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* The four edges of an indicator that follows a choice (useIndicator), registered so each can travel on its own. */
+@property --pui-glide-l {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --pui-glide-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --pui-glide-t {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --pui-glide-b {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@layer components {
+  .sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background-color: var(--pui-hover);
+  }
+  .sheen::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 660%;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--pui-hover) 0%, var(--pui-hover-2) 45%, var(--pui-hover) 90%) 0 0 /
+      calc(100% / 3) 100% repeat-x;
+    animation: pui-sheen calc(1.6s * var(--pui-motion-look, 1) * var(--pui-motion-scale, 1)) linear infinite;
+    /* SkeletonBlock and SkeletonGroup set it from their visibility; a group's shapes may sit at any depth (a bar list's
+       rows keep their real structure while loading), and the custom property reaches them all */
+    animation-play-state: var(--pui-sheen-play, running);
+  }
+  .sheen[data-still]::after,
+  [data-skeleton-group][data-still] .sheen::after,
+  [data-motion="reduced"] .sheen::after,
+  [data-motion="none"] .sheen::after {
+    animation: none;
+    transform: translateX(-33.3333%); /* the shimmer's resting position (0%): a tile starts at the left edge */
+  }
+  /* ── .ix — the hover / press baseline for any clickable thing (legacy interaction-states) ───────────────────
+     Hover is the highest-frequency interaction on a screen, so it arrives at 0ms and leaves over --pui-motion-out; the
+     asymmetry lives in the selector. A press is acknowledged at 0ms and released over --pui-motion-out. Focus is never in
+     the transition list: it is discrete (base.css). Min 24px so a control that animates can also be hit. */
+  .ix {
+    min-block-size: var(--pui-hit-min);
+    min-inline-size: var(--pui-hit-min);
+    transition:
+      background-color var(--pui-motion-out) var(--pui-ease-default),
+      border-color var(--pui-motion-out) var(--pui-ease-default),
+      color var(--pui-motion-out) var(--pui-ease-default),
+      transform var(--pui-motion-out) var(--pui-ease-default);
+  }
+  .ix:hover {
+    transition-duration: 0ms;
+  }
+  .ix:active {
+    transform: scale(var(--pui-press-scale));
+    transition-duration: 0ms;
+  }
+
+  /* ── .disclosure-panel — animate to the content's own height with no measuring (legacy disclosure-0fr) ───────
+     A one-row grid going 0fr → 1fr is a height animation that never reads the DOM. Open with [data-open], with
+     [aria-expanded="true"] on the immediately preceding button, or inside <details open>. visibility is transitioned
+     too, so a closed panel's links are out of the Tab order and the screen reader. The single child is the clip: both
+     its declarations are load-bearing (drop either and nothing collapses, silently). */
+  .disclosure-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--pui-motion-out) var(--pui-ease-default),
+      visibility var(--pui-motion-out) var(--pui-ease-default);
+  }
+  [aria-expanded="true"] + .disclosure-panel,
+  .disclosure-panel[data-open],
+  details[open] > .disclosure-panel {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition-duration: var(--pui-motion-in);
+  }
+  .disclosure-panel > * {
+    overflow: hidden;
+    min-block-size: 0;
+  }
+  /* ── .enter-grow — a part that arrives by growing to its own height (a reasoning step, a "+3 more" line), so what
+     sits below glides instead of jumping a row. The disclosure's one-row grid again, going 0fr → 1fr from
+     @starting-style; the single child is the clip, which keeps a few pixels of margin so hover tints and focus rings
+     past the row's edge still show. Put it only on parts that arrive while the person watches, not on history. */
+  .enter-grow {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows var(--pui-duration-morph) var(--pui-ease-default);
+  }
+  @starting-style {
+    .enter-grow {
+      grid-template-rows: 0fr;
+    }
+  }
+  .enter-grow > * {
+    overflow: clip;
+    overflow-clip-margin: var(--pui-space-2);
+    min-block-size: 0;
+  }
+  .disclosure-mark {
+    transition: rotate var(--pui-motion-out) var(--pui-ease-default);
+  }
+  [aria-expanded="true"] .disclosure-mark,
+  [data-open] > * > .disclosure-mark,
+  details[open] .disclosure-mark {
+    rotate: 90deg;
+    transition-duration: 0ms;
+  }
+
+  /* ── .overlay-anim — enter AND exit on an element that goes display:none, no JS (legacy overlay-enter-exit) ───
+     Works on [popover], <dialog> and any element with [data-open] (add .overlay-plain for that path). The base rule is
+     the exit (--pui-motion-out); the open state is the arrival (--pui-motion-in). allow-discrete keeps the element on screen
+     while it fades; @starting-style gives the arrival a "from". .overlay-scrim adds a backdrop, for modal layers only. */
+  .overlay-anim {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+    transition:
+      opacity var(--pui-motion-out) var(--pui-ease-default),
+      transform var(--pui-motion-out) var(--pui-ease-default),
+      overlay var(--pui-motion-out) allow-discrete,
+      display var(--pui-motion-out) allow-discrete;
+  }
+  .overlay-anim:popover-open,
+  .overlay-anim[open],
+  .overlay-anim[data-open] {
+    opacity: 1;
+    transform: none;
+    transition-duration: var(--pui-motion-in);
+  }
+  @starting-style {
+    .overlay-anim:popover-open,
+    .overlay-anim[open],
+    .overlay-anim[data-open] {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.97);
+    }
+  }
+  .overlay-plain {
+    display: none;
+  }
+  .overlay-plain[data-open] {
+    display: block;
+  }
+  .overlay-scrim::backdrop {
+    background-color: transparent;
+    transition:
+      background-color var(--pui-motion-out) var(--pui-ease-default),
+      overlay var(--pui-motion-out) allow-discrete,
+      display var(--pui-motion-out) allow-discrete;
+  }
+  .overlay-scrim:popover-open::backdrop,
+  .overlay-scrim[open]::backdrop {
+    background-color: var(--pui-scrim);
+    backdrop-filter: blur(var(--pui-blur-overlay));
+    transition-duration: var(--pui-motion-in);
+  }
+  @starting-style {
+    .overlay-scrim:popover-open::backdrop,
+    .overlay-scrim[open]::backdrop {
+      background-color: transparent;
+    }
+  }
+
+  /* ── .sr-fade / .sr-wipe — a reveal that is a pure function of scroll position (legacy scroll-reveal) ─────────
+     No observer, no fired-once class: scroll back and the approach state returns. The served state is the final one;
+     the approach exists only inside the guard, so an engine without view timelines (which would otherwise play it once
+     on load) and reduced motion both get plain visible content. Longhands only: the `animation` shorthand resets the
+     timeline. At most one reveal per screenful, never in the first one, and never fade-and-rise. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .sr-fade,
+      .sr-wipe {
+        animation-timing-function: linear;
+        animation-fill-mode: backwards;
+        animation-timeline: view();
+        animation-range: var(--sr-range, entry 15% entry 65%);
+      }
+      .sr-fade {
+        animation-name: pui-sr-fade;
+      }
+      .sr-wipe {
+        animation-name: pui-sr-wipe;
+      }
+    }
+  }
+
+  /* ── hit targets (legacy focus-hit) ─────────────────────────────────────────────────────────────────────────────
+     Hit-testing uses the element's own border box; painting a bigger pseudo does not help unless it is positioned
+     inside a positioned element. .hit grows the real box; .hit-tight gives the growth back to the layout in dense rows;
+     .hit-bleed extends a control whose drawn size is the design (set --pui-h to its drawn height). Never put
+     pointer-events: none on the bleed. Measure by walking elementFromPoint outward, not by reading computed style. */
+  .hit {
+    display: inline-flex;
+    min-inline-size: var(--pui-hit-min);
+    min-block-size: var(--pui-hit-min);
+    align-items: center;
+    justify-content: center;
+  }
+  .hit-tight {
+    margin: -6px -5px;
+  }
+  .hit-bleed {
+    position: relative;
+  }
+  .hit-bleed::before {
+    content: "";
+    position: absolute;
+    inset-block: calc((var(--pui-hit-min) - var(--pui-h, 16px)) / -2);
+    inset-inline: 0;
+  }
+
+  /* ── keyboard mode — opt in with data-kbd="on" on the root once a Tab keydown is seen ────────────────────────── */
+  [data-kbd="on"] :is(button, input, textarea, select, a, summary, [tabindex]):focus-visible {
+    outline: var(--pui-focus-width) solid var(--pui-focus-ring-kbd);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--pui-focus-ring-kbd-halo);
+  }
+
+  /* ── .grain — static film grain (legacy static-grain) ────────────────────────────────────────────────────────────
+     Fixed over the page by default; .grain--local inside a .grain-host clips it to one surface. Never a hit target,
+     never animated (animated grain repaints the page every frame), gone in forced colours and print. */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: var(--pui-z-sticky);
+    background-image: var(--pui-grain-tile);
+    background-size: var(--pui-grain-tile-size) var(--pui-grain-tile-size);
+    opacity: var(--pui-grain-opacity);
+    mix-blend-mode: var(--pui-grain-blend);
+    pointer-events: none;
+  }
+  .grain--local {
+    position: absolute;
+    z-index: auto;
+    border-radius: inherit;
+  }
+  .grain-host {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* ── unmeasured — data that was never collected: hatched, never a zero, never the cold end of a ramp ──────────── */
+  .unmeasured {
+    background-color: var(--pui-unmeasured);
+    background-image: var(--pui-unmeasured-hatch);
+  }
+  .unmeasured-fill {
+    fill: var(--pui-unmeasured);
+  }
+  .unmeasured-key {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pui-space-1-5);
+    font-size: var(--pui-text-2xs);
+    color: var(--pui-ink-3);
+  }
+  .unmeasured-key::before {
+    content: "";
+    inline-size: 1.5rem;
+    block-size: 0.75rem;
+    flex: none;
+    border-radius: 2px;
+    background-color: var(--pui-unmeasured);
+    background-image: var(--pui-unmeasured-hatch);
+  }
+
+  /* An indicator that follows a choice: a segmented thumb, a tab's pill or line, the ring of radio cards. Placed by
+     glideProps() (use-indicator.ts); its edges move separately, the one on the side it is heading leads and the other
+     follows a beat later, so it stretches toward the new choice and gathers there. Critically damped, no overshoot;
+     with reduced motion every duration and the beat are 1ms. .glide moves along x; .glide-2d along both axes. */
+  .glide {
+    --glide-even: var(--pui-duration-standard) var(--pui-ease-standard);
+    --glide-lead: calc(var(--pui-duration-standard) * 1.1) var(--pui-ease-out-strong);
+    --glide-trail: calc(var(--pui-duration-standard) * 1.5) var(--pui-ease-standard)
+      calc(var(--pui-duration-standard) * 0.35);
+    --glide-l: var(--glide-even);
+    --glide-r: var(--glide-even);
+    --glide-t: var(--glide-even);
+    --glide-b: var(--glide-even);
+    left: 0; /* offsetLeft is measured from the left in both directions */
+    width: calc(var(--pui-glide-r) - var(--pui-glide-l));
+    transform: translateX(var(--pui-glide-l));
+  }
+  .glide-2d {
+    top: 0;
+    height: calc(var(--pui-glide-b) - var(--pui-glide-t));
+    transform: translate(var(--pui-glide-l), var(--pui-glide-t));
+  }
+  .glide[data-ready] {
+    transition:
+      --pui-glide-l var(--glide-l),
+      --pui-glide-r var(--glide-r),
+      --pui-glide-t var(--glide-t),
+      --pui-glide-b var(--glide-b);
+  }
+  .glide[data-glide-x="right"] {
+    --glide-r: var(--glide-lead);
+    --glide-l: var(--glide-trail);
+  }
+  .glide[data-glide-x="left"] {
+    --glide-l: var(--glide-lead);
+    --glide-r: var(--glide-trail);
+  }
+  .glide[data-glide-y="down"] {
+    --glide-b: var(--glide-lead);
+    --glide-t: var(--glide-trail);
+  }
+  .glide[data-glide-y="up"] {
+    --glide-t: var(--glide-lead);
+    --glide-b: var(--glide-trail);
+  }
+
+  /* A meter's track (progress, bar list, usage): whole, unless the look cuts it into segments like a row of LEDs
+     (metal); the unlit segments stay visible, the lit ones carry the value. */
+  .meter {
+    mask: var(--pui-meter-mask);
+  }
+
+  /* Data marks follow the look through tokens: line weight (--pui-chart-stroke), arc ticks (--pui-arc-mask), and the
+     two finishes in ui/lib/look-filters.ts (glow's light on solid marks and lines, mono's dot grid on soft fills).
+     Colours stay the encoding. */
+  :where([data-marks]) {
+    filter: var(--pui-data-filter);
+  }
+  :where([data-marks-line]) {
+    filter: var(--pui-data-line-filter, var(--pui-data-filter));
+    stroke-width: var(--pui-chart-stroke);
+  }
+  /* a donut's arcs: whole, unless the look cuts them into radial ticks around the chart's centre (mono) */
+  :where([data-marks-arc]) {
+    mask-image: var(--pui-arc-mask);
+    mask-origin: view-box;
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+  }
+  :where([data-marks-fill]) {
+    filter: var(--pui-data-fill-filter, none);
+    /* a look may shade fills its own way (ink: hatching in the series' colour) */
+    mask: var(--pui-fill-mask, none);
+  }
+
+  /* The page of the look in force (its colour and pattern: pop's dot grid, glass's aurora), for a region that stands
+     in for the page: an app shell that is not <html>, a preview frame. */
+  .look-page {
+    background: var(--pui-page-pattern), var(--pui-page);
+  }
+  /* A stage an example sits on (a gallery preview, a docs frame): a quiet dot field by default; a look puts its own
+     page there (glass's light field, metal's plate, blueprint's grid), so an example is judged in the look's world. */
+  .look-stage {
+    background: var(--pui-stage-pattern), var(--pui-stage);
+    box-shadow: var(--pui-stage-edge, var(--m-surface-edge));
+  }
+  /* App chrome beside the page (a sidebar, a rail): the canvas, unless the look makes it a frosted pane over the
+     look's page (glass). */
+  .look-chrome {
+    background: var(--pui-chrome, var(--pui-canvas));
+    backdrop-filter: var(--pui-chrome-blur, none);
+    /* text that sets no colour of its own takes the chrome's ink, not the page's (ink prints the chrome reversed) */
+    color: var(--pui-ink);
+  }
+
+  /* ── type roles ──────────────────────────────────────────────────────────────────────────────────────────────────
+     Size + weight + leading + tracking as one decision, named by job (Geist-style, on our dense product scale). Colour
+     is left to the ink tokens: pair caption and overline with --pui-ink-3, body with --pui-ink or --pui-ink-2. The Tailwind text-*
+     sizes still exist for one-off adjustments; reach for a role first. */
+  /* A highlighted word inside a heading or a sentence: a soft accent tint by default; a look may turn it into a
+     sticker (pop: a tilted lemon label with an outline and a lip) or write it in light (glow: spectrum ink). */
+  .text-mark {
+    display: inline-block;
+    padding-inline: 0.16em;
+    border-radius: var(--pui-mark-radius);
+    background: var(--pui-mark-bg);
+    background-clip: var(--pui-mark-clip);
+    color: var(--pui-mark-ink);
+    /* a look may set the word in another face (prism: a serif italic of white light) */
+    font-family: var(--pui-mark-font, inherit);
+    font-style: var(--pui-mark-style, inherit);
+    font-weight: var(--pui-mark-weight, inherit);
+    box-shadow: var(--m-tag-edge, 0 0 0 0 transparent), var(--pui-mark-lip);
+    filter: var(--pui-mark-filter);
+    rotate: var(--pui-mark-tilt);
+  }
+  .text-display {
+    font-family: var(--pui-font-display);
+    font-stretch: var(--pui-heading-stretch);
+    font-size: var(--pui-text-4xl);
+    font-weight: var(--pui-weight-title);
+    line-height: var(--pui-leading-display);
+    letter-spacing: var(--pui-tracking-display);
+    text-wrap: balance;
+  }
+  .text-title {
+    font-family: var(--pui-font-display);
+    font-stretch: var(--pui-heading-stretch);
+    font-size: var(--pui-text-3xl);
+    font-weight: var(--pui-weight-title);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .text-heading {
+    font-family: var(--pui-font-display);
+    font-stretch: var(--pui-heading-stretch);
+    font-size: var(--pui-text-xl);
+    font-weight: var(--pui-weight-title);
+    line-height: var(--pui-leading-heading);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .text-subheading {
+    font-family: var(--pui-font-heading);
+    font-size: var(--pui-text-lg);
+    font-weight: var(--pui-weight-medium);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+  .text-body {
+    font-size: var(--pui-text-base);
+    font-weight: var(--pui-weight-regular);
+    line-height: var(--pui-leading-body);
+    letter-spacing: var(--pui-tracking-body);
+    text-wrap: pretty;
+  }
+  /* long-form reading: an answer, a doc, an editor's body. Never product chrome (that is .text-body 14). */
+  .text-reading {
+    font-size: var(--pui-text-reading);
+    font-weight: var(--pui-weight-regular);
+    line-height: var(--pui-leading-reading);
+    letter-spacing: var(--pui-tracking-body);
+    text-wrap: pretty;
+  }
+  .text-body-sm {
+    font-size: var(--pui-text-sm);
+    font-weight: var(--pui-weight-regular);
+    line-height: var(--pui-leading-body);
+    letter-spacing: var(--pui-tracking-body);
+    text-wrap: pretty;
+  }
+  .text-label {
+    font-size: var(--pui-text-sm);
+    font-weight: var(--pui-weight-medium);
+    line-height: var(--pui-leading-tight);
+  }
+  .text-caption {
+    font-size: var(--pui-text-xs);
+    font-weight: var(--pui-weight-regular);
+    line-height: 1.4;
+  }
+  .text-overline {
+    font-family: var(--pui-font-label);
+    font-size: var(--pui-text-2xs);
+    font-weight: var(--pui-weight-medium);
+    line-height: var(--pui-leading-tight);
+    letter-spacing: var(--pui-tracking-eyebrow);
+    text-transform: uppercase;
+  }
+  .text-numeric {
+    font-family: var(--pui-font-numeric);
+    font-size: var(--pui-text-sm);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+  .text-code {
+    font-family: var(--pui-font-code);
+    font-size: var(--pui-text-code);
+    line-height: 1.55;
+    letter-spacing: 0;
+  }
+
+  /* ── type helpers ────────────────────────────────────────────────────────────────────────────────────────────── */
+  .eyebrow {
+    font-family: var(--pui-font-label);
+    font-size: var(--pui-text-2xs);
+    font-weight: var(--pui-weight-medium);
+    line-height: var(--pui-leading-tight);
+    letter-spacing: var(--pui-tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--pui-ink-3);
+  }
+  .eyebrow--mono {
+    font-family: var(--pui-font-code);
+    letter-spacing: var(--pui-tracking-mono-caps);
+  }
+  .measure {
+    max-inline-size: var(--pui-measure);
+  }
+  /* dense table cells: a fragment, not prose. Ellipsis, and put the full value in a tooltip or title. */
+  .cell-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── .fg-auto — text colour computed from the ground where the browser can; ink where it cannot ─────────────── */
+  .fg-auto {
+    color: var(--pui-ink);
+  }
+  @supports (color: contrast-color(red)) {
+    .fg-auto {
+      color: contrast-color(var(--fg-auto-ground, var(--pui-surface)));
+    }
+  }
+
+  /* ── .glass — overlays only, static blur only; every glass surface has an opaque twin ───────────────────────── */
+  .glass {
+    background: color-mix(in oklab, var(--pui-surface-2) 72%, transparent);
+    backdrop-filter: blur(var(--pui-blur-glass)) saturate(1.2);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--pui-surface-2);
+    backdrop-filter: none;
+  }
+}
+
+/* Reduced motion: decorative loops die entirely; the one-shot entrances resolve instantly through the 1ms tokens. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer,
+  .sheen::after,
+  .animate-pulse-soft,
+  .animate-marquee {
+    animation: none;
+  }
+}
+@media (forced-colors: active) {
+  .grain {
+    display: none;
+  }
+}
+@media print {
+  .grain {
+    display: none;
+  }
+}

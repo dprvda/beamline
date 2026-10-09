@@ -1,0 +1,130 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  .focusTarget:focus-visible {
+    outline: 2px solid var(--pui-focus-ring);
+    outline-offset: 4px;
+    border-radius: var(--pui-radius-control);
+  }
+  .root {
+    container-type: inline-size;
+    /* one column for the form, the tab row and the save bar: 720 wide, the same inline padding everywhere */
+    --_column: 720px;
+    --_gutter: var(--pui-space-4);
+  }
+  @container (min-width: 560px) {
+    .layout {
+      --_gutter: var(--pui-space-8);
+    }
+  }
+  .layout {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .root[data-navigation="none"] .layout {
+    grid-template-rows: minmax(0, 1fr);
+  }
+  /* navigation none: the host's page routes the sections and owns the page, so the form starts at the page's own left
+     edge with no gutter of its own (trial t27: a centred 720 column in a wide page left a gap on the left) */
+  .root[data-navigation="none"] .column {
+    margin-inline: 0;
+    padding-inline: 0;
+    padding-top: 0;
+    /* no room kept for the save bar (t28: a 112 px gap under the form at rest); the bar takes its own when it shows */
+    padding-bottom: var(--pui-space-2);
+  }
+  .root[data-navigation="none"] .saveBar {
+    justify-content: flex-start;
+    margin-block-start: 0;
+    padding-inline: 0;
+  }
+  .root[data-navigation="none"] .bar {
+    max-width: var(--_column);
+  }
+  .column {
+    display: flex;
+    max-width: var(--_column);
+    flex-direction: column;
+    gap: var(--pui-space-6);
+    margin-inline: auto;
+    padding: var(--pui-space-5) var(--_gutter) calc(var(--pui-space-24) + var(--pui-space-4));
+  }
+  @container (min-width: 560px) {
+    .column {
+      padding-top: var(--pui-space-8);
+    }
+  }
+  .navigation {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border-block-end: 1px solid var(--pui-line-soft);
+    padding: var(--pui-space-3);
+  }
+  .heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--pui-space-1) var(--pui-space-3);
+    padding: 0 var(--pui-space-2) var(--pui-space-2);
+  }
+  /* tab row: its heading and items start where the form's text starts (the item's own padding sits in the gutter) */
+  .root[data-navigation="tabs"] .navigation {
+    padding-inline: 0;
+  }
+  .root[data-navigation="tabs"] .heading {
+    width: 100%;
+    max-width: var(--_column);
+    margin-inline: auto;
+    padding: var(--pui-space-2) var(--_gutter) var(--pui-space-3);
+  }
+  .root[data-navigation="tabs"] .items {
+    width: 100%;
+    max-width: var(--_column);
+    margin-inline: auto;
+    padding-inline: calc(var(--_gutter) - var(--pui-space-3));
+  }
+  .items {
+    display: flex;
+    gap: var(--pui-space-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+  }
+  .items::-webkit-scrollbar {
+    display: none;
+  }
+  .items:dir(rtl) {
+    mask-image: linear-gradient(to left, #000 calc(100% - 24px), transparent);
+  }
+  .saveBar {
+    pointer-events: none;
+    position: sticky;
+    bottom: calc(var(--pui-space-4) + env(safe-area-inset-bottom));
+    z-index: var(--pui-z-raised);
+    display: flex;
+    justify-content: center;
+    /* the bar floats over the column's bottom padding instead of adding its own height under the form */
+    margin-block-start: calc(-1 * var(--pui-space-20));
+    padding-inline: var(--_gutter);
+    padding-block-end: var(--pui-space-4);
+  }
+  .bar {
+    max-width: calc(var(--_column) - 2 * var(--_gutter));
+  }
+  @container (min-width: 760px) {
+    .root[data-navigation="rail"] .layout {
+      grid-template-columns: 220px minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+    }
+    .root[data-navigation="rail"] .navigation {
+      border-inline-end: 1px solid var(--pui-line-soft);
+      border-block-end: 0;
+    }
+    .root[data-navigation="rail"] .items {
+      flex-direction: column;
+      mask-image: none;
+    }
+  }
+}

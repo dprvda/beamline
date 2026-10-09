@@ -1,0 +1,134 @@
+{
+  "name": "input",
+  "title": "Input",
+  "description": "A single-line text field with its label, help and error wired for assistive tech, three sizes and adornments.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "motion"
+  ],
+  "tags": [
+    "text field",
+    "form",
+    "email",
+    "url"
+  ],
+  "whenToUse": [
+    "Single-line text entry with label, description and error."
+  ],
+  "notFor": [
+    "Numbers with steps (number-field). Passwords (password-field). Searching (search-field)."
+  ],
+  "spec": {
+    "anatomy": [
+      "label (visible or for assistive tech only)",
+      "field frame (fill, 3:1 edge, focus halo, invalid and disabled states)",
+      "leading / trailing adornments",
+      "control",
+      "description or error (linked with aria-describedby / aria-errormessage)"
+    ],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "states": [
+      "rest (placeholder ink-3)",
+      "hover (ring-hover, arrives at once)",
+      "focus (the field role's focus edge; never animated)",
+      "filled",
+      "working (caller-run async check: Spinner sm in the trailing slot, the field stays editable)",
+      "resolved (caller's words and an optional trailing check; no animation)",
+      "invalid (error replaces the description: red edge via role inputs, icon and words; value kept)",
+      "read-only (transparent fill, ring kept, value selectable)",
+      "disabled (--pui-opacity-disabled, same in every look)"
+    ],
+    "keyboard": [
+      "Native text editing; Tab moves on"
+    ],
+    "motion": "Edge and halo change at once on focus (focus is never animated); hover arrives at 0ms and leaves over --pui-motion-out.",
+    "props": [
+      {
+        "name": "label",
+        "type": "ReactNode",
+        "required": true
+      },
+      {
+        "name": "hideLabel",
+        "type": "boolean"
+      },
+      {
+        "name": "description",
+        "type": "ReactNode"
+      },
+      {
+        "name": "error",
+        "type": "ReactNode",
+        "description": "The problem and its fix; marks the field invalid."
+      },
+      {
+        "name": "size",
+        "type": "\"sm\" | \"md\" | \"lg\"",
+        "default": "\"md\""
+      },
+      {
+        "name": "leading / trailing",
+        "type": "ReactNode",
+        "description": "An icon, unit or prefix inside the frame."
+      },
+      {
+        "name": "...input attributes",
+        "type": "InputHTMLAttributes"
+      }
+    ],
+    "appearance": "Managed appearance changes preserve mounted controls and operational state. Instance design props override scoped defaults; classNames addresses documented slots. 0.2: style moves from native input to visual root; use classNames.input for native input styling. ref and native attributes continue addressing the input."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "field wrapper (data-slot=field)",
+    "refTarget": "native input",
+    "slots": [
+      "root:field",
+      "label:label",
+      "frame:field-control",
+      "input:input",
+      "leading:field-adornment",
+      "trailing:field-adornment",
+      "description:field-description",
+      "error:field-error"
+    ],
+    "states": [
+      "rest",
+      "hover",
+      "focus",
+      "filled",
+      "invalid (error)",
+      "disabled",
+      "read-only"
+    ],
+    "roles": [
+      "m-field"
+    ],
+    "geometryInputs": [
+      "--pui-field-radius",
+      "size"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/input"
+    ],
+    "features": []
+  }
+}

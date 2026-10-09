@@ -1,0 +1,130 @@
+{
+  "name": "tag-input",
+  "title": "Tag input",
+  "description": "Short free-form values as tags: Enter, comma or Tab adds, a pasted list adds them all, Backspace twice removes the last; duplicates and invalid values are said, not dropped silently.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "lucide-react"
+  ],
+  "tags": [
+    "tags",
+    "emails",
+    "labels"
+  ],
+  "whenToUse": [
+    "Free-form short values such as labels or email addresses."
+  ],
+  "notFor": [
+    "Choosing from a fixed list (multi-select)."
+  ],
+  "spec": {
+    "anatomy": [
+      "label",
+      "field frame",
+      "chips with ×",
+      "text field",
+      "description / error"
+    ],
+    "states": [
+      "empty",
+      "with tags",
+      "last tag marked",
+      "full (max)",
+      "note (duplicate, invalid)",
+      "error",
+      "disabled"
+    ],
+    "keyboard": [
+      "Enter / comma / Tab add",
+      "Backspace marks then removes the last",
+      "Escape clears the draft"
+    ],
+    "motion": "A new tag grows in, the others close up when one is removed, and the removed tag fades where it stood (useFlip, --pui-duration-standard). Reduced motion places at once.",
+    "props": [
+      {
+        "name": "value / defaultValue / onValueChange",
+        "type": "string[]"
+      },
+      {
+        "name": "validate",
+        "type": "(value) => string | undefined"
+      },
+      {
+        "name": "max",
+        "type": "number"
+      },
+      {
+        "name": "label / description / error / placeholder",
+        "type": "ReactNode"
+      },
+      {
+        "name": "classNames",
+        "type": "TagInputClassNames",
+        "description": "Classes for documented visual parts; internal refs and event handlers are retained."
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / Ref",
+        "description": "Visual root style; ref targets native input."
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the visual root; typed classNames style the documented parts. Native control refs and controller identities survive appearance changes."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "field wrapper (data-slot=field)",
+    "refTarget": "native input",
+    "slots": [
+      "root:field",
+      "label:label",
+      "frame:field-control",
+      "input:tag-input",
+      "chip:field-chip",
+      "chipText:field-chip-text",
+      "remove:field-chip-remove",
+      "description:field-description",
+      "error:field-error",
+      "status:tag-input-status"
+    ],
+    "states": [
+      "draft",
+      "filled",
+      "marked",
+      "invalid",
+      "disabled",
+      "full"
+    ],
+    "roles": [
+      "m-field"
+    ],
+    "geometryInputs": [
+      "size",
+      "--pui-field-radius",
+      "--pui-nest-radius",
+      "--pui-nest-inset"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/tag-input"
+    ],
+    "features": []
+  }
+}

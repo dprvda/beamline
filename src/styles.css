@@ -1,0 +1,12 @@
+/* Beamline's foundation and the Prism look, from the sample source, compiled by this app's Tailwind v4 */
+@layer properties, theme, base, components, utilities;
+@import "tailwindcss" theme(inline);
+@source "../ui";
+@source "./";
+@import "../ui/styles/foundation.css";
+@import "../ui/styles/theme.css";
+@import "../ui/styles/presets/prism.css";
+
+body {
+  margin: 0;
+}

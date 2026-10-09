@@ -1,0 +1,215 @@
+/* ui/styles/base.css — the defaults every component assumes, applied only inside a .pui root (the whole document for
+   an app built on the system, or a UIRoot region inside a host app). Nothing here reaches elements outside a root. */
+/* Size-matched stand-ins for the two interface faces, from the Arial every system has (Liberation Sans is its metric
+   twin on Linux). Until Geist or Inter arrives (font-display: swap; late on a slow network), text is set in this
+   stand-in scaled to the real face's average width at that weight and given its ascent and descent, so when the real
+   face lands, lines keep their breaks and controls their size instead of shifting a few pixels. One face per weight
+   band, because Arial has no medium and its bold runs wider than a semibold: regular to 450, medium (Arial's regular
+   scaled to the medium's width) to 550, semibold and up from Arial Bold. Measured on the Latin files, weighted by
+   English letter frequency (.workspace/diag/font-metrics.mjs). Nothing is downloaded. */
+@font-face {
+  font-family: "Geist Fallback";
+  font-weight: 100 450;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 105.86%;
+  ascent-override: 94.93%;
+  descent-override: 27.87%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Geist Fallback";
+  font-weight: 451 550;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 108.46%;
+  ascent-override: 92.66%;
+  descent-override: 27.2%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Geist Fallback";
+  font-weight: 551 900;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold");
+  size-adjust: 102.36%;
+  ascent-override: 98.18%;
+  descent-override: 28.82%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 100 450;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 107.34%;
+  ascent-override: 90.27%;
+  descent-override: 22.45%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 451 550;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 108.8%;
+  ascent-override: 89.07%;
+  descent-override: 22.15%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 551 900;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold");
+  size-adjust: 101.05%;
+  ascent-override: 95.89%;
+  descent-override: 23.85%;
+  line-gap-override: 0%;
+}
+@layer base {
+  /* the root: the type and ink every component inherits */
+  .pui {
+    color: var(--pui-ink);
+    font-family: var(--pui-font-body);
+    line-height: var(--pui-leading-body);
+    letter-spacing: var(--pui-tracking-body);
+    font-feature-settings: var(--pui-font-features);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  /* the body text size goes on the region root or on <body>, never on <html>: that would change what 1rem means for
+     the whole page, the host app's own sizes included */
+  .pui:not(html),
+  html.pui body {
+    font-size: var(--pui-text-base);
+  }
+  /* icons drawn at lucide's default width follow the look's stroke; an icon given its own width keeps it */
+  :where(.pui) svg.lucide[stroke-width="2"] {
+    stroke-width: var(--pui-icon-stroke);
+  }
+  /* a region that sets its own look takes that look's type */
+  :where(.pui) [data-look] {
+    font-family: var(--pui-font-body);
+    letter-spacing: var(--pui-tracking-body);
+    font-feature-settings: var(--pui-font-features);
+  }
+  /* an app built on the system: the page itself is the canvas, with the look's pattern on it (none by default) */
+  html.pui,
+  html.pui body {
+    background: var(--pui-page-pattern), var(--pui-page);
+  }
+  /* headings take the look's heading face (the body face unless a look says otherwise) */
+  :where(.pui) :is(h1, h2, h3) {
+    font-family: var(--pui-font-heading);
+    font-stretch: var(--pui-heading-stretch);
+  }
+  :where(.pui, .pui *),
+  :where(.pui, .pui *)::before,
+  :where(.pui, .pui *)::after {
+    border-color: var(--pui-line);
+  }
+  :where(.pui) :is(h1, h2, h3, h4) {
+    text-wrap: balance;
+  }
+  :where(.pui) p {
+    text-wrap: pretty;
+  }
+  :where(.pui) a {
+    text-underline-position: from-font;
+    text-decoration-skip-ink: auto;
+  }
+  :where(.pui) ::selection,
+  .pui::selection {
+    background: var(--pui-accent-tint);
+    color: var(--pui-ink);
+  }
+  /* numbers in data UI never jitter */
+  :where(.pui) :is(.tabular, [data-numeric], table, code, kbd, .font-mono, .font-numeric) {
+    font-variant-numeric: tabular-nums;
+  }
+  /* focus is discrete and never animated (owner ruling) */
+  /* !important so a utility like transition-all on the element cannot animate the ring (focus is never animated). */
+  :where(.pui, .pui *):focus-visible {
+    outline: var(--pui-focus-width) var(--pui-focus-style) var(--pui-focus-ring);
+    outline-offset: 2px;
+    transition: none !important;
+  }
+  /* Chromium draws its own outline on a clicked SVG element or tabindex="-1" node (charts' keyboard layers, roving
+     lists); pointer focus shows nothing, keyboard focus shows the ring above. */
+  :where(.pui, .pui *):focus:not(:focus-visible) {
+    outline: none;
+  }
+  :where(.pui-theme-switching, .pui-theme-switching *, .pui-theme-switching *::before, .pui-theme-switching *::after) {
+    transition: none !important;
+  }
+}
+
+/* Scrollbars follow the system, not the OS. Chromium and Safari take ::-webkit-scrollbar (the only way to drop the
+   arrow buttons and inset the thumb); Firefox takes the standard properties. The two must never meet on one element:
+   Chromium ignores every ::-webkit-scrollbar rule once scrollbar-color or scrollbar-width is set, and scrollbar-color
+   inherits, so the standard pair lives only behind @supports. Components never set their own scrollbar colours or
+   widths; to hide a bar use scrollbar-width: none plus ::-webkit-scrollbar { display: none }. */
+@layer base {
+  :where(.pui, .pui *)::-webkit-scrollbar {
+    width: var(--pui-scrollbar-size);
+    height: var(--pui-scrollbar-size);
+    background: var(--pui-scrollbar-track);
+  }
+  :where(.pui, .pui *)::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  :where(.pui, .pui *)::-webkit-scrollbar-corner,
+  :where(.pui, .pui *)::-webkit-scrollbar-track {
+    background: var(--pui-scrollbar-track);
+  }
+  :where(.pui, .pui *)::-webkit-scrollbar-thumb {
+    min-width: 32px;
+    min-height: 32px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: var(--pui-scrollbar-thumb) padding-box;
+  }
+  :where(.pui, .pui *)::-webkit-scrollbar-thumb:hover,
+  :where(.pui, .pui *)::-webkit-scrollbar-thumb:active {
+    background-color: var(--pui-scrollbar-thumb-hover);
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    :where(.pui, .pui *) {
+      scrollbar-width: thin;
+      scrollbar-color: var(--pui-scrollbar-thumb) var(--pui-scrollbar-track);
+    }
+  }
+}
+
+/* A streamed word arriving: out of a slight blur into ink (Response, CitedText). */
+@keyframes pui-reveal-word {
+  from {
+    opacity: 0;
+    filter: blur(3px);
+  }
+  55% {
+    filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+@keyframes pui-caret-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
+}
+
+/* a page-wide change revealed by revealChange() (ui/lib/look.ts): the new page is clipped open over the old one,
+   so neither snapshot fades */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}

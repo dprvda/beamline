@@ -1,0 +1,115 @@
+{
+  "name": "alert",
+  "title": "Alert",
+  "description": "A message that stays until it is dealt with: what happened, what to do, an action; danger and warning are announced; dismissing folds its height away.",
+  "kind": "component",
+  "category": "feedback",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "lucide-react"
+  ],
+  "tags": [
+    "message",
+    "warning",
+    "error"
+  ],
+  "whenToUse": [
+    "Persistent problems or notices on a page: failing webhook, expiring card, maintenance."
+  ],
+  "notFor": [
+    "Brief results of an action (toast).",
+    "Field errors (under the field)."
+  ],
+  "spec": {
+    "anatomy": [
+      "wrap (folds on dismiss)",
+      "alert (m-surface; tone tint composed over the role's fill)",
+      "icon (tone colour)",
+      "title",
+      "body",
+      "actions",
+      "dismiss (ghost icon Button sm)"
+    ],
+    "states": [
+      "shown",
+      "folding away"
+    ],
+    "keyboard": [
+      "Dismiss is a button"
+    ],
+    "motion": "Dismiss folds the height to zero and fades over --pui-duration-standard, then unmounts; reduced motion is instant. Nothing moves at rest.",
+    "props": [
+      {
+        "name": "tone",
+        "type": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"neutral\""
+      },
+      {
+        "name": "title / children / action",
+        "type": "ReactNode"
+      },
+      {
+        "name": "icon",
+        "type": "ReactNode | false"
+      },
+      {
+        "name": "open / onDismiss",
+        "type": "boolean / () => void"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native HTMLDivElement"
+      },
+      {
+        "name": "classNames",
+        "type": "AlertClassNames"
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "tone"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the existing visual root; native ref preserves internal measurements and focus. Typed classNames addresses documented existing parts; source owns deeper anatomy."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "alert",
+    "refTarget": "native HTMLDivElement",
+    "slots": [
+      "root:alert",
+      "wrap:alert-wrap",
+      "clip:alert-clip",
+      "icon:alert-icon",
+      "body:alert-body",
+      "title:alert-title",
+      "description:alert-description",
+      "action:alert-action",
+      "dismiss:alert-dismiss"
+    ],
+    "states": [
+      "shown",
+      "folding away"
+    ],
+    "roles": [
+      "m-surface"
+    ],
+    "geometryInputs": [],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/alert"
+    ],
+    "features": []
+  }
+}

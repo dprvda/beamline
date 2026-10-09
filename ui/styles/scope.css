@@ -1,0 +1,60 @@
+@layer theme {
+  /* Reset managed boundaries only; raw theme subregions retain the enclosing parameters. */
+  .pui[data-slot="ui-root"],
+  .pui[data-slot="ui-root-layer"] {
+    --pui-motion-scale: 1;
+    --pui-radius-scale: 1;
+    --pui-type-scale: 1;
+    --pui-type-ratio: 1;
+    --pui-space-scale: 1;
+  }
+  /* Optional public component inputs reset at every boundary; managed tokens reapply inherited overrides. */
+  .pui {
+    --pui-button-radius: initial;
+    --pui-field-radius: initial;
+    --pui-overlay-radius: initial;
+    --pui-dialog-radius: initial;
+    --pui-dialog-width: initial;
+    --pui-table-row-height: initial;
+    --_pui-table-row-height: 40px;
+    --pui-data-grid-row-height: initial;
+    --_pui-data-grid-row-height: 36px;
+    --pui-data-grid-header-height: initial;
+    --_pui-data-grid-header-height: 34px;
+    --pui-data-grid-footer-height: initial;
+    --_pui-data-grid-footer-height: 34px;
+    --pui-order-book-row-height: initial;
+    --_pui-order-book-row-height: 24px;
+  }
+  /* An element that sets its own density (a component's density prop or scoped default) resolves the same row
+     tokens as a scope does, so an explicit compact table inside a comfortable page reads its compact rows. */
+  .pui[data-density="default"],
+  .pui [data-density="default"] {
+    --_pui-table-row-height: 40px;
+    --_pui-data-grid-row-height: 36px;
+    --_pui-data-grid-header-height: 34px;
+    --_pui-data-grid-footer-height: 34px;
+    --_pui-order-book-row-height: 24px;
+  }
+  .pui[data-density="compact"],
+  .pui [data-density="compact"] {
+    --_pui-table-row-height: 32px;
+    --_pui-data-grid-row-height: 28px;
+    --_pui-data-grid-header-height: 28px;
+    --_pui-data-grid-footer-height: 28px;
+    --_pui-order-book-row-height: 20px;
+  }
+  .pui[data-density="comfortable"],
+  .pui [data-density="comfortable"] {
+    --_pui-table-row-height: 48px;
+    --_pui-data-grid-row-height: 44px;
+    --_pui-data-grid-header-height: 40px;
+    --_pui-data-grid-footer-height: 40px;
+    --_pui-order-book-row-height: 28px;
+  }
+}
+@layer base {
+  :where(.pui, .pui *) {
+    border-style: var(--pui-border-style, solid);
+  }
+}

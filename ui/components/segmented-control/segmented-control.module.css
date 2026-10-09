@@ -1,0 +1,87 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Segmented control: a well (the inset role of the look in force) with one raised thumb (the control role) that
+   slides to the chosen segment. The segments themselves are transparent text buttons on top. */
+  .root {
+    composes: m-inset from global;
+    --pui-segment-height: 32px;
+    --pui-segment-pad: 12px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pui-space-0-5);
+    /* the well's inset is size, not spacing: a control keeps its height when the Spacing parameter changes (O1 §14.2) */
+    padding: var(--pui-size-0-5, 0.125rem);
+    border-radius: var(--pui-radius-control);
+  }
+  .fill {
+    display: flex;
+    width: 100%;
+  }
+  /* As a form field the well carries the field's 1px ring (3:1 in every look), so an unanswered choice reads as a
+     control beside the inputs, and turns red with the field's error like they do. */
+  .root[data-field] {
+    box-shadow:
+      inset 0 0 0 1px var(--m-field-ring),
+      var(--m-inset-edge, 0 0 transparent);
+  }
+  .root[data-field][aria-invalid="true"] {
+    box-shadow:
+      inset 0 0 0 1px var(--pui-red),
+      var(--m-inset-edge, 0 0 transparent);
+  }
+  .sm {
+    --pui-segment-height: 28px;
+    --pui-segment-pad: 10px;
+  }
+
+  /* placed and moved by the contour engine (ui/lib/contour.ts), which sets its box and, while it travels, its outline */
+  .thumb {
+    composes: m-control from global;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    border-radius: calc(var(--pui-radius-control) - 2px);
+  }
+
+  .segment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pui-space-1-5);
+    height: var(--pui-segment-height);
+    padding-inline: var(--pui-segment-pad);
+    border-radius: calc(var(--pui-radius-control) - 2px);
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-sm);
+    font-weight: var(--pui-weight-medium);
+    white-space: nowrap;
+    transition: color var(--pui-motion-out) var(--pui-ease-default);
+  }
+  .sm .segment {
+    font-size: var(--pui-text-xs);
+  }
+  .fill .segment {
+    flex: 1;
+  }
+  .iconOnly .segment {
+    width: var(--pui-segment-height);
+    padding-inline: 0;
+  }
+  .segment:hover:not(:disabled),
+  .segment[aria-checked="true"] {
+    color: var(--pui-ink);
+    transition-duration: 0ms;
+  }
+  .segment:disabled {
+    opacity: var(--pui-opacity-disabled);
+    pointer-events: none;
+  }
+  .segment :where(svg) {
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+    flex-shrink: 0;
+  }
+}

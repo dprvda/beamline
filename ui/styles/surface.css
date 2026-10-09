@@ -1,0 +1,275 @@
+/* Shared surface roles; selected presets provide all paint inputs. Source: 3563fb5f76c686e5979604b7bbdfd25c27dc0230; input hashes: da55a8c1a6b1f85790bb05ee8a671da1ce0ae34945389e707e09f65ea0d3fb41, 8548928b9b7eeafe90029c607a1256b52c39a4812b7815b8912626097ef3fc17, 0ef1e7bd7bc20fe6bf94d332330bd3eb3492f75e1c0e2b531941d522592ca1c9. */
+@property --pui-m-hover {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+@property --pui-m-c {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: transparent;
+}
+@property --pui-light-k {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+@layer theme {
+  :where(.pui) {
+    --m-transition:
+      --pui-m-hover var(--pui-motion-out) var(--pui-ease-default),
+      --pui-m-c var(--pui-motion-out) var(--pui-ease-default), box-shadow var(--pui-motion-out) var(--pui-ease-default);
+  }
+}
+@layer components {
+  .m-control {
+    --m-veil: color-mix(in oklab, var(--m-control-veil) calc(var(--pui-m-hover) * 100%), transparent);
+    background: linear-gradient(var(--m-veil), var(--m-veil)), var(--m-control-bg);
+    box-shadow: var(--m-control-edge);
+    backdrop-filter: var(--m-control-blur);
+  }
+  .m-control:where(:hover:not(:disabled, [aria-disabled="true"], [data-disabled])) {
+    --pui-m-hover: 1;
+    box-shadow: var(--m-control-edge-hover);
+    translate: var(--m-hover-shift);
+  }
+  .m-control:where(:active:not(:disabled, [aria-disabled="true"], [data-disabled])),
+  .m-control:where([data-pressed]) {
+    box-shadow: var(--m-control-press);
+    translate: var(--m-press-shift);
+  }
+
+  .m-inset {
+    background: var(--m-inset-shade), var(--m-inset-fill, var(--pui-inset));
+    box-shadow: var(--m-inset-edge);
+  }
+
+  .m-toggle {
+    --pui-m-c: var(--m-toggle-off, var(--pui-control-track));
+    background: var(--m-inset-shade), var(--pui-m-c);
+    box-shadow:
+      inset 0 0 0 1px var(--m-toggle-ring, transparent),
+      var(--m-inset-edge);
+  }
+  .m-toggle:where(:hover:not(:disabled, [data-disabled], [data-state="checked"], [data-state="indeterminate"])) {
+    --pui-m-c: var(--m-toggle-off-hover, var(--pui-control-track-hover));
+    box-shadow:
+      inset 0 0 0 1px var(--m-toggle-ring-hover, transparent),
+      var(--m-inset-edge-hover);
+  }
+
+  .m-knob {
+    background: var(--m-knob-sheen), var(--pui-control-thumb);
+    box-shadow: var(--m-knob-edge), var(--pui-control-thumb-shadow);
+  }
+
+  .m-solid,
+  .m-toggle:where([data-state="checked"], [data-state="indeterminate"]) {
+    --pui-m-c: var(--m-color, var(--pui-accent));
+    --m-c2: oklch(from var(--pui-m-c) l c calc(h + var(--m-solid-shift)));
+    background:
+      var(--m-solid-sheen),
+      linear-gradient(
+        100deg,
+        color-mix(in oklab, var(--pui-m-c) var(--m-solid-alpha), transparent),
+        color-mix(in oklab, var(--m-c2) var(--m-solid-alpha), transparent)
+      );
+    box-shadow:
+      var(--m-solid-inset),
+      0 0 0 1px color-mix(in oklab, var(--pui-m-c), var(--m-solid-rim-color) var(--m-solid-rim)),
+      var(--m-solid-drop),
+      var(--m-solid-bloom-at)
+        color-mix(
+          in oklab,
+          light-dark(var(--m-solid-halo-light, var(--m-c2)), var(--m-c2)) var(--m-solid-bloom),
+          transparent
+        ),
+      0 0 14px -3px
+        color-mix(
+          in oklab,
+          light-dark(var(--m-solid-halo-light, var(--pui-m-c)), var(--pui-m-c))
+            var(--m-solid-halo-now, var(--m-solid-halo)),
+          transparent
+        );
+    backdrop-filter: var(--m-control-blur);
+  }
+  .m-solid:where(:hover:not(:disabled, [aria-disabled="true"], [data-disabled])),
+  .m-toggle:where([data-state="checked"], [data-state="indeterminate"]):where(:hover:not(:disabled, [data-disabled])) {
+    --pui-m-c: oklch(from var(--m-color, var(--pui-accent)) calc(l + (0.55 - l) * var(--m-solid-lift)) c h);
+    --m-solid-halo-now: var(--m-solid-halo-hover, var(--m-solid-halo));
+    translate: var(--m-hover-shift);
+  }
+  .m-solid:where(:active:not(:disabled, [aria-disabled="true"], [data-disabled])) {
+    box-shadow:
+      var(--m-solid-press),
+      0 0 0 1px color-mix(in oklab, var(--pui-m-c), var(--m-solid-rim-color) var(--m-solid-rim));
+    translate: var(--m-press-shift);
+  }
+
+  .m-field {
+    background: var(--m-field-bg);
+    box-shadow:
+      inset 0 0 0 1px var(--m-field-ring),
+      var(--m-field-edge);
+  }
+  .m-field:where(:hover:not(:focus-within, :disabled, [data-disabled])) {
+    box-shadow:
+      inset 0 0 0 1px var(--m-field-ring-hover),
+      var(--m-field-edge);
+  }
+  .m-field:where(:focus-within, :focus-visible) {
+    background: var(--m-field-bg-focus, var(--m-field-bg));
+    box-shadow: var(--m-field-edge-focus);
+  }
+
+  :where(.m-field) {
+    position: relative;
+  }
+  .m-field::after {
+    content: var(--m-split, none);
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: var(--m-split-height, 1.5px);
+    background: var(--m-split-light, none) 0 0 / var(--m-split-size, 200% 100%);
+    mask:
+      linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent),
+      var(--m-split-knots, linear-gradient(#000, #000)) 0 0 / var(--m-split-knots-size, 100% 100%);
+    mask-composite: intersect;
+    opacity: 0;
+    scale: 0 1;
+    transition:
+      scale var(--pui-motion-out) var(--pui-ease-default),
+      opacity var(--pui-motion-out) var(--pui-ease-default);
+    pointer-events: none;
+  }
+  .m-field:where(:focus-within, :focus-visible):where(:not([data-invalid], [aria-invalid="true"]))::after {
+    opacity: 1;
+    scale: 1 1;
+    transition-duration: var(--pui-duration-considered), var(--pui-motion-in);
+    animation:
+      m-split-flow calc(9s * var(--pui-motion-scale, 1)) steps(108) infinite alternate,
+      m-split-knots calc(5.3s * var(--pui-motion-scale, 1)) steps(64) infinite alternate;
+  }
+  @keyframes m-split-flow {
+    to {
+      background-position: 100% 0;
+    }
+  }
+
+  @keyframes m-split-knots {
+    to {
+      mask-position:
+        0 0,
+        100% 0;
+    }
+  }
+
+  @keyframes m-split-sweep {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .m-field::after {
+      transition: none;
+      animation: none !important;
+    }
+  }
+
+  .m-tag {
+    box-shadow: var(--m-tag-edge);
+  }
+
+  .m-surface {
+    background: var(--m-surface-bg);
+    box-shadow: var(--m-surface-edge);
+    backdrop-filter: var(--m-surface-blur);
+  }
+
+  :where(.m-surface) {
+    position: relative;
+  }
+  .m-surface::before {
+    content: var(--m-edge-light);
+    position: absolute;
+    inset: 0;
+    padding: var(--m-edge-light-width);
+    border-radius: inherit;
+
+    --_w: calc(1 + var(--m-edge-light-wobble, 0) * (var(--pui-light-seed, 0.5) - 0.5) * 1.6);
+    --_h: calc(1 - var(--m-edge-light-wobble, 0) * var(--pui-light-seed, 0.5) * 0.55);
+
+    --pui-light-k: calc(1 - var(--m-edge-light-glint, 0));
+    background:
+      radial-gradient(
+        max(0.5px, calc(var(--m-edge-light-size) * var(--pui-light-k) * var(--_w)))
+          max(0.5px, calc(var(--m-edge-light-size) * var(--pui-light-k) * var(--_h))) at var(--pui-light-x, -100vmax)
+          var(--pui-light-y, -100vmax),
+        var(--m-edge-light-stops, var(--m-edge-light-color), transparent 72%)
+      ),
+      var(--m-rim);
+    filter: hue-rotate(calc(var(--m-edge-light-wobble, 0) * (var(--pui-light-seed, 0.5) - 0.5) * 70deg));
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    pointer-events: none;
+    transition: --pui-light-k calc(var(--pui-duration-considered) * 2.4) var(--pui-ease-default);
+  }
+  .m-surface[data-glint]::before {
+    --pui-light-k: 1;
+    transition-duration: var(--pui-duration-considered);
+  }
+  .m-overlay {
+    background: var(--m-overlay-bg);
+    box-shadow: var(--m-overlay-edge);
+    backdrop-filter: var(--m-overlay-blur);
+  }
+
+  :where(.m-surface, .m-overlay)::after,
+  :where(.m-control:not(.hit-bleed), .m-field, .m-inset, .m-toggle, .m-solid)::before {
+    content: var(--m-pen, none);
+    position: absolute;
+    inset: 0.5px;
+    z-index: 1;
+    border: var(--m-pen-width, 1.5px) solid var(--m-pen-color, currentColor);
+    border-radius: inherit;
+    filter: var(--m-pen-fine, none);
+    pointer-events: none;
+  }
+  :where(.m-surface, .m-overlay)::after {
+    inset: var(--m-pen-inset, 0.5px);
+    filter: var(--m-pen-filter, none);
+  }
+  :where(.m-surface:nth-of-type(3n + 2), .m-overlay:nth-of-type(3n + 2))::after {
+    filter: var(--m-pen-filter-b, var(--m-pen-filter, none));
+  }
+  :where(.m-surface:nth-of-type(3n), .m-overlay:nth-of-type(3n))::after {
+    filter: var(--m-pen-filter-c, var(--m-pen-filter, none));
+  }
+  :where(.m-solid, .m-toggle[data-state="checked"])::before {
+    border-color: var(--pui-m-c);
+  }
+
+  :where(
+    :is([data-look="ink"], [data-pui-preset="beamline/ink"])
+      :is(.m-control, .m-field, .m-inset, .m-toggle, .m-solid, .m-surface, .m-overlay)
+  ) {
+    position: relative;
+  }
+
+  :is(.m-control, .m-solid, .m-field, .m-toggle):where(
+    :disabled,
+    [aria-disabled="true"]:not([data-loading]),
+    [data-disabled]
+  ) {
+    box-shadow: var(--pui-shadow-hairline);
+    backdrop-filter: none;
+  }
+  .m-control:where(:disabled, [aria-disabled="true"]:not([data-loading]), [data-disabled]) {
+    background: var(--pui-surface-2);
+  }
+}

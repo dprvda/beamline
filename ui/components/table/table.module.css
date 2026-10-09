@@ -1,0 +1,144 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  .wrapper {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .root {
+    --_table-row-height: var(--pui-table-row-height, var(--_table-density-height, var(--_pui-table-row-height, 40px)));
+    width: 100%;
+    border-collapse: collapse;
+    caption-side: bottom;
+    font-size: var(--pui-text-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  .root[data-density="compact"] {
+    --_table-density-height: 32px;
+  }
+  .root[data-density="default"] {
+    --_table-density-height: 40px;
+  }
+  .root[data-density="comfortable"] {
+    --_table-density-height: 48px;
+  }
+  .row {
+    border-bottom: 1px var(--pui-border-style, solid) var(--pui-line-soft);
+    transition: background-color var(--pui-motion-out) var(--pui-ease-default);
+  }
+  .row:hover {
+    transition-duration: 0ms;
+    background: var(--pui-hover);
+  }
+  .row[data-state="selected"],
+  .cell[data-state="selected"] {
+    background: var(--pui-accent-tint);
+  }
+  .row[data-state="selected"] > *,
+  .cell[data-state="selected"] {
+    color: var(--pui-ink);
+  }
+  .row[data-state="selected"] > :first-child,
+  .cell[data-state="selected"] {
+    box-shadow: inset 2px 0 0 var(--pui-accent-ink);
+  }
+  .row:dir(rtl)[data-state="selected"] > :first-child,
+  .cell:dir(rtl)[data-state="selected"] {
+    box-shadow: inset -2px 0 0 var(--pui-accent-ink);
+  }
+  .header .row:hover,
+  .footer .row:hover {
+    background: transparent;
+  }
+  /* the seam under the header is the stronger line (fitted surfaces: line under a header, line-soft inside) */
+  .header .row {
+    border-bottom-color: var(--pui-line);
+  }
+  .body .row:last-child {
+    border: 0;
+  }
+  .footer {
+    border-top: 1px var(--pui-border-style, solid) var(--pui-line);
+    font-weight: var(--pui-weight-medium);
+  }
+  .footer .cell,
+  .body .row > .cell:first-child {
+    color: var(--pui-ink);
+  }
+  .head,
+  .cell {
+    height: var(--_table-row-height);
+    padding-inline: var(--pui-space-3);
+    vertical-align: middle;
+  }
+  .head {
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+    font-weight: var(--pui-weight-medium);
+    text-align: start;
+    white-space: nowrap;
+  }
+  .cell {
+    color: var(--pui-ink-2);
+    padding-block: max(0px, calc((var(--_table-row-height) - 24px) / 2));
+  }
+  .head[data-numeric],
+  .cell[data-numeric] {
+    text-align: end;
+  }
+  .cell[data-numeric] {
+    font-family: var(--pui-font-numeric);
+    color: var(--pui-ink);
+  }
+  /* a value that was never measured: a quiet dash, never a zero (the caller adds the words "Not measured") */
+  .cell[data-null] {
+    color: var(--pui-ink-3);
+  }
+  /* the border of a collapsed table does not travel with a sticky cell, so the header draws its own seam */
+  .root[data-sticky-header] .head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--pui-surface);
+    box-shadow: inset 0 -1px 0 var(--pui-line);
+  }
+  .head[data-sticky],
+  .cell[data-sticky] {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 1;
+    background: var(--pui-surface);
+  }
+  /* a pinned first cell keeps the row's state paint under it */
+  .row:hover > .cell[data-sticky] {
+    background: var(--pui-hover);
+  }
+  .row[data-state="selected"] > .cell[data-sticky] {
+    background: linear-gradient(var(--pui-accent-tint), var(--pui-accent-tint)), var(--pui-surface);
+  }
+  .root[data-sticky-header] .head[data-sticky] {
+    z-index: 2;
+  }
+  .cell[data-interactive] {
+    padding: 0;
+  }
+  .cell[data-interactive] > :is(button, a) {
+    display: flex;
+    width: 100%;
+    min-height: calc(var(--_table-row-height) - 1px);
+    padding: 0 var(--pui-space-3);
+    align-items: center;
+    border-radius: 0;
+    text-align: inherit;
+    justify-content: inherit;
+  }
+  .cell[data-interactive] > :focus-visible {
+    outline-offset: -2px;
+  }
+  .caption {
+    padding: var(--pui-space-2-5) var(--pui-space-3);
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+    text-align: start;
+  }
+}

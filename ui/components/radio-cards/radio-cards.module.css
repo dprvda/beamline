@@ -1,0 +1,155 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Radio cards: raised option cards (the control role) with one accent ring that slides to the chosen card. */
+  .group {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--pui-radio-cards-card-width, 180px), 100%), 1fr));
+    gap: var(--pui-space-2);
+  }
+  .list {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* Keep a full focus outline inside the scroller without changing the cards' layout footprint. */
+    margin: calc(var(--pui-space-1) * -1);
+    padding: var(--pui-space-1);
+  }
+  .row .card {
+    flex: 0 0 var(--pui-radio-cards-card-width, 180px);
+  }
+  /* placed and moved by glide (utilities.css), on both axes: it stretches toward the chosen card and gathers there */
+  .ring {
+    composes: glide glide-2d from global;
+    position: absolute;
+    z-index: 1;
+    border-radius: var(--pui-radius-card);
+    box-shadow: inset 0 0 0 1.5px var(--pui-accent);
+    pointer-events: none;
+  }
+  .card {
+    composes: m-control from global;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: var(--pui-space-3);
+    padding: var(--pui-space-3);
+    border-radius: var(--pui-radius-card);
+    text-align: start;
+    transition: var(--m-transition);
+  }
+  .card:hover {
+    transition-duration: 0ms;
+  }
+  .card:disabled {
+    opacity: var(--pui-opacity-disabled);
+    pointer-events: none;
+  }
+  .list .card {
+    flex-direction: row;
+    align-items: center;
+  }
+  .media {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--pui-radius-control);
+  }
+  .media :where(img, video, canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .head {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    gap: var(--pui-space-3);
+  }
+  .list .head {
+    align-items: center;
+  }
+  .icon {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    place-items: center;
+    /* nested in the card: the chip radius, or the card radius minus the padding when that is rounder (roundness 200%) */
+    --_r: max(0px, var(--pui-radius-card) - var(--pui-space-3) - var(--pui-radius-chip));
+    border-radius: calc(var(--pui-radius-chip) + var(--_r));
+    background: var(--pui-hover-2);
+    color: var(--pui-ink-2);
+  }
+  .icon :where(svg) {
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+  }
+  .text {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+    gap: var(--pui-space-0-5);
+  }
+  .label {
+    color: var(--pui-ink);
+    font-size: var(--pui-text-base);
+    font-weight: var(--pui-weight-medium);
+  }
+  .detail {
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+    line-height: 1.375;
+  }
+  /* the radio mark is RadioGroup's own: the toggle role's well, filled with a dot when chosen */
+  .mark {
+    composes: m-toggle from global;
+    --m-color: var(--pui-control-on);
+    --m-toggle-off: var(--pui-field);
+    --m-toggle-off-hover: var(--pui-field);
+    --m-toggle-ring: var(--pui-edge-control);
+    --m-toggle-ring-hover: color-mix(in oklab, var(--pui-edge-control) 60%, var(--pui-ink));
+    display: grid;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: 50%;
+    transition: var(--m-transition);
+  }
+  .card:hover .mark {
+    --m-toggle-ring: var(--m-toggle-ring-hover);
+    transition-duration: 0ms;
+  }
+  .mark[data-state="checked"]::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pui-control-glyph);
+  }
+  /* the figure people compare (a price, a size) closes the card under a seam, in the body face with even digits */
+  .figure {
+    margin-top: auto;
+    padding-top: var(--pui-space-2-5);
+    border-top: 1px solid var(--pui-line-soft);
+    color: var(--pui-ink);
+    font-size: var(--pui-text-base);
+    font-weight: var(--pui-weight-medium);
+    font-variant-numeric: tabular-nums;
+  }
+  .list .figure {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+    margin-inline-start: auto;
+    font-size: var(--pui-text-sm);
+  }
+}

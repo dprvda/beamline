@@ -1,0 +1,43 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* The trigger is a field frame (paint, hover, focus edge, invalid, disabled at --pui-opacity-disabled all come from
+     _shared/field); it adds only what a button-like frame needs. */
+  .trigger {
+    width: 100%;
+    justify-content: space-between;
+    text-align: start;
+    cursor: pointer;
+  }
+  .trigger:focus-visible {
+    outline: none;
+  }
+  .trigger:disabled {
+    cursor: not-allowed;
+  }
+  .trigger[data-placeholder] {
+    color: var(--pui-ink-3);
+  }
+  .chevron {
+    flex-shrink: 0;
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+    color: var(--pui-ink-3);
+  }
+
+  /* list rows: a detail at the end, the check after it at the inline end */
+  .detail {
+    flex-shrink: 0;
+    margin-inline-start: auto;
+    padding-inline-start: var(--pui-space-3);
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+  }
+  .check {
+    position: absolute;
+    inset-inline-end: var(--pui-space-2);
+    display: inline-flex;
+  }
+  .check > svg {
+    color: var(--pui-accent);
+  }
+}

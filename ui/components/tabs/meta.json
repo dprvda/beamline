@@ -1,0 +1,144 @@
+{
+  "name": "tabs",
+  "title": "Tabs",
+  "description": "Switches between panels of one object; one indicator slides to the active tab, counts sit beside labels, and a long row scrolls instead of wrapping.",
+  "kind": "component",
+  "category": "navigation",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-direction",
+    "@radix-ui/react-tabs"
+  ],
+  "tags": [
+    "tabs",
+    "panels",
+    "switch"
+  ],
+  "whenToUse": [
+    "Switching between panels of the same object: Overview, Activity, Settings; Positions and Orders."
+  ],
+  "notFor": [
+    "Filtering the same content (segmented-control).",
+    "Moving between sections of an app (sidebar)."
+  ],
+  "spec": {
+    "anatomy": [
+      "Tabs",
+      "TabsList (indicator)",
+      "TabsTrigger (icon, label, count)",
+      "TabsContent",
+      "TabsNav (the same row as navigation: nav, indicator)",
+      "TabsNavItem (link or button, aria-current=page)"
+    ],
+    "variants": {
+      "variant": [
+        "underline",
+        "pill"
+      ]
+    },
+    "states": [
+      "active",
+      "inactive",
+      "hover",
+      "disabled",
+      "overflowing row"
+    ],
+    "keyboard": [
+      "← → move and activate",
+      "Home / End jump",
+      "Tab moves into the panel",
+      "Direction follows explicit props or the managed scope and resolves the surrounding static direction; forwarded refs keep internal direction measurement attached. refreshAppearance updates static scope changes without remounting controls.",
+      "TabsNav: Tab moves between items; Enter (links) or Enter and Space (buttons) follow one"
+    ],
+    "motion": "The indicator (line or pill) travels as matter (ui/lib/contour.ts), shaped by the look's mechanics (--m-morph-*): in soft its corner facing the new tab answers first, its leading edge rounds out a few pixels, the middle draws a slight neck and the corners round toward a capsule while it is stretched, then it gathers into its plain box. Nothing overshoots (critically damped, ~0.26 s, the far corner a little later). Metal, blueprint and mono stay rigid (it slides and stretches with straight edges); pop stretches most; glass is a little heavier; ink thins like a brush. The choice itself is made at once (state, colour, focus); only the decorative indicator (line or pill) settles. At rest: no clip and no frames. Reduced motion: it jumps. The new panel fades in.",
+    "props": [
+      {
+        "name": "value / defaultValue / onValueChange",
+        "type": "string"
+      },
+      {
+        "name": "TabsList variant",
+        "type": "\"underline\" | \"pill\"",
+        "default": "\"underline\""
+      },
+      {
+        "name": "TabsTrigger icon / count",
+        "type": "ReactNode / number"
+      },
+      {
+        "name": "TabsList.classNames / TabsTrigger.classNames",
+        "type": "typed part classes",
+        "description": "See visualContract.slots; existing handlers, accessibility and internal measurement refs are preserved."
+      },
+      {
+        "name": "TabsNav / TabsNavItem",
+        "type": "value, defaultValue, onValueChange, variant / value, href?, icon?, count?",
+        "required": false,
+        "description": "Tabs that switch pages or routes rather than panels: a nav with the same look and travelling indicator, the current item aria-current=page. Tab moves between items, Enter follows one."
+      },
+      {
+        "name": "style",
+        "type": "CSSProperties",
+        "description": "Visual root inline styles; Tabs exported parts each retain their native style attribute."
+      },
+      {
+        "name": "ref",
+        "type": "HTMLDivElement (Tabs/TabsList), HTMLButtonElement (TabsTrigger)",
+        "description": "Native visual root/control reference, composed with internal refs when present."
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "variant"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the visual root. Typed classNames customize documented internal parts; composed exported parts retain native attributes. Styling and forwarded refs preserve internal measurement/focus, handlers and accessibility. Appearance changes retain operational state. Indicator geometry follows item resizing, published appearance changes and font completion."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "Tabs div; composed parts each own their native root",
+    "refTarget": "Tabs div; TabsList ref composes with the indicator measurement ref; triggers are buttons and content is div",
+    "slots": [
+      "Tabs:tabs",
+      "TabsList:tabs-list",
+      "TabsList.classNames.indicator:tabs-indicator",
+      "TabsTrigger:tabs-trigger",
+      "TabsTrigger.classNames.count:tabs-count",
+      "TabsContent:tabs-content"
+    ],
+    "roles": [
+      "m-inset",
+      "m-control"
+    ],
+    "geometryInputs": [
+      "variant",
+      "--pui-space-*",
+      "--pui-text-*",
+      "--pui-radius-control",
+      "measured selected tab offsets"
+    ],
+    "states": [
+      "active",
+      "inactive",
+      "hover",
+      "disabled",
+      "overflowing row"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/tabs"
+    ],
+    "features": []
+  }
+}

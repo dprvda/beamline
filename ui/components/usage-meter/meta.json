@@ -1,0 +1,120 @@
+{
+  "name": "usage-meter",
+  "title": "Usage meter",
+  "description": "An allowance and what fills it: one bar split by source, the room left, a warning near the limit and the overflow in its own red well past a notch at the limit.",
+  "kind": "component",
+  "category": "feedback",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [],
+  "tags": [
+    "quota",
+    "usage",
+    "limit"
+  ],
+  "whenToUse": [
+    "Plan limits and quotas: seats, storage, requests."
+  ],
+  "notFor": [
+    "Task progress (progress).",
+    "A single value on a range (gauge)."
+  ],
+  "spec": {
+    "anatomy": [
+      "header (label, figure with a status glyph when warn/over)",
+      "bar: allowance well (m-inset meter, sources in series colours up to the limit)",
+      "notch at the limit and overflow well (solid red), only when over",
+      "legend (swatch, label, value; room left or overflow with glyph and words)"
+    ],
+    "states": [
+      "ok",
+      "warn (orange figure + ▲ glyph)",
+      "over (red figure + ⓘ glyph, overflow well after the notch, 'N over' in the legend)"
+    ],
+    "keyboard": [
+      "Not interactive (role meter)"
+    ],
+    "motion": "Segment widths ease over --pui-duration-standard when values change; nothing moves at rest. When the value changes, the change itself stays in view for a moment (_shared/delta-ghost): what was lost sits as a pale ghost under the fill, holds about 0.7 s and drains toward the new end; what was gained arrives lit and cools over about 1.3 s. The ghost spans the real before and after, never an in-between value; a run of changes the same way extends one ghost. Reduced motion: the ghost is shown still for 1.1 s, then removed.",
+    "props": [
+      {
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "name": "segments",
+        "type": "{ id, label, value }[]"
+      },
+      {
+        "name": "limit / unit / decimals",
+        "type": "number / string / number"
+      },
+      {
+        "name": "warnAt",
+        "type": "0–1"
+      },
+      {
+        "name": "freeLabel / overLabel",
+        "type": "string"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native HTMLDivElement"
+      },
+      {
+        "name": "classNames",
+        "type": "UsageMeterClassNames"
+      }
+    ],
+    "appearance": "className/style address the existing visual root; native ref preserves internal measurements and focus. Typed classNames addresses documented existing parts; source owns deeper anatomy."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "notes": [
+    "§14.2 exception: `gap: 1px` between source segments is a hairline seam, not a spacing step.",
+    "§14.2 exception: the 'room left' legend swatch's 1px inset ring is a hairline boundary on --pui-line, not a look shadow."
+  ],
+  "visualContract": {
+    "version": 1,
+    "root": "usage-meter",
+    "refTarget": "native HTMLDivElement",
+    "slots": [
+      "root:usage-meter",
+      "header:usage-meter-header",
+      "label:usage-meter-label",
+      "value:usage-meter-value",
+      "bar:usage-meter-bar",
+      "track:usage-meter-track",
+      "segment:usage-meter-segment",
+      "overflow:usage-meter-overflow",
+      "over:usage-meter-over",
+      "legend:usage-meter-legend",
+      "legendItem:usage-meter-legend-item",
+      "swatch:usage-meter-swatch",
+      "amount:usage-meter-amount",
+      "remainder:usage-meter-remainder",
+      "ghost:delta-ghost"
+    ],
+    "states": [
+      "ok",
+      "warn (orange figure + ▲ glyph)",
+      "over (red figure + ⓘ glyph, overflow well after the notch, 'N over' in the legend)"
+    ],
+    "roles": [],
+    "geometryInputs": [
+      "segments",
+      "limit"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/usage-meter"
+    ],
+    "features": []
+  }
+}

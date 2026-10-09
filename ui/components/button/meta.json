@@ -1,0 +1,159 @@
+{
+  "name": "button",
+  "title": "Button",
+  "description": "The action control: five weights and a brand fill, a buy/sell tone, sm/md/lg and a 44 px touch size, icon-only, a loading state that keeps its size and focus, and a label that changes in place.",
+  "kind": "component",
+  "category": "actions",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "motion",
+    "radix-ui"
+  ],
+  "tags": [
+    "action",
+    "control",
+    "submit",
+    "cta",
+    "icon button"
+  ],
+  "whenToUse": [
+    "Any action that happens on click: submit, save, open, run. One primary (or accent) per view."
+  ],
+  "notFor": [
+    "Navigation to another page (a link; or asChild around the link when it must look like a button).",
+    "A destructive action that needs friction (confirm-morph or hold-to-confirm).",
+    "Several related actions (split-button or dropdown-menu)."
+  ],
+  "spec": {
+    "anatomy": [
+      "root (button, or the child element with asChild)",
+      "leading icon (any icon element among the children, before the text)",
+      "label (the text; its width follows the text when it changes)",
+      "loader (a spinner that opens in front of the label while loading)"
+    ],
+    "variants": {
+      "variant": [
+        "primary",
+        "secondary",
+        "outline",
+        "ghost",
+        "danger",
+        "accent"
+      ],
+      "size": [
+        "sm",
+        "md",
+        "lg",
+        "touch (44 px, bottom action bars on phones)"
+      ],
+      "shape": [
+        "text (padding on both sides)",
+        "icon-only (square; detected when there is no text)"
+      ],
+      "tone": [
+        "up (buy: --pui-up fill or label)",
+        "down (sell: --pui-down fill or label)"
+      ]
+    },
+    "states": [
+      "rest",
+      "hover (arrives at once, leaves over --pui-motion-out)",
+      "pressed (scale 0.97, icon/sm 0.95, at 0ms; none on popup anchors or with reduced motion)",
+      "focus (the look's focus ring, never animated)",
+      "disabled (--pui-opacity-disabled)",
+      "working (loading: loader opens in front of the label, size and focus kept, aria-busy, clicks ignored)",
+      "resolved (the caller changes the label in place, e.g. Save → Saved; never reverted by a timer)",
+      "error (the caller keeps or restores the label and shows the message next to the cause; the button never turns red)"
+    ],
+    "keyboard": [
+      "Enter / Space activate (native button)",
+      "Tab focuses; focus stays on the button through loading"
+    ],
+    "motion": "Hover colour arrives at 0ms and leaves over --pui-motion-out. Press scales to 0.97 at once (narrow buttons 0.95) and springs back. A changed label slides up out of a soft blur while the width follows on spring.morph; the loader opens its width from 0 so nothing jumps. Reduced motion: colour changes only, no scale, no slide.",
+    "props": [
+      {
+        "name": "variant",
+        "type": "\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | \"danger\" | \"accent\"",
+        "default": "\"primary\"",
+        "description": "Visual weight. primary is the ink-filled main action; accent fills with the brand; danger is for destructive actions."
+      },
+      {
+        "name": "size",
+        "type": "\"sm\" | \"md\" | \"lg\" | \"touch\"",
+        "default": "\"md\"",
+        "description": "Height 32 / 36 / 40 px; touch 44 px for a bottom action bar on a phone."
+      },
+      {
+        "name": "tone",
+        "type": "\"up\" | \"down\"",
+        "required": false,
+        "description": "Market side. On primary/accent the fill becomes --pui-up (buy) or --pui-down (sell) with the matching on-colour ink; on quiet variants the label takes the colour. Pair with a word or arrow."
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "description": "Shows the loader, sets aria-busy and ignores clicks; size and focus stay."
+      },
+      {
+        "name": "look",
+        "type": "\"soft\" | \"blueprint\" | \"glass\" | \"metal\" | \"glow\" | \"pop\" | \"mono\" | \"ink\"",
+        "description": "Paint this button in another look than the one in force around it. Primary and accent are solids, secondary a raised control; outline, ghost and danger keep their own quiet paint."
+      },
+      {
+        "name": "asChild",
+        "type": "boolean",
+        "description": "Render the single child (a link, a Radix trigger) with the button's look and behaviour."
+      },
+      {
+        "name": "...button attributes",
+        "type": "ButtonHTMLAttributes",
+        "description": "type defaults to \"button\". Icon-only buttons need aria-label."
+      }
+    ],
+    "appearance": "Managed appearance changes preserve mounted controls and operational state. Instance design props override scoped defaults; classNames addresses documented slots. Managed appearance updates preserve mounted controls and operational state. Motion reads individual CSS duration, easing, spring and stagger tokens at the actual host; no first-document-root lookup. Reduced/none policy wins over speed; semantic reading intervals and data pacing do not scale. Motion reads the actual host: semantic chart glide (500ms), chart sweep (600ms), insight page (240ms) or press-scale as applicable; durations scale with the scope, reduced/none wins. Appearance does not reset values or a finished entrance."
+  },
+  "review": {
+    "status": "accepted",
+    "notes": "Rewritten from spec; asChild replaces the old class adapter.",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "button",
+    "refTarget": "visual root",
+    "slots": [
+      "root",
+      "label",
+      "loader"
+    ],
+    "states": [
+      "rest",
+      "hover",
+      "pressed",
+      "focus-visible",
+      "disabled",
+      "loading",
+      "label changing"
+    ],
+    "roles": [
+      "m-control",
+      "m-solid"
+    ],
+    "geometryInputs": [
+      "--pui-control-height-sm",
+      "--pui-control-height-md",
+      "--pui-control-height-lg",
+      "size"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/button"
+    ],
+    "features": []
+  }
+}

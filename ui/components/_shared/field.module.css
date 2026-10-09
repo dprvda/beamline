@@ -1,0 +1,101 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* The one frame every text-like control sits in: input, textarea, password, search, number, the select and date
+   triggers. Its paint (fill, edge, hover, focus) is the field role of the look in force (looks.css); invalid,
+   read-only and disabled are drawn here so they read the same in every look. */
+  .frame {
+    composes: m-field from global;
+    --_field-height: var(--pui-control-height-md);
+    position: relative;
+    display: flex;
+    min-width: 0; /* a grid or flex parent may make it narrower than the input's natural width */
+    align-items: center;
+    gap: var(--pui-space-2);
+    min-height: var(--_field-height);
+    padding-inline: var(--pui-space-2-5);
+    border-radius: var(--pui-field-radius, var(--pui-radius-control));
+    color: var(--pui-ink);
+    font-size: var(--pui-text-sm);
+    cursor: text;
+    transition:
+      box-shadow var(--pui-motion-out) var(--pui-ease-default),
+      background-color var(--pui-motion-out) var(--pui-ease-default);
+  }
+  .frame:hover:not([data-disabled]) {
+    transition-duration: 0ms;
+  }
+  .frame[data-state="open"] {
+    box-shadow: var(--m-field-edge-focus);
+  }
+  .frame:focus-within {
+    transition: none;
+  }
+  .frame[data-invalid] {
+    --m-field-ring: var(--pui-red);
+    --m-field-ring-hover: var(--pui-red);
+    --m-field-edge-focus:
+      inset 0 0 0 1px var(--pui-red), 0 0 0 3px color-mix(in oklab, var(--pui-red) 22%, transparent);
+  }
+  .frame[data-disabled] {
+    opacity: var(--pui-opacity-disabled);
+    cursor: not-allowed;
+  }
+  .frame[data-readonly] {
+    --m-field-bg: transparent;
+  }
+  .sm {
+    --_field-height: var(--pui-control-height-sm);
+    padding-inline: var(--pui-space-2);
+  }
+  .lg {
+    --_field-height: var(--pui-control-height-lg);
+    padding-inline: var(--pui-space-3);
+    font-size: var(--pui-text-base);
+  }
+  .multiline {
+    align-items: stretch;
+    padding-block: var(--pui-space-2);
+  }
+
+  /* The control itself: borderless, it takes the frame's look. Focus shows on the frame, so the control's own ring is off
+   (the frame's ring is the visible focus indicator, which is always present when the control has focus). */
+  .control {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    min-height: calc(var(--_field-height) - 2px);
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    padding: 0;
+  }
+  .control:focus-visible {
+    outline: none;
+  }
+  .control::placeholder {
+    color: var(--pui-ink-3);
+    opacity: 1;
+  }
+  .control:disabled {
+    cursor: not-allowed;
+  }
+  textarea.control {
+    min-height: 0;
+    resize: none;
+    line-height: 1.5;
+    field-sizing: content;
+  }
+  .adornment {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--pui-ink-3);
+  }
+  .adornment :where(svg) {
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+  }
+}

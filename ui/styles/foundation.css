@@ -1,0 +1,8 @@
+/* Import before host layer creation when sharing Tailwind; no host theme variables are assigned. */
+@layer properties, theme, base, components, utilities;
+@import "./tokens.css" layer(theme);
+@import "./base.css";
+@import "./surface.css";
+@import "./scope.css";
+@import "./utilities.css";
+@import "./motion.css";

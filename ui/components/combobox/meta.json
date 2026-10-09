@@ -1,0 +1,149 @@
+{
+  "name": "combobox",
+  "title": "Combobox",
+  "description": "One value from a long list found by typing (time zones, countries, customers): ranked matches with the match emphasised, keywords, optional group headings, clearable; the field keeps focus, and below 640 px the list opens as a bottom sheet with its own search.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-popover",
+    "lucide-react"
+  ],
+  "tags": [
+    "search",
+    "autocomplete",
+    "select"
+  ],
+  "whenToUse": [
+    "Picking one value from a long, searchable list."
+  ],
+  "notFor": [
+    "Fewer than about seven options (select).",
+    "Several values (multi-select)."
+  ],
+  "spec": {
+    "anatomy": [
+      "label",
+      "field (text, clear, chevron)",
+      "list (group headings when options carry a group)",
+      "empty state",
+      "phone sheet below 640 px: title, search field, list"
+    ],
+    "states": [
+      "chosen",
+      "typing",
+      "open",
+      "no match",
+      "error",
+      "disabled",
+      "sheet (below 640 px)"
+    ],
+    "keyboard": [
+      "↓ / ↑ open and move",
+      "Enter picks",
+      "Escape closes and restores",
+      "Home / End when not typing",
+      "Below 640 px: Enter, Space, ↓ or a typed letter on the field open the sheet (the letter starts its search); ↓ ↑ Enter in the sheet's search; Escape closes it and focus returns to the field"
+    ],
+    "motion": "The list grows from the field; below 640 px the sheet slides up from the bottom edge (none under reduced motion). Opens out of its trigger (_shared/overlay.module.css, source morph): the layer starts as the trigger's own box, offset onto it, and grows; the side next to the trigger is there at once so the nearest rows read within the ruled 90 ms, the far side settles by ~200 ms, content fades in over 90 ms; it closes back into the trigger in 180 ms. Until it has grown the press that opened it cannot land on a row. Reduced motion: it appears. One highlight plate glides between options for the arrow keys and the pointer, and appears in place when the query changes.",
+    "props": [
+      {
+        "name": "options",
+        "type": "{ value, label, description?, keywords?, icon?, disabled?, group? }[]",
+        "description": "`group` puts a heading where the group changes (in the given order) while the list is unsearched; searching ranks flat, finds a group's name and shows it beside each row's description."
+      },
+      {
+        "name": "value / defaultValue / onValueChange",
+        "type": "string"
+      },
+      {
+        "name": "clearable / required",
+        "type": "boolean"
+      },
+      {
+        "name": "emptyMessage",
+        "type": "ReactNode"
+      },
+      {
+        "name": "sheetTitle",
+        "type": "string",
+        "description": "Heading of the bottom sheet below 640 px. Default: the label."
+      },
+      {
+        "name": "style / className",
+        "type": "CSSProperties / string",
+        "description": "Visual field root; native props and ref remain on the native control."
+      },
+      {
+        "name": "classNames",
+        "type": "FieldClassNames & Partial<Record<\"input\" | \"clear\" | \"toggle\" | \"content\", string>>",
+        "description": "Documented field and control part classes; cannot replace refs, handlers or aria wiring."
+      }
+    ],
+    "appearance": "Uses the canonical nearest-scope portal host. A managed scope with a pending host waits to mount overlay content; no-provider use retains the library default destination. Appearance changes reuse the same host and preserve existing state.",
+    "scopeDefaults": {
+      "keys": [
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "responsive": "Below 640 px of viewport the field is a read-only opener (no on-screen keyboard under a popover) and the list opens in BottomSheet at full height with a search field inside it; picking closes the sheet and focus returns to the field."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-04"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "Field wrapper; className/style and classNames.root apply here",
+    "refTarget": "native input",
+    "slots": [
+      "root:field",
+      "label:label",
+      "frame:field-control",
+      "leading:field-adornment",
+      "trailing:field-adornment",
+      "description:field-description",
+      "error:field-error",
+      "input:combobox",
+      "clear:combobox-clear",
+      "toggle:combobox-toggle",
+      "content:combobox-list",
+      "sheet:combobox-sheet",
+      "search:combobox-search",
+      "group:listbox-group",
+      "separator:listbox-separator"
+    ],
+    "states": [
+      "chosen",
+      "typing",
+      "open",
+      "no match",
+      "error",
+      "disabled",
+      "sheet (below 640 px)"
+    ],
+    "roles": [
+      "m-field"
+    ],
+    "geometryInputs": [
+      "--pui-field-radius",
+      "--pui-control-height-sm",
+      "--pui-control-height-md",
+      "--pui-control-height-lg",
+      "--pui-text-sm"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/combobox",
+      "shared field"
+    ],
+    "features": []
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "name": "item",
+  "title": "Item",
+  "description": "The generic list row: media, title, description, meta and trailing actions; becomes a link or button when interactive.",
+  "category": "display",
+  "kind": "component",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [],
+  "tags": [
+    "list",
+    "row",
+    "list item"
+  ],
+  "whenToUse": [
+    "Any list of things: projects, files, services, people."
+  ],
+  "notFor": [
+    "Tabular data with columns → table or data-grid."
+  ],
+  "spec": {
+    "anatomy": [
+      "media (ItemIcon tile, avatar, thumbnail)",
+      "title",
+      "description",
+      "meta (isolated, tabular)",
+      "actions (own tab stops)",
+      "selection bar (inline-start, when selected)"
+    ],
+    "variants": {
+      "variant": [
+        "plain",
+        "outline",
+        "card"
+      ],
+      "size": [
+        "sm",
+        "md"
+      ]
+    },
+    "states": [
+      "static",
+      "hover (interactive rows: hover tint)",
+      "selected (accent tint, 2px accent-ink bar on the inline-start side, text in ink; stays on hover)",
+      "focus (ring on the row's link or button)"
+    ],
+    "keyboard": [
+      "Main area is one link/button; actions are separate tab stops."
+    ],
+    "motion": "Hover tint arrives at once and leaves over --pui-motion-out; nothing else moves.",
+    "props": [
+      {
+        "name": "title",
+        "type": "ReactNode",
+        "required": true
+      },
+      {
+        "name": "description / media / meta / actions",
+        "type": "ReactNode"
+      },
+      {
+        "name": "href / onSelect",
+        "type": "string / () => void"
+      },
+      {
+        "name": "selected",
+        "type": "boolean"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native HTMLDivElement"
+      },
+      {
+        "name": "classNames",
+        "type": "ItemClassNames"
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "variant",
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the existing visual root; native ref preserves internal measurements and focus. Typed classNames addresses documented existing parts; source owns deeper anatomy."
+  },
+  "review": {
+    "status": "accepted",
+    "notes": "Row is a link or button only when it does something; trailing actions stay separately focusable.",
+    "checked": "2026-10-02"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "item",
+    "refTarget": "native HTMLDivElement",
+    "slots": [
+      "root:item",
+      "main:item-main",
+      "media:item-media",
+      "text:item-text",
+      "title:item-title",
+      "description:item-description",
+      "meta:item-meta",
+      "actions:item-actions"
+    ],
+    "states": [
+      "static",
+      "hover (interactive rows: hover tint)",
+      "selected (accent tint, 2px accent-ink bar on the inline-start side, text in ink; stays on hover)",
+      "focus (ring on the row's link or button)"
+    ],
+    "roles": [
+      "m-surface"
+    ],
+    "geometryInputs": [
+      "size",
+      "variant"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/item"
+    ],
+    "features": []
+  }
+}

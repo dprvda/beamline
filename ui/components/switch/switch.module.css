@@ -1,0 +1,78 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Switch: a track and a thumb. The track is the toggle role of the look in force (a well that fills when on), the
+     thumb its knob; the thumb slides on the system spring, stretches while pressed and reaches as it travels. */
+  .track {
+    composes: m-toggle from global;
+    --m-color: var(--pui-control-on);
+    --pui-switch-w: 32px;
+    --_switch-direction: 1;
+    --pui-switch-h: 18px;
+    --pui-switch-pad: 2px;
+    position: relative;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    width: var(--pui-switch-w);
+    height: var(--pui-switch-h);
+    padding: var(--pui-switch-pad);
+    border-radius: var(--pui-radius-pill);
+    cursor: pointer;
+    transition: var(--m-transition);
+  }
+  .track:dir(rtl) {
+    --_switch-direction: -1;
+  }
+  .track:disabled {
+    opacity: var(--pui-opacity-disabled);
+    cursor: not-allowed;
+  }
+  .sm {
+    --pui-switch-w: 26px;
+    --pui-switch-h: 14px;
+  }
+  .thumb {
+    composes: m-knob from global;
+    --pui-thumb: calc(var(--pui-switch-h) - var(--pui-switch-pad) * 2);
+    display: block;
+    width: var(--pui-thumb);
+    height: var(--pui-thumb);
+    border-radius: var(--pui-radius-pill);
+    transition:
+      transform var(--pui-duration-spring) var(--pui-ease-spring),
+      width var(--pui-duration-fast) var(--pui-ease-default);
+  }
+  .thumb[data-state="checked"] {
+    background: var(--m-knob-sheen), var(--pui-control-thumb-on);
+    transform: translateX(
+      calc((var(--pui-switch-w) - var(--pui-thumb) - var(--pui-switch-pad) * 2) * var(--_switch-direction))
+    );
+  }
+  /* toggled: the knob reaches toward where it is going (its leading side stretches by half) and gathers there, a bead
+     of the look's material, never overshooting; rigid looks keep their knob (--m-morph-spread 0) */
+  .thumb[data-travel="on"] {
+    animation: reach-on var(--pui-duration-spring) var(--pui-ease-default);
+  }
+  .thumb[data-travel="off"] {
+    animation: reach-off var(--pui-duration-spring) var(--pui-ease-default);
+  }
+  @keyframes reach-on {
+    40% {
+      width: calc(var(--pui-thumb) * (1 + var(--m-morph-spread, 0.35) * 1.4));
+    }
+  }
+  @keyframes reach-off {
+    40% {
+      width: calc(var(--pui-thumb) * (1 + var(--m-morph-spread, 0.35) * 1.4));
+      translate: calc(var(--pui-thumb) * var(--m-morph-spread, 0.35) * -1.4 * var(--_switch-direction)) 0;
+    }
+  }
+  .track:active:not(:disabled) .thumb {
+    width: calc(var(--pui-thumb) + 4px);
+  }
+  .track:active:not(:disabled) .thumb[data-state="checked"] {
+    transform: translateX(
+      calc((var(--pui-switch-w) - var(--pui-thumb) - 4px - var(--pui-switch-pad) * 2) * var(--_switch-direction))
+    );
+  }
+}

@@ -1,0 +1,461 @@
+@layer properties, theme, base, components, utilities;
+/* the source morph's moving parts: the clip's four sides, the radius and the offset back to the trigger */
+@property --ci-t {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: -48px;
+}
+@property --ci-r {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: -48px;
+}
+@property --ci-b {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: -48px;
+}
+@property --ci-l {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: -48px;
+}
+@property --ci-x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --ci-y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@layer components {
+  /* Every floating layer in the system: one surface (painted by the overlay role of the look in force), one menu-item
+   look, one scrim, one enter and exit. A layer placed against a trigger opens out of it (the source morph below); one
+   without a placement arrives in --pui-motion-in scaling from its origin. Each leaves in --pui-motion-out; Radix keeps
+   it mounted until the exit animation ends. Reduced motion makes both instant (the duration tokens become 1ms). */
+  .surface {
+    composes: m-overlay from global;
+    z-index: var(--pui-z-popover);
+    min-width: 8rem;
+    max-height: var(--radix-popper-available-height, 70vh);
+    overflow: auto;
+    border-radius: var(--pui-overlay-radius, var(--pui-radius-card));
+    color: var(--pui-ink);
+    transform-origin: var(--radix-popper-transform-origin, var(--radix-dropdown-menu-content-transform-origin, center));
+    outline: none;
+  }
+  .surface[data-state="open"],
+  .surface[data-state="delayed-open"],
+  .surface[data-state="instant-open"] {
+    animation: pop-in var(--pui-motion-in) var(--pui-ease-default);
+  }
+  .surface[data-state="closed"] {
+    animation: pop-out var(--pui-motion-out) var(--pui-ease-default) forwards;
+  }
+
+  /* The source morph (research/morphing-interfaces-2026-10-04, M3): a layer placed against a trigger does not fade in
+     beside it, it opens out of it. It starts as the trigger's own box (Radix gives its size and the side and alignment
+     it was placed on), offset back onto the trigger, and grows: the side nearest the trigger is there at once, the
+     sides across follow, the far side arrives last (~200 ms), so the rows by the trigger are readable within the
+     ruled 90 ms while the outline settles. Content fades in over those 90 ms. It closes back into the trigger in the
+     ruled 180 ms. The clip ends 48px outside the box so the layer's shadow is never cut. Reduced motion: instant. */
+  .surface[data-side] {
+    --_aw: var(--radix-popper-anchor-width, 0px);
+    --_ah: var(--radix-popper-anchor-height, 0px);
+    --_gap: 6px;
+    --from-t: -48px;
+    --from-r: -48px;
+    --from-b: -48px;
+    --from-l: -48px;
+    --from-x: 0px;
+    --from-y: 0px;
+    --d-near: calc(var(--pui-duration-standard) * 0.55);
+    --d-cross: calc(var(--pui-duration-standard) * 0.85);
+    --d-far: var(--pui-duration-standard);
+    clip-path: inset(
+      var(--ci-t) var(--ci-r) var(--ci-b) var(--ci-l) round var(--pui-overlay-radius, var(--pui-radius-card))
+    );
+    translate: var(--ci-x) var(--ci-y);
+  }
+  .surface[data-side="bottom"] {
+    --from-t: 0px;
+    --from-b: calc(100% - var(--_ah));
+    --from-y: calc(-1 * (var(--_ah) + var(--_gap)));
+    --d-t: var(--d-near);
+    --d-b: var(--d-far);
+    --d-l: var(--d-cross);
+    --d-r: var(--d-cross);
+  }
+  .surface[data-side="top"] {
+    --from-b: 0px;
+    --from-t: calc(100% - var(--_ah));
+    --from-y: calc(var(--_ah) + var(--_gap));
+    --d-b: var(--d-near);
+    --d-t: var(--d-far);
+    --d-l: var(--d-cross);
+    --d-r: var(--d-cross);
+  }
+  .surface[data-side="right"] {
+    --from-l: 0px;
+    --from-r: calc(100% - var(--_aw));
+    --from-x: calc(-1 * (var(--_aw) + var(--_gap)));
+    --d-l: var(--d-near);
+    --d-r: var(--d-far);
+    --d-t: var(--d-cross);
+    --d-b: var(--d-cross);
+  }
+  .surface[data-side="left"] {
+    --from-r: 0px;
+    --from-l: calc(100% - var(--_aw));
+    --from-x: calc(var(--_aw) + var(--_gap));
+    --d-r: var(--d-near);
+    --d-l: var(--d-far);
+    --d-t: var(--d-cross);
+    --d-b: var(--d-cross);
+  }
+  /* alignment along the trigger: which part of the layer the trigger sits over */
+  .surface:is([data-side="bottom"], [data-side="top"])[data-align="start"] {
+    --from-l: 0px;
+    --from-r: calc(100% - var(--_aw));
+  }
+  .surface:is([data-side="bottom"], [data-side="top"])[data-align="end"] {
+    --from-l: calc(100% - var(--_aw));
+    --from-r: 0px;
+  }
+  .surface:is([data-side="bottom"], [data-side="top"])[data-align="start"]:dir(rtl) {
+    --from-l: calc(100% - var(--_aw));
+    --from-r: 0px;
+  }
+  .surface:is([data-side="bottom"], [data-side="top"])[data-align="end"]:dir(rtl) {
+    --from-l: 0px;
+    --from-r: calc(100% - var(--_aw));
+  }
+  .surface:is([data-side="bottom"], [data-side="top"])[data-align="center"] {
+    --from-l: calc((100% - var(--_aw)) / 2);
+    --from-r: calc((100% - var(--_aw)) / 2);
+  }
+  .surface:is([data-side="left"], [data-side="right"])[data-align="start"] {
+    --from-t: 0px;
+    --from-b: calc(100% - var(--_ah));
+  }
+  .surface:is([data-side="left"], [data-side="right"])[data-align="end"] {
+    --from-t: calc(100% - var(--_ah));
+    --from-b: 0px;
+  }
+  .surface:is([data-side="left"], [data-side="right"])[data-align="center"] {
+    --from-t: calc((100% - var(--_ah)) / 2);
+    --from-b: calc((100% - var(--_ah)) / 2);
+  }
+  .surface[data-side]:is([data-state="open"], [data-state="delayed-open"], [data-state="instant-open"]) {
+    animation:
+      grow-t var(--d-t) var(--pui-ease-out-strong),
+      grow-r var(--d-r) var(--pui-ease-out-strong),
+      grow-b var(--d-b) var(--pui-ease-out-strong),
+      grow-l var(--d-l) var(--pui-ease-out-strong),
+      grow-xy var(--d-cross) var(--pui-ease-out-strong),
+      settling var(--d-far) step-end;
+  }
+  .surface[data-side]:is([data-state="open"], [data-state="delayed-open"], [data-state="instant-open"]) > * {
+    animation: content-in var(--pui-motion-in) var(--pui-ease-default) both;
+  }
+  /* one duration for every part of the exit: the layer unmounts when the first of them ends */
+  .surface[data-side][data-state="closed"] {
+    animation: shrink var(--pui-motion-out) var(--pui-ease-exit) forwards;
+  }
+  .surface[data-side][data-state="closed"] > * {
+    animation: content-out var(--pui-motion-in) var(--pui-ease-default) forwards;
+  }
+  @keyframes grow-t {
+    from {
+      --ci-t: var(--from-t);
+    }
+  }
+  @keyframes grow-r {
+    from {
+      --ci-r: var(--from-r);
+    }
+  }
+  @keyframes grow-b {
+    from {
+      --ci-b: var(--from-b);
+    }
+  }
+  @keyframes grow-l {
+    from {
+      --ci-l: var(--from-l);
+    }
+  }
+  @keyframes grow-xy {
+    from {
+      --ci-x: var(--from-x);
+      --ci-y: var(--from-y);
+    }
+  }
+  /* it starts over its own trigger: until it has grown, the press that opened it must not land on a row */
+  @keyframes settling {
+    0%,
+    100% {
+      pointer-events: none;
+    }
+  }
+  @keyframes shrink {
+    to {
+      --ci-t: var(--from-t);
+      --ci-r: var(--from-r);
+      --ci-b: var(--from-b);
+      --ci-l: var(--from-l);
+      --ci-x: var(--from-x);
+      --ci-y: var(--from-y);
+      opacity: 0;
+    }
+  }
+  @keyframes content-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes content-out {
+    to {
+      opacity: 0;
+    }
+  }
+  .padded {
+    padding: var(--pui-pad-popover);
+  }
+  .menu {
+    padding: var(--pui-space-1);
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+  @keyframes pop-out {
+    to {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+
+  /* rows (and the gliding plate) nest in the list: its radius minus its padding, never rounder than a chip; on the
+     row itself, so any list that uses .item gets it */
+  .item,
+  .glide {
+    --_item-radius: min(
+      var(--pui-radius-chip),
+      calc(var(--pui-overlay-radius, var(--pui-radius-card)) - var(--pui-space-1))
+    );
+  }
+
+  /* menu rows: shared by dropdown, context menu, menubar, select, combobox lists */
+  .item {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--pui-space-2);
+    min-height: var(--pui-control-height-sm);
+    padding: 0 var(--pui-space-2);
+    /* nested in the list: the overlay's radius minus its padding, never rounder than a chip */
+    border-radius: var(--_item-radius);
+    color: var(--pui-ink);
+    font-size: var(--pui-text-sm);
+    cursor: default;
+    user-select: none;
+    outline: none;
+  }
+  .item[data-disabled] {
+    color: var(--pui-ink-3);
+    pointer-events: none;
+  }
+  .item[data-tone="danger"] {
+    color: var(--pui-red);
+  }
+  .item :where(svg) {
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+    flex-shrink: 0;
+    color: var(--pui-ink-3);
+  }
+  .item[data-tone="danger"] :where(svg) {
+    color: currentColor;
+  }
+  .item[data-highlighted]:not([data-glide]) {
+    background: var(--pui-hover-2);
+  }
+  .shortcut {
+    margin-inline-start: auto;
+    padding-inline-start: var(--pui-space-4);
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+    letter-spacing: var(--pui-tracking-mono-caps);
+  }
+  .heading {
+    padding: var(--pui-space-1-5) var(--pui-space-2) var(--pui-space-1);
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+    font-weight: var(--pui-weight-medium);
+  }
+  .separator {
+    height: 1px;
+    margin: var(--pui-space-1) calc(var(--pui-space-1) * -1);
+    background: var(--pui-line);
+  }
+  .check {
+    margin-inline-start: auto;
+    color: var(--pui-accent) !important;
+  }
+  /* the gliding highlight: one plate moves between rows for the pointer and the arrow keys; it appears in place */
+  .glide {
+    position: absolute;
+    z-index: 0;
+    inset-inline: var(--pui-space-1);
+    top: 0;
+    border-radius: var(--_item-radius);
+    background: var(--pui-hover-2);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--pui-motion-out) var(--pui-ease-default);
+  }
+  .glide[data-on] {
+    opacity: 1;
+    transition:
+      transform var(--pui-duration-fast) var(--pui-ease-standard),
+      height var(--pui-duration-fast) var(--pui-ease-standard),
+      opacity 0ms;
+  }
+  .glide[data-jump] {
+    transition: opacity 0ms;
+  }
+  /* a plate over a row or grid of cells takes each cell's size and travels both ways */
+  .glide[data-axis="xy"] {
+    inset-inline: auto;
+    left: 0;
+  }
+  .glide[data-axis="xy"][data-on] {
+    transition:
+      transform var(--pui-duration-fast) var(--pui-ease-standard),
+      width var(--pui-duration-fast) var(--pui-ease-standard),
+      height var(--pui-duration-fast) var(--pui-ease-standard),
+      opacity 0ms;
+  }
+
+  /* modal layers */
+  .scrim {
+    position: fixed;
+    inset: 0;
+    z-index: var(--pui-z-overlay);
+    background: var(--pui-scrim);
+    backdrop-filter: blur(var(--pui-blur-overlay));
+  }
+  .scrim[data-state="open"] {
+    animation: fade-in var(--pui-fade-in) var(--pui-ease-default);
+  }
+  .scrim[data-state="closed"] {
+    animation: fade-out var(--pui-fade-out) var(--pui-ease-default) forwards;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  .dialog {
+    composes: m-overlay from global;
+    position: fixed;
+    z-index: var(--pui-z-modal);
+    left: 50%;
+    top: 50%;
+    width: min(calc(100vw - var(--pui-space-8)), var(--pui-dialog-width, var(--_dialog-width, 440px)));
+    max-height: calc(100dvh - var(--pui-space-12));
+    overflow: hidden;
+    translate: -50% -50%;
+    border-radius: var(--pui-dialog-radius, var(--pui-radius-window));
+    color: var(--pui-ink);
+    outline: none;
+  }
+  .dialog[data-state="open"] {
+    animation: dialog-in var(--pui-duration-standard) var(--pui-ease-enter);
+  }
+  .dialog[data-state="closed"] {
+    animation: dialog-out var(--pui-motion-out) var(--pui-ease-default) forwards;
+  }
+  /* A dialog opened from something (use-open-from.ts) grows out of it: it starts as the opener's box, offset back onto
+     it, and grows to its own place over the considered duration while its content fades in; it closes back into the
+     opener in the ruled 180 ms. Shares the source morph's moving parts and guard with .surface. */
+  .dialog[data-open-from] {
+    clip-path: inset(
+      var(--ci-t) var(--ci-r) var(--ci-b) var(--ci-l) round var(--pui-dialog-radius, var(--pui-radius-window))
+    );
+    transform: translate(var(--ci-x), var(--ci-y));
+  }
+  .dialog[data-open-from][data-state="open"] {
+    animation:
+      grow-t var(--pui-duration-considered) var(--pui-ease-out-strong),
+      grow-r var(--pui-duration-considered) var(--pui-ease-out-strong),
+      grow-b var(--pui-duration-considered) var(--pui-ease-out-strong),
+      grow-l var(--pui-duration-considered) var(--pui-ease-out-strong),
+      grow-xy calc(var(--pui-duration-considered) * 0.9) var(--pui-ease-out-strong),
+      settling var(--pui-duration-considered) step-end;
+  }
+  .dialog[data-open-from][data-state="open"] > * {
+    animation: content-in var(--pui-duration-standard) var(--pui-ease-default) calc(var(--pui-duration-standard) * 0.35)
+      both;
+  }
+  .dialog[data-open-from][data-state="closed"] {
+    animation: shrink var(--pui-motion-out) var(--pui-ease-exit) forwards;
+  }
+  .dialog[data-open-from][data-state="closed"] > * {
+    animation: content-out var(--pui-motion-in) var(--pui-ease-default) forwards;
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes dialog-out {
+    to {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+}
+
+/* Reduced motion: surfaces and dialogs fade without scaling or growing, over the fade tokens (restrained under reduced,
+   1ms under none; APPEARANCE A06). */
+@media (prefers-reduced-motion: reduce) {
+  .surface,
+  .dialog {
+    animation-name: fade-in !important;
+    animation-duration: var(--pui-fade-in) !important;
+  }
+  .surface[data-state="closed"],
+  .dialog[data-state="closed"] {
+    animation-name: fade-out !important;
+    animation-duration: var(--pui-fade-out) !important;
+  }
+}
+@layer components {
+  :global(.pui[data-motion="reduced"]) .surface,
+  :global(.pui[data-motion="none"]) .surface,
+  :global(.pui[data-motion="reduced"]) .dialog,
+  :global(.pui[data-motion="none"]) .dialog {
+    animation-name: fade-in;
+    animation-duration: var(--pui-fade-in);
+  }
+  :global(.pui[data-motion="reduced"]) .surface[data-state="closed"],
+  :global(.pui[data-motion="none"]) .surface[data-state="closed"],
+  :global(.pui[data-motion="reduced"]) .dialog[data-state="closed"],
+  :global(.pui[data-motion="none"]) .dialog[data-state="closed"] {
+    animation-name: fade-out;
+    animation-duration: var(--pui-fade-out);
+  }
+}

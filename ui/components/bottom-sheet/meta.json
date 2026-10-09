@@ -1,0 +1,148 @@
+{
+  "name": "bottom-sheet",
+  "title": "Bottom sheet",
+  "description": "A phone panel that rests at a peek and follows the finger to full height; a flick down closes it, and the handle works from the keyboard.",
+  "kind": "component",
+  "category": "overlays",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "motion",
+    "lucide-react"
+  ],
+  "tags": [
+    "drawer",
+    "mobile",
+    "drag"
+  ],
+  "whenToUse": [
+    "Phone panels that rest at a peek and expand: filters, details, a picker."
+  ],
+  "notFor": [
+    "Desktop side panels (sheet).",
+    "Blocking decisions (dialog or alert-dialog)."
+  ],
+  "spec": {
+    "anatomy": [
+      "scrim",
+      "panel",
+      "handle (button)",
+      "title",
+      "description",
+      "close",
+      "body (scrolls)"
+    ],
+    "variants": {
+      "detents": [
+        "fractions of the screen height, default [0.45, 0.92]"
+      ]
+    },
+    "states": [
+      "closed",
+      "entering",
+      "resting at a detent",
+      "dragging",
+      "leaving"
+    ],
+    "keyboard": [
+      "Escape closes",
+      "Enter on the handle cycles heights",
+      "↑ ↓ on the handle move between heights (↓ at the lowest closes)",
+      "Tab is trapped inside",
+      "Opening autofocus preserves initialDetent. Focusing a control below the resting visible area expands the panel, independent of the entrance animation."
+    ],
+    "motion": "Slides on the host-resolved --pui-ease-drawer over --pui-duration-considered (360 ms at foundation scale one); follows scoped speed and reduced/none. While dragged it follows the finger 1:1 and resists past the top.",
+    "props": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "detents",
+        "type": "number[]",
+        "default": "[0.45, 0.92]"
+      },
+      {
+        "name": "initialDetent",
+        "type": "number",
+        "default": "0"
+      },
+      {
+        "name": "onDetentChange",
+        "type": "(index) => void"
+      },
+      {
+        "name": "trigger",
+        "type": "ReactNode"
+      },
+      {
+        "name": "open / defaultOpen / onOpenChange",
+        "type": "boolean"
+      },
+      {
+        "name": "classNames",
+        "type": "typed part classes",
+        "description": "See visualContract.slots; existing handlers, accessibility and internal measurement refs are preserved."
+      },
+      {
+        "name": "style",
+        "type": "CSSProperties",
+        "description": "Visual root inline styles."
+      },
+      {
+        "name": "ref",
+        "type": "HTMLDivElement",
+        "description": "Native visual root/control reference, composed with internal refs when present."
+      }
+    ],
+    "appearance": "className/style address the visual root. Typed classNames customize documented internal parts; composed exported parts retain native attributes. Styling and forwarded refs preserve internal measurement/focus, handlers and accessibility. Appearance changes retain operational state."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "portaled div[data-slot=bottom-sheet]",
+    "refTarget": "native panel div; composed with appearance measurement ref",
+    "slots": [
+      "root:bottom-sheet",
+      "backdrop:bottom-sheet-backdrop",
+      "header:bottom-sheet-header",
+      "handle:bottom-sheet-handle",
+      "title:bottom-sheet-title",
+      "description:bottom-sheet-description",
+      "close:bottom-sheet-close",
+      "body:bottom-sheet-body"
+    ],
+    "roles": [
+      "m-overlay"
+    ],
+    "geometryInputs": [
+      "detents",
+      "initialDetent",
+      "viewport height",
+      "measured header height",
+      "--pui-radius-window",
+      "--pui-duration-considered",
+      "--pui-ease-drawer"
+    ],
+    "states": [
+      "closed",
+      "entering",
+      "resting at a detent",
+      "dragging",
+      "leaving"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/bottom-sheet"
+    ],
+    "features": []
+  }
+}

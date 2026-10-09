@@ -1,0 +1,134 @@
+{
+  "name": "dialog",
+  "title": "Dialog",
+  "description": "A focused task over the page (create, invite, rename) with a title, body and footer; focus moves in, is trapped and returns on close.",
+  "kind": "component",
+  "category": "overlays",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "lucide-react"
+  ],
+  "tags": [
+    "modal",
+    "overlay",
+    "form"
+  ],
+  "whenToUse": [
+    "Short focused tasks that need attention without leaving the page: create, invite, rename, import."
+  ],
+  "notFor": [
+    "Long editing beside a list (sheet).",
+    "Blocking destructive confirmations (alert-dialog).",
+    "Information that needs no answer (toast)."
+  ],
+  "spec": {
+    "anatomy": [
+      "Dialog",
+      "DialogTrigger",
+      "DialogContent (scrim, title, description, body, ×)",
+      "DialogFooter",
+      "DialogClose"
+    ],
+    "variants": {
+      "size": [
+        "sm 380",
+        "md 440",
+        "lg 560",
+        "xl 720"
+      ]
+    },
+    "states": [
+      "closed",
+      "open (focus to the first field or autoFocus; Tab trapped)",
+      "working (dismissible={false}: Escape, scrim and × off; primary Button loading keeps its size)",
+      "error (Alert at the top of the body, the field marked invalid with its words, drafts kept, focus moved to the field)",
+      "resolved (the caller closes on success; focus returns to the opener)",
+      "long content (header and footer stay; only the body scrolls)",
+      "closing"
+    ],
+    "keyboard": [
+      "Escape closes (unless dismissible is false)",
+      "Tab is trapped inside",
+      "focus returns to the trigger"
+    ],
+    "motion": "The scrim fades in; the dialog scales 0.96 → 1 over --pui-duration-standard on --pui-ease-enter and leaves over --pui-motion-out. Opens out of whatever opened it (_shared/use-open-from.ts): it starts as the opener's box, offset onto it, grows to its place over the considered duration while its content fades in, and closes back into the opener in 180 ms. Without an opener (a shortcut) the ordinary entrance runs. Reduced motion: it appears.",
+    "props": [
+      {
+        "name": "title",
+        "type": "ReactNode"
+      },
+      {
+        "name": "description",
+        "type": "ReactNode"
+      },
+      {
+        "name": "size",
+        "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+        "default": "\"md\""
+      },
+      {
+        "name": "dismissible",
+        "type": "boolean",
+        "default": "true"
+      },
+      {
+        "name": "showClose",
+        "type": "boolean",
+        "default": "true"
+      },
+      {
+        "name": "footer",
+        "type": "ReactNode"
+      },
+      {
+        "name": "open / defaultOpen / onOpenChange",
+        "type": "boolean"
+      }
+    ],
+    "appearance": "Managed appearance changes preserve mounted controls and operational state. Instance design props override scoped defaults; classNames addresses documented slots. Header/footer remain reachable while the body scrolls."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "dialog",
+    "refTarget": "visual root",
+    "slots": [
+      "root",
+      "scrim",
+      "header",
+      "title",
+      "description",
+      "body",
+      "footer",
+      "close"
+    ],
+    "states": [
+      "closed",
+      "open",
+      "busy (dismissible=false, × hidden)",
+      "closing"
+    ],
+    "roles": [
+      "m-overlay"
+    ],
+    "geometryInputs": [
+      "--pui-dialog-radius",
+      "--pui-dialog-width",
+      "size"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/dialog"
+    ],
+    "features": []
+  }
+}

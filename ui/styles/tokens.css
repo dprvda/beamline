@@ -1,0 +1,825 @@
+/* ui/styles/tokens.css — the ONE token source for every component in ui/.
+ *
+ * Every token lives on a `.pui` root, never on the page as a whole, and every name carries the --pui- prefix, so the
+ * system can sit inside any app without touching that app's own variables. A root is either the whole document
+ * (<html class="pui">, for apps built on the system) or a UIRoot element around the screens that use it.
+ *
+ * Dark is the default: a top-level .pui with no theme class is dark. Light is opt-in: class="pui light" (or
+ * data-theme="light"). A nested .pui with no theme class inherits; with one, it switches theme for its subtree.
+ *
+ * The brand is an input, not a token we declare: set --pui-brand on the root (or anywhere above it) and accent, focus,
+ * series 1, glows and the brand ramps follow. Without it each theme uses --pui-brand-default; data-accent presets
+ * change that default.
+ *
+ * Rulings carried from the owner's engine (legacy/landing-sites/tokens/general/color.css):
+ *   - neutrals carry a TRACE of hue 260, they are not pure grey;
+ *   - elevation is lightness first (page < canvas < surface < surface-2), shadow second;
+ *   - --pui-edge-control is the 3:1 boundary for inputs; --pui-line is a decorative hairline;
+ *   - colour is never the only carrier of meaning (pair --pui-up/--pui-down with a sign or arrow);
+ *   - "unmeasured" is a hatched state, never the cold end of a data ramp.
+ *
+ * Not restored, on purpose: the @supports fallbacks for relative colour syntax and light-dark(). Tailwind v4's browser
+ * floor already requires both, and every accent token here is a relative colour.
+ * Utilities that use these tokens (interaction baseline, disclosure, overlay enter/exit, scroll reveal, hit targets,
+ * grain, hatch, eyebrow) live in ui/styles/utilities.css.
+ */
+
+.pui.light,
+.pui[data-theme="light"] {
+  color-scheme: light;
+
+  /* the brand when the app sets none (--pui-brand wins whenever it is set) */
+  --pui-brand-default: oklch(0.54 0.19 258);
+
+  /* surfaces */
+  --pui-page: oklch(0.985 0.002 260);
+  --pui-canvas: oklch(0.967 0.003 260);
+  --pui-surface: oklch(1 0 0);
+  --pui-surface-2: oklch(1 0 0);
+  --pui-inset: oklch(0.977 0.003 260);
+  --pui-hover: oklch(0.962 0.004 260);
+  --pui-hover-2: oklch(0.93 0.005 260);
+
+  /* ink */
+  --pui-ink: oklch(0.22 0.01 260);
+  --pui-ink-2: oklch(0.47 0.012 260);
+  --pui-ink-3: oklch(0.53 0.011 260);
+  --pui-ink-inverse: oklch(0.985 0.002 260);
+
+  /* lines */
+  --pui-line: oklch(0.925 0.005 260);
+  --pui-line-strong: oklch(0.875 0.007 260);
+  --pui-line-soft: oklch(0.955 0.003 260);
+  --pui-edge-control: oklch(0.62 0.01 260);
+  --pui-field: oklch(0.967 0.003 260);
+  --pui-stripe: oklch(0.405 0 0 / 0.075);
+  --pui-stripe-bg: oklch(0.97 0 0);
+
+  /* accent (derived from the brand; --pui-accent itself is set in the shared block below) */
+  /* accent-coloured text: never lighter than 0.5, so any brand reads ≥ 4.5:1 on surfaces and on its own tint */
+  --pui-accent-ink: oklch(from var(--pui-accent) min(calc(l - 0.05), 0.5) c h);
+  --pui-accent-strong: oklch(from var(--pui-accent) calc(l - 0.1) c h);
+  --pui-accent-tint: oklch(from var(--pui-accent) 0.96 0.02 h);
+  --pui-accent-subtle: oklch(from var(--pui-accent) l c h / 0.12);
+  /* text on an accent fill: near-white on a deep accent, near-black on a light one, so any brand stays ≥ 4.5:1 */
+  --pui-accent-foreground: oklch(from var(--pui-accent) clamp(0.17, (0.6 - l) * 1000, 0.99) 0 0);
+  /* double bezel: an outer shell with a hairline, a gap, and an inset panel with its own edge (bezel component) */
+  --pui-bezel-shell: var(--pui-surface);
+  --pui-bezel-shell-edge: inset 0 1px 0 oklch(1 0 0 / 0.9), 0 0 0 1px var(--pui-line), 0 1px 2px oklch(0 0 0 / 0.04);
+  --pui-bezel-inner: var(--pui-inset);
+  --pui-bezel-inner-edge: inset 0 0 0 1px var(--pui-line-soft);
+  /* streaming text: the trail a new word passes through before it settles to ink (brand hue, +45°, +90°); its chroma
+     follows the brand, so a neutral brand gets a near-grey trail */
+  --pui-stream-1: oklch(from var(--pui-accent) 0.56 clamp(0.02, c, 0.16) h);
+  --pui-stream-2: oklch(from var(--pui-accent) 0.53 clamp(0.02, c * 1.05, 0.17) calc(h + 45));
+  --pui-stream-3: oklch(from var(--pui-accent) 0.57 clamp(0.02, c, 0.16) calc(h + 90));
+
+  /* semantic — always paired with an icon or word, never colour alone. Light values are deep enough to be read as
+     text (≥ 4.5:1 on canvas and on their own tint), not only seen as fills. */
+  --pui-green: oklch(0.5 0.15 152);
+  --pui-green-tint: oklch(0.955 0.03 155);
+  --pui-orange: oklch(0.55 0.16 55);
+  --pui-orange-tint: oklch(0.96 0.03 65);
+  --pui-red: oklch(0.54 0.2 25);
+  --pui-red-tint: oklch(0.955 0.025 20);
+  --pui-blue: oklch(0.52 0.17 250);
+  --pui-blue-tint: oklch(0.955 0.025 250);
+  --pui-violet: oklch(0.54 0.2 295);
+  --pui-violet-tint: oklch(0.955 0.03 295);
+
+  /* trading — up/down are NOT green/red aliases so a product can swap them (e.g. East-Asian convention) */
+  --pui-up: oklch(0.47 0.15 152);
+  --pui-up-tint: oklch(0.47 0.15 152 / 0.1);
+  --pui-down: oklch(0.54 0.21 22);
+  --pui-down-tint: oklch(0.54 0.21 22 / 0.1);
+  --pui-on-up: oklch(0.99 0 0);
+  --pui-on-down: oklch(0.99 0 0);
+
+  /* data */
+  --pui-unmeasured: oklch(0.9 0.004 260);
+  --pui-unmeasured-hatch: repeating-linear-gradient(45deg, oklch(0 0 0 / 0.1) 0 2px, transparent 2px 4px);
+  /* series 2–7 keep their hue distance from series 1 (the brand), so any brand keeps the palette's spacing;
+     with the default brand (hue 258) they are the approved hues (D5). Each keeps 3:1 against the card (D8) */
+  --pui-series-2: oklch(from var(--pui-series-1) 0.62 0.17 calc(h - 83));
+  --pui-series-3: oklch(from var(--pui-series-1) 0.66 0.16 calc(h - 188));
+  --pui-series-4: oklch(from var(--pui-series-1) 0.58 0.2 calc(h + 62));
+  --pui-series-5: oklch(from var(--pui-series-1) 0.62 0.15 calc(h - 228));
+  --pui-series-6: oklch(from var(--pui-series-1) 0.55 0.12 calc(h - 38));
+  --pui-series-7: oklch(from var(--pui-series-1) 0.64 0.14 calc(h - 128));
+  --pui-series-8: oklch(0.52 0.02 260);
+
+  /* overlays */
+  --pui-tooltip-bg: oklch(0.25 0.008 260);
+  --pui-tooltip-fg: oklch(0.975 0.002 260);
+  --pui-tooltip-muted: oklch(0.73 0.008 260);
+  --pui-tooltip-border: oklch(0.34 0.007 260);
+  --pui-scrim: oklch(0.2 0.01 260 / 0.35);
+
+  /* shadows: a hairline ring + a layered soft stack */
+  --pui-shadow-xs: 0 1px 1px oklch(0 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.04);
+  --pui-shadow-sm: 0 1px 2px oklch(0 0 0 / 0.04), 0 2px 4px oklch(0 0 0 / 0.04), 0 3px 8px oklch(0 0 0 / 0.03);
+  --pui-shadow-md: 0 2px 4px oklch(0 0 0 / 0.04), 0 4px 10px oklch(0 0 0 / 0.05), 0 10px 24px oklch(0 0 0 / 0.05);
+  --pui-shadow-lg: 0 4px 8px oklch(0 0 0 / 0.04), 0 12px 28px oklch(0 0 0 / 0.08), 0 24px 56px oklch(0 0 0 / 0.08);
+  --pui-shadow-hairline: 0 0 0 1px var(--pui-line);
+  --pui-shadow-btn: 0 0 0 1px var(--pui-line-strong), var(--pui-shadow-xs);
+  --pui-shadow-card: 0 0 0 1px var(--pui-line), var(--pui-shadow-sm);
+  --pui-shadow-raised: 0 0 0 1px var(--pui-line), var(--pui-shadow-md);
+  --pui-shadow-overlay: 0 0 0 1px var(--pui-line), var(--pui-shadow-lg);
+  --pui-shadow-inset-field: inset 0 1px 2px oklch(0 0 0 / 0.08);
+
+  /* selection controls (Arc vocabulary): a filled control, its glyph, its track and thumb */
+  --pui-control-on: var(--pui-accent);
+  --pui-control-glyph: var(--pui-accent-foreground);
+  --pui-control-track: oklch(0.9 0.005 260);
+  --pui-control-track-hover: oklch(0.86 0.006 260);
+  --pui-control-thumb: oklch(1 0 0);
+  --pui-control-thumb-on: oklch(1 0 0);
+  --pui-control-fill: var(--pui-accent);
+  --pui-control-thumb-shadow:
+    0 0 0 0.5px oklch(0 0 0 / 0.08), 0 1px 2px oklch(0 0 0 / 0.16), 0 2px 6px oklch(0 0 0 / 0.06);
+
+  /* consequence triples — the TOKEN IS THE TRIPLE: colour + shape + word (blocking ▲, degrading ■, hygiene ○).
+     Light halves from legacy light-first.css §F: text at L 50 (4.5:1 on white), tint at L 96.5, edge 80% of the text. */
+  --pui-consequence-blocking: oklch(0.5 0.1546 18.61);
+  --pui-consequence-degrading: oklch(0.5 0.1023 86.73);
+  --pui-consequence-hygiene: oklch(0.5 0.0145 286.01);
+  --pui-consequence-blocking-tint: oklch(0.965 0.0172 18.61);
+  --pui-consequence-degrading-tint: oklch(0.965 0.0392 86.73);
+  --pui-consequence-hygiene-tint: oklch(0.965 0.0173 286.01);
+  --pui-consequence-blocking-edge: color-mix(in srgb, var(--pui-consequence-blocking) 80%, transparent);
+  --pui-consequence-degrading-edge: color-mix(in srgb, var(--pui-consequence-degrading) 80%, transparent);
+  --pui-consequence-hygiene-edge: color-mix(in srgb, var(--pui-consequence-hygiene) 80%, transparent);
+
+  /* keyboard-mode focus ring (opt-in with data-kbd="on" on the root): amber at 3:1 on white does not exist, so the
+     light half is olive-gold at L 60 (legacy light-first.css §D, 3.36–3.94:1) */
+  --pui-focus-ring: oklch(from var(--pui-accent) 0.5 c h);
+  --pui-focus-ring-kbd: oklch(0.6 0.1233 96);
+  --pui-focus-ring-kbd-halo: oklch(0.6 0.1233 96 / 0.16);
+
+  /* grain: multiply darkens paper, overlay would wash out on white */
+  --pui-grain-opacity: 0.06;
+  --pui-grain-blend: multiply;
+}
+
+.pui:where(:not(.pui .pui)),
+.pui.dark,
+.pui[data-theme="dark"] {
+  color-scheme: dark;
+  --pui-brand-default: oklch(0.68 0.16 258);
+
+  --pui-page: oklch(0.155 0.004 260);
+  --pui-canvas: oklch(0.175 0.004 260);
+  --pui-surface: oklch(0.2 0.005 260);
+  --pui-surface-2: oklch(0.232 0.006 260);
+  --pui-inset: oklch(0.168 0.004 260);
+  --pui-hover: oklch(0.245 0.006 260);
+  --pui-hover-2: oklch(0.285 0.007 260);
+
+  --pui-ink: oklch(0.955 0.003 260);
+  --pui-ink-2: oklch(0.75 0.008 260);
+  --pui-ink-3: oklch(0.64 0.01 260);
+  --pui-ink-inverse: oklch(0.17 0.004 260);
+
+  --pui-line: oklch(0.275 0.006 260);
+  --pui-line-strong: oklch(0.335 0.008 260);
+  --pui-line-soft: oklch(0.235 0.005 260);
+  --pui-edge-control: oklch(0.52 0.01 260);
+  --pui-field: oklch(0.215 0.006 260);
+  --pui-stripe: oklch(1 0 0 / 0.045);
+  --pui-stripe-bg: oklch(0.165 0.004 260);
+
+  /* never darker than 0.74 on the dark surfaces, whatever the brand */
+  --pui-accent-ink: oklch(from var(--pui-accent) max(calc(l + 0.1), 0.74) calc(c * 0.7) h);
+  --pui-accent-strong: oklch(from var(--pui-accent) calc(l + 0.14) calc(c * 0.6) h);
+  --pui-accent-tint: oklch(from var(--pui-accent) l c h / 0.16);
+  --pui-accent-subtle: oklch(from var(--pui-accent) l c h / 0.2);
+  /* text on an accent fill: near-white on a deep accent, near-black on a light one, so any brand stays ≥ 4.5:1 */
+  --pui-accent-foreground: oklch(from var(--pui-accent) clamp(0.17, (0.6 - l) * 1000, 0.99) 0 0);
+  --pui-bezel-shell: oklch(0.19 0.004 260);
+  --pui-bezel-shell-edge:
+    inset 0 1px 0 oklch(1 0 0 / 0.045), 0 0 0 1px oklch(1 0 0 / 0.065), 0 1px 3px oklch(0 0 0 / 0.35);
+  --pui-bezel-inner: oklch(0.145 0.004 260);
+  --pui-bezel-inner-edge: inset 0 0 0 1px oklch(1 0 0 / 0.045), inset 0 1px 3px oklch(0 0 0 / 0.45);
+  --pui-stream-1: oklch(from var(--pui-accent) 0.8 clamp(0.02, c * 0.7, 0.11) h);
+  --pui-stream-2: oklch(from var(--pui-accent) 0.76 clamp(0.02, c * 0.8, 0.13) calc(h + 45));
+  --pui-stream-3: oklch(from var(--pui-accent) 0.79 clamp(0.02, c * 0.75, 0.12) calc(h + 90));
+
+  --pui-green: oklch(0.72 0.15 152);
+  --pui-green-tint: oklch(0.72 0.15 152 / 0.14);
+  --pui-orange: oklch(0.77 0.15 60);
+  --pui-orange-tint: oklch(0.77 0.15 60 / 0.14);
+  --pui-red: oklch(0.68 0.19 22);
+  --pui-red-tint: oklch(0.68 0.19 22 / 0.15);
+  --pui-blue: oklch(0.7 0.14 250);
+  --pui-blue-tint: oklch(0.7 0.14 250 / 0.15);
+  --pui-violet: oklch(0.7 0.16 295);
+  --pui-violet-tint: oklch(0.7 0.16 295 / 0.15);
+
+  --pui-up: oklch(0.74 0.16 155);
+  --pui-up-tint: oklch(0.74 0.16 155 / 0.14);
+  --pui-down: oklch(0.68 0.2 22);
+  --pui-down-tint: oklch(0.68 0.2 22 / 0.15);
+  --pui-on-up: oklch(0.2 0.03 155);
+  --pui-on-down: oklch(0.18 0.03 22);
+
+  --pui-unmeasured: oklch(0.24 0.005 260);
+  --pui-unmeasured-hatch: repeating-linear-gradient(45deg, oklch(1 0 0 / 0.1) 0 2px, transparent 2px 4px);
+  /* series 2–7 keep their hue distance from series 1 (the brand), so any brand keeps the palette's spacing;
+     with the default brand (hue 258) they are the approved hues (D5) */
+  --pui-series-2: oklch(from var(--pui-series-1) 0.74 0.14 calc(h - 83));
+  --pui-series-3: oklch(from var(--pui-series-1) 0.8 0.14 calc(h - 183));
+  --pui-series-4: oklch(from var(--pui-series-1) 0.7 0.18 calc(h + 62));
+  --pui-series-5: oklch(from var(--pui-series-1) 0.72 0.14 calc(h - 223));
+  --pui-series-6: oklch(from var(--pui-series-1) 0.68 0.11 calc(h - 38));
+  --pui-series-7: oklch(from var(--pui-series-1) 0.78 0.14 calc(h - 128));
+  --pui-series-8: oklch(0.62 0.02 260);
+
+  --pui-tooltip-bg: oklch(0.13 0.004 260);
+  --pui-tooltip-fg: oklch(0.955 0.003 260);
+  --pui-tooltip-muted: oklch(0.72 0.008 260);
+  --pui-tooltip-border: oklch(0.29 0.006 260);
+  --pui-scrim: oklch(0.08 0.004 260 / 0.6);
+
+  --pui-shadow-xs: 0 1px 2px oklch(0 0 0 / 0.3);
+  --pui-shadow-sm: 0 1px 2px oklch(0 0 0 / 0.25), 0 2px 6px oklch(0 0 0 / 0.2);
+  --pui-shadow-md: 0 2px 6px oklch(0 0 0 / 0.25), 0 8px 20px oklch(0 0 0 / 0.25);
+  --pui-shadow-lg: 0 4px 12px oklch(0 0 0 / 0.3), 0 18px 48px oklch(0 0 0 / 0.4);
+  /* in dark, elevation rings are a faint LIGHT hairline graduated by how far the surface floats */
+  --pui-shadow-hairline: 0 0 0 1px var(--pui-line);
+  --pui-shadow-btn: 0 0 0 1px oklch(1 0 0 / 0.09), 0 1px 2px oklch(0 0 0 / 0.3);
+  --pui-shadow-card: 0 0 0 1px oklch(1 0 0 / 0.08), 0 1px 2px oklch(0 0 0 / 0.2), 0 2px 6px oklch(0 0 0 / 0.2);
+  --pui-shadow-raised: 0 0 0 1px oklch(1 0 0 / 0.1), 0 2px 10px oklch(0 0 0 / 0.3);
+  --pui-shadow-overlay: 0 0 0 1px oklch(1 0 0 / 0.12), 0 8px 28px oklch(0 0 0 / 0.45);
+  --pui-shadow-inset-field: inset 0 1px 2px oklch(0 0 0 / 0.35);
+
+  --pui-control-on: var(--pui-accent);
+  --pui-control-glyph: var(--pui-accent-foreground);
+  --pui-control-track: oklch(0.32 0.007 260);
+  --pui-control-track-hover: oklch(0.36 0.008 260);
+  --pui-control-thumb: oklch(0.97 0.002 260);
+  --pui-control-thumb-on: oklch(1 0 0);
+  --pui-control-fill: var(--pui-accent);
+  --pui-control-thumb-shadow:
+    0 0 0 0.5px oklch(0 0 0 / 0.3), 0 1px 2px oklch(0 0 0 / 0.35), 0 2px 6px oklch(0 0 0 / 0.2);
+
+  /* consequence triples, dark: the source hexes #ff8086 / #f0c14b / #9a9aa4 converted to OKLCH byte-exactly
+     (legacy color.css §E); tint and edge are the source's "+16" / "+55" hex alphas as real alpha (0.086 / 0.33) */
+  --pui-consequence-blocking: oklch(0.7457 0.1546 18.61);
+  --pui-consequence-degrading: oklch(0.8318 0.1424 86.73);
+  --pui-consequence-hygiene: oklch(0.6894 0.0145 286.01);
+  --pui-consequence-blocking-tint: oklch(0.7457 0.1546 18.61 / 0.086);
+  --pui-consequence-degrading-tint: oklch(0.8318 0.1424 86.73 / 0.086);
+  --pui-consequence-hygiene-tint: oklch(0.6894 0.0145 286.01 / 0.086);
+  --pui-consequence-blocking-edge: oklch(0.7457 0.1546 18.61 / 0.33);
+  --pui-consequence-degrading-edge: oklch(0.8318 0.1424 86.73 / 0.33);
+  --pui-consequence-hygiene-edge: oklch(0.6894 0.0145 286.01 / 0.33);
+
+  --pui-focus-ring: var(--pui-accent);
+  --pui-focus-ring-kbd: oklch(0.85 0.19 96);
+  --pui-focus-ring-kbd-halo: oklch(0.85 0.19 96 / 0.16);
+
+  /* soft-light, not the legacy overlay: overlay at 5% on a near-black surface changed no pixels (measured sd 0.04 of
+     255); soft-light at 18% gives a felt texture (sd ≈ 1) while barely lifting the ground */
+  --pui-grain-opacity: 0.18;
+  --pui-grain-blend: soft-light;
+}
+
+/* Accent presets: data-accent on the root swaps the default brand (an explicit --pui-brand still wins). The dark value
+   applies unless the root is explicitly light. */
+.pui[data-accent="neutral"] {
+  --pui-brand-default: oklch(0.3 0.005 260);
+}
+.pui[data-accent="neutral"]:not(.light, [data-theme="light"]) {
+  --pui-brand-default: oklch(0.9 0.004 260);
+  --pui-control-thumb-on: oklch(0.17 0.004 260);
+}
+.pui[data-accent="violet"] {
+  --pui-brand-default: oklch(0.56 0.24 290);
+}
+.pui[data-accent="green"] {
+  --pui-brand-default: oklch(0.62 0.15 160);
+}
+.pui[data-accent="amber"] {
+  --pui-brand-default: oklch(0.76 0.16 75);
+}
+.pui[data-accent="orange"] {
+  --pui-brand-default: oklch(0.68 0.18 50);
+}
+.pui[data-accent="rose"] {
+  --pui-brand-default: oklch(0.63 0.21 355);
+}
+.pui[data-accent="violet"]:not(.light, [data-theme="light"]) {
+  --pui-brand-default: oklch(0.7 0.17 290);
+}
+.pui[data-accent="green"]:not(.light, [data-theme="light"]) {
+  --pui-brand-default: oklch(0.74 0.14 160);
+}
+.pui[data-accent="orange"]:not(.light, [data-theme="light"]) {
+  --pui-brand-default: oklch(0.76 0.15 55);
+}
+.pui[data-accent="rose"]:not(.light, [data-theme="light"]) {
+  --pui-brand-default: oklch(0.72 0.17 355);
+}
+
+/* ── theme-independent scales, the resolved accent, and vocabulary aliases ─── */
+.pui {
+  /* the brand: what the app set, else this theme's default. Everything brand-coloured derives from --pui-accent. */
+  --pui-accent: var(--pui-brand, var(--pui-brand-default));
+  --pui-grid-line: color-mix(in srgb, var(--pui-line) 78%, transparent);
+  --pui-bezel-radius: 22px;
+  --pui-bezel-gap: 10px;
+  --pui-series-1: var(--pui-accent);
+  /* text on a solid status fill (a badge count, a swipe action): near-white or near-black by the fill's lightness */
+  --pui-on-red: oklch(from var(--pui-red) clamp(0.17, (0.6 - l) * 1000, 0.99) 0 0);
+  --pui-on-green: oklch(from var(--pui-green) clamp(0.17, (0.6 - l) * 1000, 0.99) 0 0);
+  --pui-on-orange: oklch(from var(--pui-orange) clamp(0.17, (0.6 - l) * 1000, 0.99) 0 0);
+  --pui-on-blue: oklch(from var(--pui-blue) clamp(0.17, (0.6 - l) * 1000, 0.99) 0 0);
+
+  /* Arc vocabulary */
+  --pui-background: var(--pui-page);
+  --pui-foreground: var(--pui-ink);
+  --pui-surface-raised: var(--pui-surface-2);
+  --pui-surface-muted: var(--pui-hover);
+  --pui-text-secondary: var(--pui-ink-2);
+  --pui-text-muted: var(--pui-ink-3);
+  --pui-border: var(--pui-line);
+  --pui-border-subtle: var(--pui-line-soft);
+  --pui-border-strong: var(--pui-line-strong);
+  --pui-success: var(--pui-green);
+  --pui-warning: var(--pui-orange);
+  --pui-danger: var(--pui-red);
+  --pui-info: var(--pui-blue);
+  --pui-shadow-resting: var(--pui-shadow-xs);
+  --pui-shadow-floating: var(--pui-shadow-overlay);
+  /* Agent presence (orb) and ambient light (glow): three hues derived from --pui-brand, so they follow the accent. */
+  --pui-orb-1: var(--pui-accent);
+  --pui-orb-2: oklch(from var(--pui-accent) calc(l + 0.02) calc(c * 1.05) calc(h + 48));
+  --pui-orb-3: oklch(from var(--pui-accent) calc(l + 0.16) calc(c * 0.7) calc(h - 36));
+  --pui-glow-1: oklch(from var(--pui-accent) l c calc(h - 30) / 0.85);
+  --pui-glow-2: oklch(from var(--pui-accent) calc(l + 0.04) c calc(h + 40) / 0.85);
+  --pui-glow-3: oklch(from var(--pui-accent) calc(l + 0.1) calc(c * 0.8) calc(h + 110) / 0.75);
+  /* Scrollbars (base.css): thin, no arrow buttons, quiet at rest, clearer under the pointer. Both themes derive from --pui-ink. */
+  --pui-scrollbar-size: 10px;
+  --pui-scrollbar-thumb: color-mix(in oklab, var(--pui-ink) 17%, transparent);
+  --pui-scrollbar-thumb-hover: color-mix(in oklab, var(--pui-ink) 34%, transparent);
+  --pui-scrollbar-track: transparent;
+  /* Arc shipped "no focus rings" as a product decision. This system overrules it: keyboard focus is always visible,
+     never animated (owner motion ruling). --pui-focus-ring itself is per theme (solid accent on dark; the brand at L 50 on
+     light, since a fixed lightness cannot clear 3:1 on both grounds). Text fields draw a 3px halo instead of the
+     outline, at 70% so a thick band does not shout. */
+  --pui-focus-halo: color-mix(in oklab, var(--pui-focus-ring) 70%, transparent);
+
+  /* shadcn / ElevenLabs / EvilCharts vocabulary (NB: shadcn's --pui-accent means "hover
+     background"; vendored shadcn code is rewritten to bg-hover, so --pui-accent stays the brand) */
+  --pui-card: var(--pui-surface);
+  --pui-card-foreground: var(--pui-ink);
+  --pui-popover: var(--pui-surface-2);
+  --pui-popover-foreground: var(--pui-ink);
+  --pui-primary: var(--pui-ink);
+  --pui-primary-foreground: var(--pui-ink-inverse);
+  --pui-secondary: var(--pui-hover);
+  --pui-secondary-foreground: var(--pui-ink);
+  --pui-muted: var(--pui-hover);
+  --pui-muted-foreground: var(--pui-ink-2);
+  --pui-destructive: var(--pui-red);
+  --pui-destructive-foreground: oklch(0.99 0 0);
+  --pui-input: var(--pui-line-strong);
+  --pui-ring: var(--pui-focus-ring);
+  --pui-chart-1: var(--pui-series-1);
+  --pui-chart-2: var(--pui-series-2);
+  --pui-chart-3: var(--pui-series-3);
+  --pui-chart-4: var(--pui-series-4);
+  --pui-chart-5: var(--pui-series-5);
+  --pui-sidebar: var(--pui-canvas);
+  --pui-sidebar-foreground: var(--pui-ink);
+  --pui-sidebar-primary: var(--pui-accent);
+  --pui-sidebar-primary-foreground: var(--pui-accent-foreground);
+  --pui-sidebar-accent: var(--pui-hover);
+  --pui-sidebar-accent-foreground: var(--pui-ink);
+  --pui-sidebar-border: var(--pui-line);
+  --pui-sidebar-ring: var(--pui-focus-ring);
+
+  /* ── the brand engine (legacy color.css §A) ─────────────────────────────────
+     Seven lightness stops (chroma and hue kept) and six chroma stops (lightness and hue kept), all from --pui-brand, so a
+     rebrand moves every one. The 0.22 chroma stop leaves sRGB at some hues and is gamut-mapped: check it at yours. */
+  --pui-brand-l-14: oklch(from var(--pui-accent) 0.14 c h);
+  --pui-brand-l-26: oklch(from var(--pui-accent) 0.26 c h);
+  --pui-brand-l-38: oklch(from var(--pui-accent) 0.38 c h);
+  --pui-brand-l-50: oklch(from var(--pui-accent) 0.5 c h);
+  --pui-brand-l-62: oklch(from var(--pui-accent) 0.62 c h);
+  --pui-brand-l-74: oklch(from var(--pui-accent) 0.74 c h);
+  --pui-brand-l-86: oklch(from var(--pui-accent) 0.86 c h);
+  --pui-brand-c-0: oklch(from var(--pui-accent) l 0 h);
+  --pui-brand-c-04: oklch(from var(--pui-accent) l 0.04 h);
+  --pui-brand-c-08: oklch(from var(--pui-accent) l 0.08 h);
+  --pui-brand-c-12: oklch(from var(--pui-accent) l 0.12 h);
+  --pui-brand-c-17: oklch(from var(--pui-accent) l 0.17 h);
+  --pui-brand-c-22: oklch(from var(--pui-accent) l 0.22 h);
+
+  /* ── data ramps (legacy color.css §D) ──────────────────────────────────────
+     Encodings, not brand: a rebrand does not move them. Nine stops each for CSS; the continuous forms are
+     heat(t) / cool(t) / delta(t) in ui/lib/ramp.ts. Equal data steps look equally different (OKLCH, not HSL).
+       heat  oklch(30+44t %, 0.03+0.19t, 258-208t)   sequential, cold blue → hot orange
+       cool  oklch(26+46t %, 0.02+0.15t, 272-68t)    sequential, one cool family
+       delta diverging with a declared neutral pivot at t = 0.5 (stop 4): loss (hue 28) ← pivot → gain (hue 160).
+     "Unmeasured" is never a ramp stop: it is --pui-unmeasured + --pui-unmeasured-hatch. */
+  --pui-ramp-heat-0: oklch(0.3 0.03 258);
+  --pui-ramp-heat-1: oklch(0.355 0.0537 232);
+  --pui-ramp-heat-2: oklch(0.41 0.0775 206);
+  --pui-ramp-heat-3: oklch(0.465 0.1013 180);
+  --pui-ramp-heat-4: oklch(0.52 0.125 154);
+  --pui-ramp-heat-5: oklch(0.575 0.1487 128);
+  --pui-ramp-heat-6: oklch(0.63 0.1725 102);
+  --pui-ramp-heat-7: oklch(0.685 0.1963 76);
+  --pui-ramp-heat-8: oklch(0.74 0.22 50);
+  --pui-ramp-cool-0: oklch(0.26 0.02 272);
+  --pui-ramp-cool-1: oklch(0.3175 0.0387 263.5);
+  --pui-ramp-cool-2: oklch(0.375 0.0575 255);
+  --pui-ramp-cool-3: oklch(0.4325 0.0762 246.5);
+  --pui-ramp-cool-4: oklch(0.49 0.095 238);
+  --pui-ramp-cool-5: oklch(0.5475 0.1138 229.5);
+  --pui-ramp-cool-6: oklch(0.605 0.1325 221);
+  --pui-ramp-cool-7: oklch(0.6625 0.1512 212.5);
+  --pui-ramp-cool-8: oklch(0.72 0.17 204);
+  --pui-ramp-delta-0: oklch(0.64 0.17 28);
+  --pui-ramp-delta-1: oklch(0.605 0.15 28);
+  --pui-ramp-delta-2: oklch(0.57 0.13 28);
+  --pui-ramp-delta-3: oklch(0.535 0.11 28);
+  --pui-ramp-delta-4: oklch(0.36 0.01 160);
+  --pui-ramp-delta-5: oklch(0.43 0.05 160);
+  --pui-ramp-delta-6: oklch(0.5 0.09 160);
+  --pui-ramp-delta-7: oklch(0.57 0.13 160);
+  --pui-ramp-delta-8: oklch(0.64 0.17 160);
+
+  /* ── legacy engine vocabulary ──────────────────────────────────────────────
+     The names the original token layer and its bricks read, pointed at this system's values (no second palette). */
+  --pui-bg: var(--pui-page);
+  --pui-fg: var(--pui-ink);
+  --pui-fg-muted: var(--pui-ink-2);
+  --pui-neutral-muted: var(--pui-ink-3);
+  --pui-surface-base: var(--pui-page);
+  --pui-surface-inset: var(--pui-inset);
+  --pui-surface-card: var(--pui-surface);
+  --pui-surface-sunken: var(--pui-inset);
+  --pui-edge-hairline: var(--pui-line);
+  --pui-brand-solid: var(--pui-accent);
+  --pui-brand-on-solid: var(--pui-accent-foreground);
+  --pui-brand-fg: var(--pui-accent-ink);
+  --pui-type-bg: var(--pui-page);
+  --pui-type-card: var(--pui-surface);
+  --pui-type-edge: var(--pui-line);
+  --pui-type-dim: var(--pui-ink-3);
+  --pui-type-dim-fg: var(--pui-ink-2);
+  --pui-type-red: var(--pui-red);
+  --pui-type-amber: var(--pui-orange);
+  --pui-type-green: var(--pui-green);
+  --pui-consequence-blocking-fg: var(--pui-consequence-blocking);
+  --pui-consequence-degrading-fg: var(--pui-consequence-degrading);
+  --pui-consequence-hygiene-fg: var(--pui-consequence-hygiene);
+  --pui-consequence-blocking-bg: var(--pui-consequence-blocking-tint);
+  --pui-consequence-degrading-bg: var(--pui-consequence-degrading-tint);
+  --pui-consequence-hygiene-bg: var(--pui-consequence-hygiene-tint);
+  --pui-consequence-border-alpha: 0.33;
+  --pui-consequence-fill-alpha: 0.086;
+
+  /* ── spacing ───────────────────────────────────────────────────────────────
+     A 4px grid: --space-N = N × 0.25rem, identical to Tailwind's spacing (p-4 = --pui-space-4 = 16px), so CSS modules and
+     utilities land on the same steps. The semantic names are the values the containers already converged on. */
+  --pui-space-0: 0;
+  --pui-space-px: 1px;
+  --pui-space-0-5: calc(0.125rem * var(--pui-space-scale, 1));
+  --pui-space-1: calc(0.25rem * var(--pui-space-scale, 1));
+  --pui-space-1-5: calc(0.375rem * var(--pui-space-scale, 1));
+  --pui-space-2: calc(0.5rem * var(--pui-space-scale, 1));
+  --pui-space-2-5: calc(0.625rem * var(--pui-space-scale, 1));
+  --pui-space-3: calc(0.75rem * var(--pui-space-scale, 1));
+  --pui-space-4: calc(1rem * var(--pui-space-scale, 1));
+  --pui-space-5: calc(1.25rem * var(--pui-space-scale, 1));
+  --pui-space-6: calc(1.5rem * var(--pui-space-scale, 1));
+  --pui-space-7: calc(1.75rem * var(--pui-space-scale, 1));
+  --pui-space-8: calc(2rem * var(--pui-space-scale, 1));
+  --pui-space-10: calc(2.5rem * var(--pui-space-scale, 1));
+  --pui-space-12: calc(3rem * var(--pui-space-scale, 1));
+  --pui-space-14: calc(3.5rem * var(--pui-space-scale, 1));
+  --pui-space-16: calc(4rem * var(--pui-space-scale, 1));
+  --pui-space-20: calc(5rem * var(--pui-space-scale, 1));
+  --pui-space-24: calc(6rem * var(--pui-space-scale, 1));
+  --pui-space-32: calc(8rem * var(--pui-space-scale, 1));
+  --pui-pad-control: var(--pui-space-4); /* inline padding of a md button (fields use --pui-space-3) */
+  --pui-pad-popover: var(--pui-space-4); /* popover, hover card, menu panel */
+  --pui-pad-card: var(--pui-space-5); /* card body */
+  --pui-pad-panel: var(--pui-space-6); /* dialog header/body, expanded card panel */
+  --pui-gap-inline: var(--pui-space-2); /* icon ↔ label, chip ↔ chip */
+  --pui-gap-stack: var(--pui-space-3); /* rows inside a card */
+  --pui-gap-section: var(--pui-space-10); /* between page sections */
+  --pui-gutter-page: var(
+    --pui-space-10
+  ); /* page side padding at desktop; the gallery drops to --pui-space-5 on phones */
+  --pui-content-max: 1200px; /* a dashboard/content column */
+
+  /* icon sizes (lucide) — 16 is the interface default, 14 in dense rows, 20 in large controls */
+  --pui-icon-xs: 12px;
+  --pui-icon-sm: 14px;
+  --pui-icon-md: 16px;
+  --pui-icon-lg: 20px;
+  --pui-icon-xl: 24px;
+
+  /* hairlines, focus and hit targets */
+  --pui-border-width: 1px;
+  --pui-focus-width: 2px;
+  --pui-focus-offset: 2px;
+  --pui-hit-min: 24px; /* WCAG 2.5.8 floor; utilities.css .hit / .hit-bleed */
+  --pui-press-scale: 0.955; /* press acknowledgement, 0ms in (legacy interaction-states) */
+  --pui-opacity-disabled: 0.5;
+  --pui-blur-overlay: 2px; /* modal scrim */
+  --pui-blur-glass: 12px; /* overlays only, static only; see utilities.css reduced-transparency rule */
+
+  /* layers — one ladder so a tooltip inside a dialog, or a menu inside a sheet, is never underneath it */
+  --pui-z-base: 0;
+  --pui-z-raised: 1; /* a hovered card, a selected row edge */
+  --pui-z-sticky: 10; /* sticky headers, pinned columns */
+  --pui-z-overlay: 50; /* modal scrim */
+  --pui-z-modal: 51; /* dialog, sheet, bottom sheet, lightbox */
+  --pui-z-popover: 60; /* menus, select, combobox, popover, hover card */
+  --pui-z-toast: 70;
+  --pui-z-tooltip: 80;
+
+  /* grain — a static 200px fractal-noise tile (legacy static-grain); opacity and blend are per theme above */
+  --pui-grain-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='.2126 .7152 .0722 0 0 .2126 .7152 .0722 0 0 .2126 .7152 .0722 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  --pui-grain-tile-size: 200px;
+
+  /* radii — one compact product scale for every family */
+  --pui-radius: calc(0.625rem * var(--pui-radius-scale, 1));
+  --pui-radius-chip: calc(6px * var(--pui-radius-scale, 1));
+  --pui-radius-control: calc(9px * var(--pui-radius-scale, 1));
+  --pui-radius-card: calc(12px * var(--pui-radius-scale, 1));
+  --pui-radius-panel: calc(14px * var(--pui-radius-scale, 1));
+  --pui-radius-window: calc(16px * var(--pui-radius-scale, 1));
+  --pui-radius-surface: calc(18px * var(--pui-radius-scale, 1));
+  --pui-radius-pill: calc(9999px * var(--pui-radius-scale, 1));
+
+  /* control heights — SaaS density: 32 / 36 / 40 */
+  --pui-control-height-sm: 2rem;
+  --pui-control-height-md: 2.25rem;
+  --pui-control-height-lg: 2.5rem;
+  /* a touch target: the large control plus one grid step (44px), for coarse pointers and touch-first layouts */
+  --pui-control-height-touch: 2.75rem;
+
+  /* fixed sizes on the 4px grid (the CSS twin of w-/h-/size-N): the Spacing parameter never moves them, so a module
+     sizes a box, an icon or a control with var(--pui-size-9) instead of dividing the spacing scale back out */
+  --pui-size-0-5: 0.125rem;
+  --pui-size-1: 0.25rem;
+  --pui-size-1-5: 0.375rem;
+  --pui-size-2: 0.5rem;
+  --pui-size-2-5: 0.625rem;
+  --pui-size-3: 0.75rem;
+  --pui-size-3-5: 0.875rem;
+  --pui-size-4: 1rem;
+  --pui-size-4-5: 1.125rem;
+  --pui-size-5: 1.25rem;
+  --pui-size-5-5: 1.375rem;
+  --pui-size-6: 1.5rem;
+  --pui-size-6-5: 1.625rem;
+  --pui-size-7: 1.75rem;
+  --pui-size-7-5: 1.875rem;
+  --pui-size-8: 2rem;
+  --pui-size-8-5: 2.125rem;
+  --pui-size-9: 2.25rem;
+  --pui-size-9-5: 2.375rem;
+  --pui-size-10: 2.5rem;
+  --pui-size-10-5: 2.625rem;
+  --pui-size-11: 2.75rem;
+  --pui-size-11-5: 2.875rem;
+  --pui-size-12: 3rem;
+  --pui-size-13: 3.25rem;
+  --pui-size-14: 3.5rem;
+  --pui-size-15: 3.75rem;
+  --pui-size-16: 4rem;
+  --pui-size-18: 4.5rem;
+  --pui-size-20: 5rem;
+  --pui-size-24: 6rem;
+  --pui-size-28: 7rem;
+  --pui-size-32: 8rem;
+  --pui-size-36: 9rem;
+  --pui-size-40: 10rem;
+  --pui-size-44: 11rem;
+  --pui-size-48: 12rem;
+  --pui-size-52: 13rem;
+  --pui-size-56: 14rem;
+  --pui-size-60: 15rem;
+  --pui-size-64: 16rem;
+  --pui-size-72: 18rem;
+  --pui-size-80: 20rem;
+  --pui-size-96: 24rem;
+
+  /* type */
+  --pui-font-inter: "Inter", "Inter Variable";
+  --pui-font-geist: "Geist", "Geist Variable";
+  --pui-font-mono-face: "Geist Mono", "Geist Mono Variable", "JetBrains Mono";
+  --pui-font-body: var(--pui-font-inter), "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
+  --pui-font-display:
+    var(--pui-font-geist), var(--pui-font-inter), "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --pui-font-code: var(--pui-font-mono-face), ui-monospace, "SF Mono", Menlo, monospace;
+  /* figures (values, prices, percentages, times, counts): the interface face with tabular digits, so columns align
+     without the look of code. Mono stays for code, keys and identifiers. */
+  --pui-font-numeric: var(--pui-font-body);
+  /* headings: the body face and its medium weight, unless a look gives them its display face */
+  /* overlines and eyebrows: the body face unless a look sets micro-labels in another (blueprint: mono) */
+  --pui-font-label: var(--pui-font-body);
+  /* big figures (a KPI's value, a price): the display face unless a look sets them in another (ink: mono) */
+  --pui-font-figure: var(--pui-font-display);
+  --pui-font-heading: var(--pui-font-body);
+  --pui-weight-title: var(--pui-weight-medium);
+  /* the width of the heading face (a look with a variable-width face may set its headings expanded) */
+  --pui-heading-stretch: 100%;
+  /* Inter's alternate digits and letters; a look with another face sets its own */
+  --pui-font-features: "cv11", "ss01";
+  /* drawn over the page colour by html.pui (a look's dot grid, say); none by default */
+  --pui-page-pattern: linear-gradient(transparent, transparent);
+  /* .text-mark, the highlighted word: a soft accent tint unless a look makes it a sticker */
+  --pui-mark-bg: var(--pui-accent-tint);
+  --pui-mark-ink: var(--pui-accent-ink);
+  --pui-mark-lip: 0 0 0 0 transparent;
+  --pui-mark-tilt: 0deg;
+  /* the focus ring's line: 2px solid unless a look draws it its own way (never thinner than 2px, never removed) */
+  --pui-focus-width: 2px;
+  --pui-focus-style: solid;
+  --pui-mark-clip: border-box;
+  --pui-mark-radius: 0.22em;
+  /* how strongly a chart's gradient area fills (a multiplier); a look may quieten or raise it */
+  --pui-chart-fill: 1;
+  /* the stage an example sits on (.look-stage): dots on the canvas unless a look brings its page */
+  --pui-stage: var(--pui-canvas);
+  --pui-stage-pattern: radial-gradient(var(--pui-line) 1px, transparent 1px) 0 0 / 16px 16px;
+  /* the finish of data marks (ui/lib/look-filters.ts): none unless a look gives one */
+  --pui-data-filter: none;
+  /* a chart's line weight, and a mask a look may cut a donut's arcs with (mono: radial ticks) */
+  --pui-chart-stroke: 1.75px;
+  --pui-arc-mask: none;
+  --pui-fill-mask: none;
+  /* a meter's fill (progress, bar list, usage): whole unless a look cuts it into segments (metal) */
+  --pui-meter-mask: none;
+  --pui-mark-filter: none;
+  /* how far a look turns decorative stickers (0 keeps everything straight; pop sets 1) */
+  --pui-tilt: 0;
+  /* lucide's stroke; a bolder look thickens every icon at once */
+  --pui-icon-stroke: 2;
+  --pui-text-2xs: calc(0.6875rem * pow(0.785714, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-xs: calc(0.75rem * pow(0.857143, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-sm: calc(0.8125rem * pow(0.928571, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-base: calc(0.875rem * var(--pui-type-scale, 1));
+  /* reading surfaces only (answers, docs, an editor's body): 15px between body 14 and lg 16 */
+  --pui-text-reading: calc(0.9375rem * pow(1.071429, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-lg: calc(1rem * pow(1.142857, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-xl: calc(1.25rem * pow(1.428571, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-2xl: calc(1.5rem * pow(1.714286, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-3xl: calc(1.875rem * pow(2.142857, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-4xl: calc(2.5rem * pow(2.857143, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-5xl: calc(3.5rem * pow(4, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-text-code: calc(0.78125rem * pow(0.892857, calc(var(--pui-type-ratio, 1) - 1)) * var(--pui-type-scale, 1));
+  --pui-weight-regular: 400;
+  --pui-weight-medium: 500;
+  --pui-weight-semibold: 600;
+  --pui-weight-bold: 700;
+  --pui-tracking-display: -0.025em;
+  --pui-tracking-body: -0.006em;
+  --pui-tracking-eyebrow: 0.06em;
+  --pui-tracking-mono-caps: 0.04em;
+  --pui-leading-display: 1.1;
+  --pui-leading-heading: 1.25;
+  --pui-leading-body: 1.45;
+  --pui-leading-tight: 1.2;
+  --pui-leading-reading: 1.6;
+  /* Reading measure: 45–78 REAL characters. `ch` is the width of "0", which in Inter/Geist is ~1.4× the average
+     letter, so "66ch" renders ~95 characters. 48ch ≈ 68 real characters here; re-measure if the face changes. */
+  --pui-measure: 48ch;
+
+  /* motion — the ruled pair: arrival ~90ms, departure 180ms. Frequency law: hover is 0ms in. */
+  --pui-ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --pui-ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --pui-ease-link: cubic-bezier(0.16, 1, 0.3, 1);
+  --pui-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  /* SITUATIONAL, never the default: a decelerating curve for a reveal that should feel thrown into place. Name the
+     exception at the use site; a use that cannot argue for it takes --pui-ease-default. */
+  /* critically damped: follows like a spring, never overshoots (springs are not a default here) */
+  --pui-ease-spring: linear(
+    0,
+    0.034,
+    0.12,
+    0.23,
+    0.35,
+    0.46,
+    0.56,
+    0.65,
+    0.72,
+    0.78,
+    0.83,
+    0.87,
+    0.9,
+    0.93,
+    0.95,
+    0.965,
+    0.977,
+    0.986,
+    0.992,
+    0.996,
+    1
+  );
+  /* NOT-DEFAULT, owner ruling: springs and overshoot are refused as defaults. Allowed only for a teaching comparison or a
+     control the pointer is physically holding. BYTE-EXACT copies of the legacy curves; a truncated copy changes the
+     curve silently. --pui-ease-spring-bounce: 48 stops, peaks 1.0925 (~9% over). --pui-ease-overshoot: 32 stops, peaks 1.6425. */
+  --pui-ease-spring-bounce: linear(
+    0,
+    0.0039,
+    0.0157,
+    0.0352,
+    0.0625,
+    0.0977,
+    0.1407,
+    0.1914,
+    0.2499,
+    0.3162,
+    0.3903,
+    0.4722,
+    0.5619,
+    0.6594,
+    0.7647,
+    0.8778,
+    0.9987,
+    1.0644,
+    1.0871,
+    1.0925,
+    1.0868,
+    1.0748,
+    1.0599,
+    1.0446,
+    1.0304,
+    1.018,
+    1.008,
+    1.0002,
+    0.9947,
+    0.991,
+    0.989,
+    0.9883,
+    0.9885,
+    0.9893,
+    0.9906,
+    0.992,
+    0.9935,
+    0.9948,
+    0.996,
+    0.9969,
+    0.9977,
+    0.9984,
+    0.9989,
+    0.9993,
+    0.9996,
+    0.9998,
+    0.9999,
+    1
+  );
+  --pui-ease-overshoot: linear(
+    0,
+    0.0225,
+    0.0869,
+    0.1876,
+    0.3187,
+    0.4735,
+    0.6446,
+    0.8243,
+    1.0044,
+    1.1767,
+    1.3327,
+    1.4643,
+    1.564,
+    1.6252,
+    1.6425,
+    1.6161,
+    1.5522,
+    1.4592,
+    1.3465,
+    1.2237,
+    1.1,
+    0.9838,
+    0.8825,
+    0.802,
+    0.7466,
+    0.7183,
+    0.7172,
+    0.7413,
+    0.787,
+    0.8493,
+    0.9224,
+    1
+  );
+  /* stagger steps; keep a whole cascade under ~300ms, and only on first paint, never per keystroke */
+}
+
+/* THE FREQUENCY LAW overrides the ruled pair: how often a path fires decides whether it animates at all. Hover is 0ms in
+   and --pui-motion-out out; a press is acknowledged at 0ms; focus is discrete and never animated; a control touched a
+   hundred times a day gets no motion. utilities.css .ix is the baseline that encodes it.
+
+   THE REDUCED-MOTION CONTRACT: reduced motion is not a degraded mode. Decorative loops die entirely (animation: none,
+   never a shorter duration); state changes become instant (1ms rather than 0 so transitionend/animationend still fire
+   for code that waits on them); nothing that carries information (a progress rail, a live value) is removed. */
+/* Managed/OS motion values are generated in motion.css from ui/lib/motion-source.ts. */

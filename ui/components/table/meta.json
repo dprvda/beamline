@@ -1,0 +1,112 @@
+{
+  "name": "table",
+  "title": "Table",
+  "description": "A plain, styled HTML table for small static data: header, body, footer, caption, numeric cells, three densities and a sticky header.",
+  "kind": "component",
+  "category": "data",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [],
+  "tags": [
+    "table",
+    "rows",
+    "static"
+  ],
+  "whenToUse": [
+    "Small static or caller-managed tables: invoices, settings lists, open orders and positions with a row action."
+  ],
+  "notFor": [
+    "Large, sortable, filterable or editable data (data-grid).",
+    "Collapsing rows into cards on a phone: the table scrolls sideways under a pinned first column instead."
+  ],
+  "spec": {
+    "anatomy": [
+      "Table",
+      "TableHeader",
+      "TableBody",
+      "TableFooter",
+      "TableRow",
+      "TableHead",
+      "TableCell",
+      "TableCaption"
+    ],
+    "states": [
+      "rest",
+      "row hover (hover tint arrives at once, leaves over --pui-motion-out)",
+      "selected (data-state=\"selected\" on the row: accent tint, 2px accent-ink edge at the inline start, ink text)",
+      "sticky header (opaque surface, its own line seam)",
+      "pinned first column (sticky cells keep the row's hover and selected paint)",
+      "unmeasured cell (data-null: ink-3 dash, the caller adds \"Not measured\")",
+      "empty (the caller renders one full-width row with its message)"
+    ],
+    "keyboard": [
+      "Native table semantics"
+    ],
+    "motion": "Row hover only: arrives at 0ms, leaves over --pui-motion-out. Nothing else moves; reduced motion changes nothing.",
+    "props": [
+      {
+        "name": "density",
+        "type": "\"compact\" | \"default\" | \"comfortable\"",
+        "description": "Row height: 32, 40 (default) or 48 px; the same three steps as every dense component."
+      },
+      {
+        "name": "stickyHeader",
+        "type": "boolean"
+      },
+      {
+        "name": "TableHead / TableCell numeric",
+        "type": "boolean"
+      }
+    ],
+    "variants": {
+      "density": [
+        "compact",
+        "default",
+        "comfortable"
+      ]
+    },
+    "appearance": "Managed appearance changes preserve mounted controls and operational state. Instance design props override scoped defaults; classNames addresses documented slots."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "table",
+    "refTarget": "visual root",
+    "slots": [
+      "wrap:table-wrap",
+      "root:table",
+      "header:table-header",
+      "body:table-body",
+      "footer:table-footer",
+      "row:table-row",
+      "head:table-head",
+      "cell:table-cell",
+      "caption:table-caption"
+    ],
+    "states": [
+      "row hover",
+      "selected (data-state)"
+    ],
+    "roles": [],
+    "geometryInputs": [
+      "density",
+      "rowHeight",
+      "--pui-table-row-height"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/table"
+    ],
+    "features": []
+  },
+  "notes": [
+    "Foundation exceptions (O1 §14.2): the selected-row edge is a 2px inset mark in --pui-accent-ink (O1 §6 selection geometry, logical per direction); the sticky header's seam is a 1px hairline in --pui-line."
+  ]
+}

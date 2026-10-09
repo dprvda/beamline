@@ -1,0 +1,164 @@
+{
+  "name": "dropdown-menu",
+  "title": "Dropdown menu",
+  "description": "A list of actions behind a trigger, with shortcuts, check items, headings and submenus; one highlight glides under the pointer and jumps with the keyboard.",
+  "kind": "component",
+  "category": "overlays",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "tags": [
+    "menu",
+    "action",
+    "more"
+  ],
+  "whenToUse": [
+    "Row actions, More menus, account menus, Move to…"
+  ],
+  "notFor": [
+    "Choosing a form value (select).",
+    "App-wide search and commands (command-menu).",
+    "Right-click menus (context-menu)."
+  ],
+  "spec": {
+    "anatomy": [
+      "trigger (built-in Button, or your own)",
+      "surface",
+      "highlight plate",
+      "item (icon, label, shortcut)",
+      "check item",
+      "heading",
+      "separator",
+      "submenu"
+    ],
+    "variants": {
+      "trigger": [
+        "text",
+        "icon only",
+        "custom"
+      ],
+      "tone": [
+        "default",
+        "danger"
+      ]
+    },
+    "states": [
+      "closed",
+      "open",
+      "item highlighted",
+      "item disabled",
+      "check item on/off",
+      "submenu open"
+    ],
+    "keyboard": [
+      "Enter / Space / ↓ opens",
+      "↑ ↓ move, wrapping",
+      "→ opens a submenu, ← closes it",
+      "type a letter to jump",
+      "Escape closes and returns focus"
+    ],
+    "motion": "The surface grows from the trigger; one highlight plate glides between rows for the pointer and the arrow keys alike (--pui-duration-fast) and appears in place the first time. Reduced motion places it at once.",
+    "props": [
+      {
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "name": "items",
+        "type": "MenuItem[]"
+      },
+      {
+        "name": "icon",
+        "type": "ReactNode"
+      },
+      {
+        "name": "trigger",
+        "type": "ReactElement"
+      },
+      {
+        "name": "variant / size",
+        "type": "ButtonVariant / ButtonSize",
+        "default": "\"ghost\" / \"sm\""
+      },
+      {
+        "name": "align / side",
+        "type": "string",
+        "default": "\"end\" / \"bottom\""
+      },
+      {
+        "name": "MenuItem",
+        "type": "{ label, icon?, shortcut?, onSelect?, disabled?, tone?: \"danger\", separatorBefore?, heading?, checked?, items? }"
+      },
+      {
+        "name": "open / defaultOpen / onOpenChange",
+        "type": "boolean"
+      },
+      {
+        "name": "classNames",
+        "type": "MenuClassNames"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "Root styles; ref targets native popup div."
+      }
+    ],
+    "appearance": "className/style target the visual root; typed classNames address internal parts. Native refs preserve existing focus and measurement. Menus read the nearest trigger direction before opening.",
+    "scopeDefaults": {
+      "keys": [
+        "variant",
+        "size",
+        "align"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    }
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "menu popup",
+    "refTarget": "native popup div",
+    "slots": [
+      "root:menu",
+      "trigger:dropdown-menu-trigger",
+      "content:menu",
+      "submenu:menu-submenu",
+      "indicator:menu-indicator",
+      "item:menu-item",
+      "label:menu-label",
+      "shortcut:menu-shortcut",
+      "check:menu-check",
+      "separator:menu-separator",
+      "heading:menu-heading",
+      "chevron:menu-chevron"
+    ],
+    "states": [
+      "closed",
+      "open",
+      "item highlighted",
+      "item disabled",
+      "check item on/off",
+      "submenu open"
+    ],
+    "roles": [
+      "m-overlay"
+    ],
+    "geometryInputs": [],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/dropdown-menu"
+    ],
+    "features": []
+  }
+}

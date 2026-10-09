@@ -1,0 +1,124 @@
+{
+  "name": "alert-dialog",
+  "title": "Alert Dialog",
+  "description": "A blocking confirmation that must be answered: the scrim does not dismiss it, focus starts on the safe choice, and an async action keeps it open until the work finishes.",
+  "kind": "component",
+  "category": "overlays",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-alert-dialog"
+  ],
+  "tags": [
+    "confirm",
+    "destructive",
+    "modal"
+  ],
+  "whenToUse": [
+    "Irreversible or costly actions: revoke a key, delete a workspace, publish to production."
+  ],
+  "notFor": [
+    "Routine confirmations (confirm-morph).",
+    "Anything informational (toast or alert)."
+  ],
+  "spec": {
+    "anatomy": [
+      "AlertDialog",
+      "AlertDialogTrigger",
+      "AlertDialogContent (scrim, title, description)",
+      "AlertDialogFooter",
+      "AlertDialogCancel",
+      "AlertDialogAction"
+    ],
+    "variants": {
+      "action": [
+        "danger (default)",
+        "primary"
+      ]
+    },
+    "states": [
+      "closed",
+      "open",
+      "working (action loading, cancel disabled)",
+      "failed (reason in the description)"
+    ],
+    "keyboard": [
+      "Focus starts on Cancel",
+      "Escape cancels",
+      "Tab is trapped",
+      "focus returns to the trigger"
+    ],
+    "motion": "Same as dialog. Opens out of whatever opened it (_shared/use-open-from.ts): it starts as the opener's box, offset onto it, grows to its place over the considered duration while its content fades in, and closes back into the opener in 180 ms. Without an opener (a shortcut) the ordinary entrance runs. Reduced motion: it appears.",
+    "props": [
+      {
+        "name": "title",
+        "type": "ReactNode"
+      },
+      {
+        "name": "description",
+        "type": "ReactNode"
+      },
+      {
+        "name": "AlertDialogAction variant",
+        "type": "ButtonVariant",
+        "default": "\"danger\""
+      },
+      {
+        "name": "AlertDialogAction loading",
+        "type": "boolean"
+      },
+      {
+        "name": "open / defaultOpen / onOpenChange",
+        "type": "boolean"
+      },
+      {
+        "name": "classNames",
+        "type": "AlertDialogClassNames"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "Root styles; ref targets native content div; each exported DOM part retains its native ref."
+      }
+    ],
+    "appearance": "className/style target the visual root; typed classNames address internal parts. Native refs preserve existing focus, measurement and animation ownership."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "AlertDialogContent popup",
+    "refTarget": "native content div; each exported DOM part retains its native ref",
+    "slots": [
+      "root:alert-dialog",
+      "scrim:alert-dialog-scrim",
+      "header:alert-dialog-header",
+      "title:alert-dialog-title",
+      "description:alert-dialog-description",
+      "AlertDialogFooter:alert-dialog-footer",
+      "AlertDialogCancel:alert-dialog-cancel",
+      "AlertDialogAction:alert-dialog-action"
+    ],
+    "states": [
+      "closed",
+      "open",
+      "working (action loading, cancel disabled)",
+      "failed (reason in the description)"
+    ],
+    "roles": [
+      "m-overlay"
+    ],
+    "geometryInputs": [],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/alert-dialog"
+    ],
+    "features": []
+  }
+}

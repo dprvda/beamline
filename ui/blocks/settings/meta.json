@@ -1,0 +1,343 @@
+{
+  "name": "settings",
+  "title": "Settings",
+  "description": "Profile and workspace settings with one draft and real save handler. Personal mode omits workspace data; optional profile fields share validation, persistence, error recovery and focus return. Existing members, billing, notifications and API sections remain available.",
+  "kind": "block",
+  "category": "blocks",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "tags": [
+    "settings",
+    "account",
+    "billing",
+    "members",
+    "api keys"
+  ],
+  "whenToUse": [
+    "The settings area of a SaaS product: personal, workspace, team, billing and developer settings behind one section list.",
+    "One section inside your own page (navigation none + section): it sits flush on your page's background and edge, under your heading."
+  ],
+  "notFor": [
+    "A single preference (a switch where the setting takes effect).",
+    "Onboarding (a stepper flow)."
+  ],
+  "composition": [
+    "item",
+    "avatar",
+    "input",
+    "combobox",
+    "dialog",
+    "alert-dialog",
+    "tag-input",
+    "select",
+    "table",
+    "dropdown-menu",
+    "badge",
+    "billing-toggle",
+    "radio-cards",
+    "usage-meter",
+    "switch",
+    "copy-button",
+    "hold-to-confirm",
+    "alert",
+    "button",
+    "toast"
+  ],
+  "spec": {
+    "anatomy": [
+      "section list (a column; a scrolling row under 760px)",
+      "section header (title, description, last-saved caption, action)",
+      "fields",
+      "members table (role select, actions menu)",
+      "plan cards, period toggle and plan-change bar",
+      "usage meters",
+      "API key rows",
+      "danger zone",
+      "save bar (count, Discard, Save)",
+      "toasts",
+      "explicit rail, tabs or no section navigation; optional heading with an aside (e.g. where saves are kept); in tabs mode heading, tab row, form and save bar share one 720px column",
+      "dirty section markers and field error links",
+      "sticky save bar as wide as the form"
+    ],
+    "states": [
+      "clean",
+      "dirty (save bar counts changes)",
+      "invalid field (save disabled, field says why)",
+      "saving",
+      "save failed (bar keeps the message, Save becomes Try again)",
+      "invite dialog: sending, failed",
+      "role change failed (reverted)",
+      "remove member / withdraw invitation (confirm)",
+      "plan or period chosen, waiting for Switch plan",
+      "key created (secret shown once)",
+      "revoke key (confirm)",
+      "deletion scheduling, scheduled, failed",
+      "sections hidden when their data is not passed",
+      "saved confirmation for 1.6 seconds; last-saved time",
+      "discard returns focus to current section heading",
+      "field-tagged save rejection marks and focuses the named field",
+      "edits during a pending save remain as unsaved changes",
+      "personal configuration without Workspace",
+      "optional profile fields share the same save flow"
+    ],
+    "keyboard": [
+      "Tab through the section list, then the section",
+      "dialogs and confirmations trap focus; Esc closes; confirmations start on Cancel",
+      "hold-to-confirm: hold Space or Enter",
+      "Save success and Discard return focus to the current section heading",
+      "A field-tagged save error focuses the visible field; Go to field switches section and focuses it"
+    ],
+    "motion": "The save bar rises on --motion-in; toasts follow the toast stack.",
+    "props": [
+      {
+        "name": "defaultValues / values / onValuesChange",
+        "type": "SettingsValues",
+        "required": true,
+        "description": "Saved profile, workspace and notification values, controlled or not."
+      },
+      {
+        "name": "onSave",
+        "type": "(values, changed: string[]) => Promise<void>",
+        "required": true,
+        "description": "Persist the draft; a rejection keeps the bar with its message."
+      },
+      {
+        "name": "section / defaultSection / onSectionChange",
+        "type": "SettingsSection"
+      },
+      {
+        "name": "members / defaultMembers / onMembersChange",
+        "type": "SettingsMember[]",
+        "description": "Adds the Members section."
+      },
+      {
+        "name": "roles",
+        "type": "SettingsRole[]"
+      },
+      {
+        "name": "onInvite / onRoleChange / onRemoveMember",
+        "type": "(emails, role) => Promise<SettingsMember[]> / (id, role) => Promise<void> / (id) => Promise<void>"
+      },
+      {
+        "name": "plans / plan / defaultPlan / period / defaultPeriod / onPlanChange",
+        "type": "SettingsPlan[] / string / \"monthly\" | \"yearly\" / (plan, period) => Promise<void>",
+        "description": "Adds Billing; a change waits for Switch plan."
+      },
+      {
+        "name": "seats / usage",
+        "type": "number / SettingsUsage[]"
+      },
+      {
+        "name": "apiKeys / defaultApiKeys / onApiKeysChange",
+        "type": "SettingsApiKey[]",
+        "description": "Adds API keys."
+      },
+      {
+        "name": "onCreateKey / onRevokeKey",
+        "type": "(name) => Promise<{ key, secret }> / (id) => Promise<void>"
+      },
+      {
+        "name": "onDeleteWorkspace",
+        "type": "() => Promise<void>",
+        "description": "Adds the Danger zone."
+      },
+      {
+        "name": "onPhotoChange",
+        "type": "() => void"
+      },
+      {
+        "name": "timeZones / domain / notificationOptions",
+        "type": "string[] / string / SettingsNotification[]"
+      },
+      {
+        "name": "className",
+        "type": "string"
+      },
+      {
+        "name": "navigation",
+        "type": "\"rail\" | \"tabs\" | \"none\"",
+        "description": "Rail folds to tabs below 760px; use tabs when embedded in a host shell, none for host-routed sections."
+      },
+      {
+        "name": "heading",
+        "type": "ReactNode | null",
+        "description": "Defaults to Settings; null leaves the page title to the host."
+      },
+      {
+        "name": "profileFields",
+        "type": "SettingsProfileField[]",
+        "description": "Extra profile Inputs keyed by SettingsValues.profile; optional empty strings are valid and changed keys use profile.<id>."
+      },
+      {
+        "name": "SettingsValues.workspace / slug",
+        "type": "string | undefined",
+        "description": "Omit both for a personal profile; Workspace and its validation are then absent."
+      },
+      {
+        "name": "onSave rejection",
+        "type": "Error & { field?: string }",
+        "description": "Known field keys render inline and receive focus; unknown fields remain general errors. Never changes the saved baseline on failure."
+      },
+      {
+        "name": "defaultDraft",
+        "type": "Partial<SettingsValues>",
+        "description": "Optional restored draft applied once; shares the same validation, changed keys and save flow."
+      },
+      {
+        "name": "classNames",
+        "type": "SettingsClassNames"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / Ref<HTMLDivElement>"
+      }
+    ],
+    "appearance": "Native div root ref/style and typed existing parts; refs compose with focus and React cleanup. Appearance preserves drafts, pending operations and dialogs. Member/key acknowledgements update only their records over the latest caller list; stale role completions do not overwrite a later request. Closing the created-key dialog clears its one-time secret before the next opening. When a save bar is visible, contained toasts clear its measured top edge so the Save action stays reachable, including after type/width changes."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "notes": "Foundations exception (O1 §14.2): `#000` in a mask-image is the mask's opaque stop (the overflowing tab row fades at its end); it decides what shows, it is not paint, and no look or theme changes it.",
+  "visualContract": {
+    "version": 1,
+    "root": "settings",
+    "refTarget": "native div",
+    "slots": [
+      "root:settings",
+      "layout:settings-layout",
+      "navigation:settings-navigation",
+      "heading:settings-heading",
+      "title:settings-title",
+      "items:settings-items",
+      "item:item",
+      "unsavedLabel:settings-unsavedLabel",
+      "fieldAttention:settings-fieldAttention",
+      "dirty:settings-dirty",
+      "viewport:settings-viewport",
+      "body:settings-body",
+      "savedAt:settings-saved-at",
+      "column:settings-column",
+      "photoRow:settings-photoRow",
+      "optional:settings-optional",
+      "domain:settings-domain",
+      "inviteIcon:settings-inviteIcon",
+      "inviteForm:settings-inviteForm",
+      "inviteError:settings-inviteError",
+      "roleHeader:table-head",
+      "actionsHeader:table-head",
+      "actionsLabel:settings-actionsLabel",
+      "personCell:table-cell",
+      "person:settings-person",
+      "personBody:settings-personBody",
+      "personName:settings-personName",
+      "personEmail:settings-personEmail",
+      "roleLabel:settings-roleLabel",
+      "memberActionsIcon:settings-memberActionsIcon",
+      "planName:settings-planName",
+      "planChange:settings-planChange",
+      "planDescription:settings-planDescription",
+      "wantedPlan:settings-wantedPlan",
+      "notification:settings-notification",
+      "notificationBody:settings-notificationBody",
+      "notificationLabel:settings-notificationLabel",
+      "notificationDescription:settings-notificationDescription",
+      "keyCreateIcon:settings-keyCreateIcon",
+      "secretBody:settings-secretBody",
+      "secretRow:settings-secretRow",
+      "secret:settings-secret",
+      "keyForm:settings-keyForm",
+      "keysEmpty:settings-keysEmpty",
+      "key:settings-key",
+      "keyIcon:settings-keyIcon",
+      "keyBody:settings-keyBody",
+      "keyTitle:settings-keyTitle",
+      "keyMeta:settings-keyMeta",
+      "keyPrefix:settings-keyPrefix",
+      "keyCreated:settings-keyCreated",
+      "danger:settings-danger",
+      "deleteError:settings-deleteError",
+      "announcement:settings-announcement",
+      "saveRegion:settings-saveRegion",
+      "saveBar:settings-save-bar",
+      "saveDescription:settings-saveDescription",
+      "saveError:settings-saveError",
+      "saved:settings-saved",
+      "invalid:settings-invalid",
+      "section:settings-section",
+      "sectionHeader:settings-sectionHeader",
+      "sectionIdentity:settings-sectionIdentity",
+      "sectionHeading:settings-section-heading",
+      "sectionDescription:settings-sectionDescription",
+      "button:button",
+      "avatar:avatar",
+      "name:input",
+      "email:input",
+      "profileField:input",
+      "workspace:input",
+      "slug:input",
+      "timeZone:combobox",
+      "inviteEmails:tag-input",
+      "role:select",
+      "dialog:dialog",
+      "table:table",
+      "tableHeader:table-header",
+      "tableBody:table-body",
+      "tableRow:table-row",
+      "confirmation:alert-dialog",
+      "confirmationFooter:alert-dialog-footer",
+      "confirmationCancel:button",
+      "confirmationAction:button",
+      "memberActions:dropdown-menu",
+      "badge:badge",
+      "period:billing-toggle",
+      "plans:radio-cards",
+      "usage:usage-meter",
+      "notificationSwitch:switch",
+      "copyKey:button",
+      "alert:alert",
+      "keyName:input",
+      "delete:hold-to-confirm",
+      "toasts:toast-stack"
+    ],
+    "states": [
+      "clean",
+      "dirty (save bar counts changes)",
+      "invalid field (save disabled, field says why)",
+      "saving",
+      "save failed (bar keeps the message, Save becomes Try again)",
+      "invite dialog: sending, failed",
+      "role change failed (reverted)",
+      "remove member / withdraw invitation (confirm)",
+      "plan or period chosen, waiting for Switch plan",
+      "key created (secret shown once)",
+      "revoke key (confirm)",
+      "deletion scheduling, scheduled, failed",
+      "sections hidden when their data is not passed",
+      "saved confirmation for 1.6 seconds; last-saved time",
+      "discard returns focus to current section heading",
+      "field-tagged save rejection marks and focuses the named field",
+      "edits during a pending save remain as unsaved changes",
+      "personal configuration without Workspace",
+      "optional profile fields share the same save flow"
+    ],
+    "roles": [],
+    "geometryInputs": [
+      "className",
+      "style"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "blocks/settings"
+    ],
+    "features": []
+  }
+}

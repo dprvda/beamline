@@ -1,0 +1,50 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* The turn runs on the compositor (a CSS animation on the svg box) and costs no JS per frame. When the work ends the
+     arc closes into a full ring over the standard duration, so stopping the turn is invisible, and the check or cross
+     draws itself a beat later. All timing comes from the motion tokens; the loop period follows --pui-motion-scale. */
+  .svg[data-state="loading"] {
+    animation: turn calc(0.8s * var(--pui-motion-scale, 1) * var(--pui-motion-look, 1)) linear infinite;
+  }
+  .track {
+    stroke-opacity: 0.18;
+  }
+  .arc {
+    stroke-dasharray: 0.3 1;
+    transition: stroke-dasharray var(--pui-duration-standard) var(--pui-ease-enter);
+  }
+  .svg:not([data-state="loading"]) .arc {
+    stroke-dasharray: 1 1;
+  }
+  .mark {
+    stroke-dasharray: 1 1;
+    animation: draw var(--pui-duration-standard) var(--pui-ease-enter) var(--pui-duration-fast) both;
+  }
+  @keyframes turn {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .svg[data-paused] {
+    animation-play-state: paused;
+  }
+  .svg[data-reduced],
+  .svg[data-reduced] .mark {
+    animation: none;
+  }
+  /* Reduction retains the loading/result shape without a decorative loop. */
+  @media (prefers-reduced-motion: reduce) {
+    .svg[data-state="loading"],
+    .mark {
+      animation: none;
+    }
+  }
+}

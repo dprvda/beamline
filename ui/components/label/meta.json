@@ -1,0 +1,84 @@
+{
+  "name": "label",
+  "title": "Label",
+  "description": "The text label tied to a form control, with a required marker that screen readers announce.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-label"
+  ],
+  "tags": [
+    "form",
+    "label",
+    "required"
+  ],
+  "whenToUse": [
+    "Labelling native or custom controls outside the form helpers."
+  ],
+  "notFor": [
+    "Inside form fields that already render their own label (form, input, select)."
+  ],
+  "spec": {
+    "anatomy": [
+      "root (label, Radix)",
+      "text",
+      "required marker (* plus visually hidden 'required' unless the control announces required itself)"
+    ],
+    "variants": {},
+    "states": [
+      "default",
+      "disabled (follows a disabled peer control)"
+    ],
+    "keyboard": [
+      "Clicking the label focuses its control (native)."
+    ],
+    "motion": "None.",
+    "props": [
+      {
+        "name": "htmlFor",
+        "type": "string",
+        "description": "The id of the control it labels."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Shows the marker and announces 'required'."
+      },
+      {
+        "name": "requiredOnControl",
+        "type": "boolean",
+        "description": "The control carries required itself (native required, aria-required): the label shows the marker only, so the control's accessible name stays the label's words. Every field that can does this for you."
+      }
+    ],
+    "appearance": "Each exported compositional part accepts its native className, style and ref directly; no hidden control styling API is needed."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "native label (data-slot=label)",
+    "refTarget": "native label",
+    "slots": [
+      "label"
+    ],
+    "states": [
+      "required",
+      "disabled styling from owning group/peer"
+    ],
+    "roles": [],
+    "geometryInputs": [],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/label"
+    ],
+    "features": []
+  }
+}

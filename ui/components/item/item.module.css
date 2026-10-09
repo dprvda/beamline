@@ -1,0 +1,156 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Item: one row. Plain rows are bare until pointed at; outline draws a quiet hairline; card wears the surface role.
+     Selected (O1 §6): accent tint, a 2px accent-ink bar on the inline-start side, and every line of text in ink, so the
+     state never rests on colour alone and the text keeps 4.5:1 on the tint in every look. */
+  .root {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--pui-space-2);
+    min-width: 0;
+    padding-inline: var(--pui-space-3);
+    border-radius: var(--pui-radius-control);
+    /* the corner an icon tile in the row's corner zone must take (O1 nested radius = outer − inset) */
+    --_item-nest: calc(var(--pui-radius-control) - var(--_pb, var(--pui-space-2-5)));
+    transition:
+      background-color var(--pui-motion-out) var(--pui-ease-default),
+      var(--m-transition);
+  }
+  .outline {
+    --_item-nest: calc(var(--pui-radius-card) - var(--_pb, var(--pui-space-2-5)));
+    border-radius: var(--pui-radius-card);
+    box-shadow: var(--pui-shadow-hairline);
+  }
+  .card {
+    composes: m-surface from global;
+    --_item-nest: calc(var(--pui-radius-card) - var(--_pb, var(--pui-space-2-5)));
+    border-radius: var(--pui-radius-card);
+  }
+  .root[data-interactive]:hover {
+    background-color: var(--pui-hover);
+    transition-duration: 0ms;
+  }
+  .root[data-state="selected"],
+  .root[data-state="selected"]:hover {
+    background-color: var(--pui-accent-tint);
+  }
+  .root[data-state="selected"]::before {
+    content: "";
+    position: absolute;
+    inset-block: 8px;
+    inset-inline-start: 0;
+    width: 2px;
+    border-radius: var(--pui-radius-pill);
+    background: var(--pui-accent-ink);
+  }
+  .main {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    gap: var(--pui-space-3);
+    padding-block: var(--pui-space-2-5);
+    border-radius: var(--pui-radius-control);
+    color: inherit;
+    text-align: start;
+    text-decoration: none;
+    outline-offset: 2px;
+  }
+  .sm {
+    --_pb: var(--pui-space-1-5);
+  }
+  .sm .main {
+    padding-block: var(--pui-space-1-5);
+  }
+  .media {
+    display: grid;
+    flex: none;
+    place-items: center;
+  }
+  .text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .title {
+    overflow: hidden;
+    color: var(--pui-ink);
+    font-size: var(--pui-text-base);
+    font-weight: var(--pui-weight-medium);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sm .title {
+    font-size: var(--pui-text-sm);
+  }
+  .description {
+    overflow: hidden;
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .meta {
+    flex: none;
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-xs);
+    font-variant-numeric: tabular-nums;
+    unicode-bidi: isolate;
+  }
+  .root[data-state="selected"] :is(.description, .meta) {
+    color: var(--pui-ink);
+  }
+  .actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--pui-space-1);
+  }
+  /* ItemIcon: a tinted tile behind an icon; its corner follows the look's control radius. */
+  .icon {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    /* its own control corner, or concentric with the row (never squarer than a chip, O1 §14.1) when the row's corner
+       is round enough to reach it; the 100000× term switches between the two without a conditional */
+    --_r: max(
+      var(--_item-nest, -1px),
+      var(--pui-radius-chip),
+      var(--pui-radius-control) - max(var(--_item-nest, -1px), 0px) * 100000
+    );
+    border-radius: var(--_r);
+    background: var(--_tile, var(--pui-hover-2));
+    color: var(--_glyph, var(--pui-ink-2));
+  }
+  .icon > svg {
+    width: 16px;
+    height: 16px;
+  }
+  .icon[data-tone="accent"] {
+    --_tile: var(--pui-accent-tint);
+    --_glyph: var(--pui-accent-ink);
+  }
+  .icon[data-tone="green"] {
+    --_tile: var(--pui-green-tint);
+    --_glyph: var(--pui-green);
+  }
+  .icon[data-tone="orange"] {
+    --_tile: var(--pui-orange-tint);
+    --_glyph: var(--pui-orange);
+  }
+  .icon[data-tone="red"] {
+    --_tile: var(--pui-red-tint);
+    --_glyph: var(--pui-red);
+  }
+  .icon[data-tone="blue"] {
+    --_tile: var(--pui-blue-tint);
+    --_glyph: var(--pui-blue);
+  }
+  .icon[data-tone="violet"] {
+    --_tile: var(--pui-violet-tint);
+    --_glyph: var(--pui-violet);
+  }
+}

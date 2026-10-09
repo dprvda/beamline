@@ -1,0 +1,193 @@
+{
+  "name": "ui-root",
+  "title": "UI root",
+  "description": "Makes a region of any app a Beamline root: theme, brand and direction for everything inside, and a matching layer at page level where its menus, dialogs and tooltips open.",
+  "kind": "component",
+  "category": "layout",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-direction"
+  ],
+  "tags": [
+    "root",
+    "provider",
+    "theme",
+    "brand",
+    "scope",
+    "embed",
+    "portal",
+    "isolation",
+    "dark",
+    "light"
+  ],
+  "aliases": [
+    "provider",
+    "theme provider",
+    "root"
+  ],
+  "whenToUse": [
+    "Using Beamline inside an app that has its own styles: wrap only the screens or widgets that use the system, so nothing outside the root is affected.",
+    "A region with a different theme, brand or direction from the rest of the page (a dark trading panel in a light app)."
+  ],
+  "notFor": [
+    "An app built entirely on the system: put class=\"pui dark\" on <html> instead (no wrapper, overlays open in the page).",
+    "Right-to-left text alone inside an existing root (direction)."
+  ],
+  "spec": {
+    "anatomy": [
+      "root (div.pui with the theme class, data-theme, data-accent, dir, and --pui-brand when set)",
+      "portal layer (div.pui appended to <body>, mirroring theme, accent, brand and dir; every overlay inside the root renders into it)"
+    ],
+    "variants": {
+      "theme": [
+        "dark",
+        "light"
+      ],
+      "dir": [
+        "ltr",
+        "rtl"
+      ],
+      "accent": [
+        "blue",
+        "violet",
+        "green",
+        "amber",
+        "orange",
+        "rose",
+        "neutral"
+      ]
+    },
+    "states": [
+      "server and first client render: managed portal pending",
+      "attached: stable portal destination",
+      "appearance changed: same controls and portal node",
+      "inherit=false resets numeric foundation parameters on both root and stable portal",
+      "per-host CSS timing overrides are resolved independently of sibling regions"
+    ],
+    "keyboard": [
+      "None of its own; sets the direction Radix parts use for ←/→ inside rtl."
+    ],
+    "motion": "None. Changing theme switches tokens in one frame.",
+    "props": [
+      {
+        "name": "theme",
+        "type": "\"dark\" | \"light\"",
+        "default": "\"dark\"",
+        "description": "Theme for everything inside, overlays included."
+      },
+      {
+        "name": "brand",
+        "type": "string",
+        "description": "Any CSS colour; becomes --pui-brand. Accent, focus ring, series 1 and glows derive from it (Prism keeps its spectrum for charts and takes the brand for its main action, focus ring and glows)."
+      },
+      {
+        "name": "accent",
+        "type": "\"blue\" | \"violet\" | \"green\" | \"amber\" | \"orange\" | \"rose\" | \"neutral\"",
+        "description": "A preset brand when no brand colour is given. Unset, the look's own brand applies (Prism: white light in dark, ink-black in light; Pop: tomato; the others: blue)."
+      },
+      {
+        "name": "dir",
+        "type": "\"ltr\" | \"rtl\"",
+        "default": "\"ltr\"",
+        "description": "Reading direction for the region and its overlays."
+      },
+      {
+        "name": "look",
+        "type": "\"soft\" | \"blueprint\" | \"glass\" | \"metal\" | \"glow\" | \"pop\" | \"mono\" | \"ink\"",
+        "default": "\"soft\"",
+        "description": "The look inside, overlays included: type, icon weight, corners, page colours and paint (DESIGN-LANGUAGE.md \"Looks\"). Independent of theme."
+      },
+      {
+        "name": "motionScale",
+        "type": "number",
+        "description": "Animation speed: multiplies every duration and spring in CSS and JS (1 = foundation default). Reduced and none motion still win."
+      },
+      {
+        "name": "radiusScale",
+        "type": "number",
+        "description": "Roundness: scales the style's corner radii (0 = square); a style's pinned corners stay."
+      },
+      {
+        "name": "typeScale",
+        "type": "number",
+        "description": "Type size: multiplies every step of the type scale and every type role."
+      },
+      {
+        "name": "typeRatio",
+        "type": "number",
+        "description": "Type contrast: how far headings sit from 14px body (<1 flatter, >1 more dramatic)."
+      },
+      {
+        "name": "spaceScale",
+        "type": "number",
+        "description": "Spacing: scales spacing tokens and Tailwind padding, margin and gap utilities; control heights, icon sizes and row density stay."
+      },
+      {
+        "name": "preset",
+        "type": "PresetRef",
+        "description": "A built-in look or a custom preset { id, visualContract: 1, base } whose stylesheet the app imports."
+      },
+      {
+        "name": "density",
+        "type": "\"compact\" | \"default\" | \"comfortable\"",
+        "description": "Row density for tables, grids and order books in this scope and its overlays."
+      },
+      {
+        "name": "motion",
+        "type": "\"auto\" | \"reduced\" | \"none\"",
+        "description": "Motion mode; auto follows the OS."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Lands on the root element."
+      },
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "required": true
+      }
+    ],
+    "appearance": "Managed appearance changes preserve mounted controls and operational state. Instance design props override scoped defaults; classNames addresses documented slots. Preset references are pure; selected CSS is imported explicitly. Nested scopes merge sparse tokens/defaults; inherit=false resets managed inputs. Managed appearance updates preserve mounted controls and operational state. Motion reads individual CSS duration, easing, spring and stagger tokens at the actual host; no first-document-root lookup. Reduced/none policy wins over speed; semantic reading intervals and data pacing do not scale."
+  },
+  "composition": [
+    "Every overlay (dialog, sheet, popover, menus, select, tooltip, hover card, toast) reads usePortalContainer() from here."
+  ],
+  "review": {
+    "status": "accepted",
+    "notes": "New: the isolation root for host apps."
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "div.pui",
+    "refTarget": "visual root",
+    "slots": [
+      "root",
+      "portal"
+    ],
+    "states": [
+      "mounted (portal layer present)",
+      "server render (no portal layer yet; overlays are closed)"
+    ],
+    "roles": [
+      "m-surface"
+    ],
+    "geometryInputs": [
+      "--pui-font-body",
+      "--pui-text-2xs"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/ui-root"
+    ],
+    "features": []
+  },
+  "notes": [
+    "Foundation exceptions (O1 §14.2): the demo passes a literal brand colour (oklch) because that is the customer input UIRoot's brand prop takes; nothing in the component bakes a colour."
+  ]
+}

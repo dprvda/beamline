@@ -1,0 +1,117 @@
+{
+  "name": "spinner",
+  "title": "Spinner",
+  "description": "A ring that spins while work runs and closes into a drawn check or cross when it ends.",
+  "category": "feedback",
+  "kind": "component",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "motion"
+  ],
+  "tags": [
+    "loading",
+    "progress",
+    "status"
+  ],
+  "whenToUse": [
+    "Short indeterminate work tied to one row, button or step."
+  ],
+  "notFor": [
+    "Page loading → skeleton.",
+    "Known progress → progress."
+  ],
+  "spec": {
+    "anatomy": [
+      "track",
+      "arc",
+      "check / cross"
+    ],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "states": [
+      "loading",
+      "success",
+      "error"
+    ],
+    "keyboard": [
+      "role=status while loading; role=img with Done/Failed after."
+    ],
+    "motion": "The loading ring rotates while visible; managed/OS reduction holds the ring still. Success/error retains a meaningful shape and label; draw and arc use semantic timings.",
+    "props": [
+      {
+        "name": "state",
+        "type": "'loading'|'success'|'error'"
+      },
+      {
+        "name": "size",
+        "type": "'sm'|'md'|'lg'"
+      },
+      {
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "name": "classNames",
+        "type": "SpinnerClassNames"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native span"
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style target the visual root; typed classNames reach internal parts. Native refs preserve focus, measurement and existing state. Actual-host motion policy and timings are resolved without recreating state. Managed reduced/none and OS reduction stop decorative loops/displacement; continuous effects pause offscreen or in a hidden document."
+  },
+  "review": {
+    "status": "accepted",
+    "notes": "Turn on the compositor; result drawn as a shape; pulses under reduced motion.",
+    "checked": "2026-10-02"
+  },
+  "notes": [
+    "The 0.8s loader turn is multiplied by the nearest motion speed and look factor. Managed/OS reduction holds it still; offscreen/hidden pauses it. Arc closing and mark drawing use duration/ease tokens."
+  ],
+  "visualContract": {
+    "version": 1,
+    "root": "span",
+    "refTarget": "native span",
+    "slots": [
+      "root:spinner",
+      "svg:spinner-svg",
+      "track:spinner-track",
+      "arc:spinner-arc",
+      "mark:spinner-mark"
+    ],
+    "states": [
+      "loading",
+      "success",
+      "error"
+    ],
+    "roles": [],
+    "geometryInputs": [
+      "size",
+      "state"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/spinner"
+    ],
+    "features": []
+  }
+}

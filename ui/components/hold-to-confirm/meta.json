@@ -1,0 +1,143 @@
+{
+  "name": "hold-to-confirm",
+  "title": "Hold to confirm",
+  "description": "Confirms a costly action by holding instead of clicking: a fill sweeps across while held and drains if let go early; pointer, touch, Space and Enter all hold.",
+  "kind": "component",
+  "category": "actions",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "tags": [
+    "confirm",
+    "destructive",
+    "press and hold"
+  ],
+  "whenToUse": [
+    "Destructive actions where an accidental click is costly and a dialog would interrupt: delete a workspace, cancel an order."
+  ],
+  "notFor": [
+    "Frequent actions (the hold becomes a tax).",
+    "Actions people must be able to do without holding: pair it with another route where that matters (alert-dialog)."
+  ],
+  "spec": {
+    "anatomy": [
+      "button",
+      "fill",
+      "icon",
+      "label",
+      "hint for screen readers"
+    ],
+    "variants": {
+      "tone": [
+        "danger",
+        "neutral"
+      ],
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "states": [
+      "idle",
+      "holding",
+      "confirmed",
+      "disabled"
+    ],
+    "keyboard": [
+      "Hold Space or Enter",
+      "releasing early cancels"
+    ],
+    "motion": "While held, a fill of the control's own colour (a quarter strength; ink at a seventh for neutral) sweeps from the inline start, linearly, for exactly the hold time, so its edge is the progress; let go early and it drains back over --pui-duration-standard. Confirmed keeps it full and the label slides to the result. Reduced motion keeps the sweep (it is information); the drain and label swap become instant.",
+    "props": [
+      {
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "name": "confirmedLabel",
+        "type": "string",
+        "default": "\"Done\""
+      },
+      {
+        "name": "onConfirm",
+        "type": "() => void"
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "default": "1200"
+      },
+      {
+        "name": "tone",
+        "type": "\"danger\" | \"neutral\"",
+        "default": "\"danger\""
+      },
+      {
+        "name": "confirmed",
+        "type": "boolean"
+      },
+      {
+        "name": "onHoldChange",
+        "type": "(holding: boolean) => void"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native HTMLButtonElement"
+      },
+      {
+        "name": "classNames",
+        "type": "HoldToConfirmClassNames"
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "tone",
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the existing root; the composed native ref preserves internal focus/measurement. Typed classNames exposes existing closed parts. Motion resolves at this host; managed/OS reduction wins. Hold/reading time remains unscaled."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "hold-to-confirm",
+    "refTarget": "native HTMLButtonElement",
+    "slots": [
+      "root:hold-to-confirm",
+      "fill:hold-to-confirm-fill",
+      "content:hold-to-confirm-content",
+      "hint:hold-to-confirm-hint"
+    ],
+    "states": [
+      "idle",
+      "holding",
+      "confirmed",
+      "disabled"
+    ],
+    "roles": [
+      "m-control"
+    ],
+    "geometryInputs": [
+      "size"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/hold-to-confirm"
+    ],
+    "features": []
+  }
+}

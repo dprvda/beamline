@@ -1,0 +1,146 @@
+{
+  "name": "copy-button",
+  "title": "Copy button",
+  "description": "Copies a value and confirms in place: the icon becomes a check and the label says Copied; a refused copy says so instead of pretending.",
+  "kind": "component",
+  "category": "actions",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "tags": [
+    "clipboard",
+    "copy",
+    "api key"
+  ],
+  "whenToUse": [
+    "Copying a key, an id, a URL or a code snippet with visible confirmation."
+  ],
+  "notFor": [
+    "Copying whole documents or files (offer a download)."
+  ],
+  "spec": {
+    "anatomy": [
+      "Button",
+      "icon (copy → check / x)",
+      "label",
+      "live status for screen readers"
+    ],
+    "variants": {
+      "variant": [
+        "secondary (default)",
+        "outline",
+        "ghost",
+        "plain (alias of ghost)",
+        "primary"
+      ],
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "states": [
+      "idle",
+      "copied (1.6 s)",
+      "failed",
+      "disabled"
+    ],
+    "keyboard": [
+      "Enter / Space copies"
+    ],
+    "motion": "Icon feedback uses --pui-duration-feedback (existing 160ms default); reduced/none swaps instantly. Copy result timeout is reading time and does not scale with animation speed.",
+    "props": [
+      {
+        "name": "value",
+        "type": "string"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "default": "\"Copy\""
+      },
+      {
+        "name": "iconOnly",
+        "type": "boolean"
+      },
+      {
+        "name": "variant",
+        "type": "ButtonVariant | \"plain\"",
+        "default": "\"secondary\""
+      },
+      {
+        "name": "size",
+        "type": "ButtonSize",
+        "default": "\"sm\""
+      },
+      {
+        "name": "onCopied",
+        "type": "() => void"
+      },
+      {
+        "name": "timeout",
+        "type": "number",
+        "default": "1600"
+      },
+      {
+        "name": "classNames",
+        "type": "CopyButtonClassNames"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref",
+        "description": "native button"
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "variant",
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style target the visual root; typed classNames reach internal parts. Native refs preserve focus, measurement and existing state. Actual-host motion policy and timings are resolved without recreating state. Managed reduced/none and OS reduction stop decorative loops/displacement; continuous effects pause offscreen or in a hidden document."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "button",
+    "refTarget": "native button",
+    "slots": [
+      "root:copy-button",
+      "label:button-label",
+      "loader:button-loader",
+      "iconFrame:copy-button-icon-frame",
+      "icon:copy-button-icon",
+      "status:copy-button-status"
+    ],
+    "states": [
+      "idle",
+      "copied (1.6 s)",
+      "failed",
+      "disabled"
+    ],
+    "roles": [],
+    "geometryInputs": [
+      "size",
+      "variant",
+      "--pui-duration-feedback"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/copy-button"
+    ],
+    "features": []
+  }
+}

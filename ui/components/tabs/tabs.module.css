@@ -1,0 +1,100 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Tabs. The list is a row that scrolls sideways when it runs out of room; one indicator follows the active tab.
+     underline: a line under the tab on a hairline. pill: a raised thumb (the control role) in a well (the inset role). */
+  .list {
+    position: relative;
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    overflow-x: auto;
+    scroll-padding-inline: var(--pui-space-2);
+    scrollbar-width: none;
+  }
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+  .underline {
+    gap: var(--pui-space-1);
+    box-shadow: inset 0 calc(-1 * var(--pui-border-width)) 0 var(--pui-line);
+  }
+  .pill {
+    composes: m-inset from global;
+    width: fit-content;
+    gap: var(--pui-space-0-5);
+    padding: var(--pui-space-0-5);
+    border-radius: var(--pui-radius-control);
+  }
+
+  /* placed and moved by the contour engine (ui/lib/contour.ts): it leads toward the chosen tab and gathers there */
+  .indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+  .line {
+    border-radius: var(--pui-radius-pill);
+    /* ink, unless the look draws the chosen tab's line its own way (prism: split light, which sweeps along it while
+       it travels to the newly chosen tab) */
+    background: var(--m-indicator-line, var(--pui-ink));
+    background-size: var(--m-indicator-size, 100% 100%);
+    /* prism: the line is fragments of light with gaps, not one even gradient */
+    mask: var(--m-indicator-mask, none);
+  }
+  .line[data-morphing] {
+    animation: var(--m-indicator-flow, none);
+  }
+  .thumb {
+    composes: m-control from global;
+    border-radius: calc(var(--pui-radius-control) - 2px);
+  }
+
+  .trigger {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--pui-space-1-5);
+    color: var(--pui-ink-3);
+    font-size: var(--pui-text-sm);
+    font-weight: var(--pui-weight-medium);
+    white-space: nowrap;
+    transition: color var(--pui-motion-out) var(--pui-ease-default);
+  }
+  .trigger:hover,
+  .trigger[data-state="active"] {
+    color: var(--pui-ink);
+    transition-duration: 0ms;
+  }
+  .trigger:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .trigger :where(svg) {
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+  }
+  .underline .trigger {
+    height: 36px;
+    padding-inline: var(--pui-space-2-5);
+  }
+  .pill .trigger {
+    height: 28px;
+    padding-inline: var(--pui-space-3);
+    border-radius: calc(var(--pui-radius-control) - 2px);
+  }
+
+  .count {
+    padding-inline: var(--pui-space-1-5);
+    border-radius: var(--pui-radius-pill);
+    background: var(--pui-hover-2);
+    color: var(--pui-ink-2);
+    font-family: var(--pui-font-numeric);
+    font-size: var(--pui-text-2xs);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--pui-leading-body);
+    padding-block: var(--pui-space-px);
+  }
+}

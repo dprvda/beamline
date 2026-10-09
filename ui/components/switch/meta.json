@@ -1,0 +1,132 @@
+{
+  "name": "switch",
+  "title": "Switch",
+  "description": "A setting that applies at once: a thumb that slides on a spring and stretches under the finger, with an optional label before or after.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-switch",
+    "motion"
+  ],
+  "tags": [
+    "toggle",
+    "setting",
+    "on off"
+  ],
+  "whenToUse": [
+    "Settings that take effect immediately when toggled."
+  ],
+  "notFor": [
+    "Choices that apply only after Save (checkbox)."
+  ],
+  "spec": {
+    "anatomy": [
+      "track (Radix switch)",
+      "thumb",
+      "label",
+      "description"
+    ],
+    "variants": {
+      "size": [
+        "sm",
+        "md"
+      ],
+      "labelPosition": [
+        "end",
+        "start"
+      ]
+    },
+    "states": [
+      "off",
+      "on",
+      "pressed",
+      "disabled"
+    ],
+    "keyboard": [
+      "Space / Enter toggles"
+    ],
+    "motion": "The thumb slides on --pui-ease-spring (no overshoot) and widens 4px while pressed. Toggled, the knob reaches toward its new side by the look's spread (--m-morph-spread; rigid looks keep their knob) and gathers there, never overshooting.",
+    "props": [
+      {
+        "name": "checked / defaultChecked / onCheckedChange",
+        "type": "boolean"
+      },
+      {
+        "name": "label",
+        "type": "ReactNode"
+      },
+      {
+        "name": "description",
+        "type": "ReactNode"
+      },
+      {
+        "name": "labelPosition",
+        "type": "\"start\" | \"end\"",
+        "default": "\"end\""
+      },
+      {
+        "name": "size",
+        "type": "\"sm\" | \"md\""
+      },
+      {
+        "name": "classNames",
+        "type": "SwitchClassNames",
+        "description": "Classes for the documented parts."
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / Ref",
+        "description": "Visual root style; ref targets native Radix switch button."
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the visual root; classNames styles the documented parts. Internal measurement, keyboard and native ref wiring are preserved. 0.2: a labelled control now applies style to the labelled wrapper; classNames.control styles the native button."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "switch-field when labelled; otherwise switch",
+    "refTarget": "native Radix switch button",
+    "slots": [
+      "root:switch-field or switch",
+      "control:switch",
+      "thumb:switch-thumb",
+      "text:switch-text",
+      "label:switch-label",
+      "description:switch-description"
+    ],
+    "states": [
+      "unchecked",
+      "checked",
+      "disabled"
+    ],
+    "roles": [
+      "m-toggle",
+      "m-knob"
+    ],
+    "geometryInputs": [
+      "size",
+      "labelPosition"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/switch"
+    ],
+    "features": []
+  }
+}

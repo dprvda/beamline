@@ -1,0 +1,139 @@
+{
+  "name": "select",
+  "title": "Select",
+  "description": "One choice from a short known list, in the same frame as every text field: label, help, error, option groups and details.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "@radix-ui/react-select",
+    "lucide-react"
+  ],
+  "tags": [
+    "field",
+    "form",
+    "choice"
+  ],
+  "whenToUse": [
+    "One choice from a short known list in a form: currency, time zone, role."
+  ],
+  "notFor": [
+    "Long or searchable lists (combobox).",
+    "Several values (multi-select).",
+    "Two to four visible options (segmented-control or radio-group)."
+  ],
+  "spec": {
+    "anatomy": [
+      "label",
+      "trigger (field frame, value, chevrons)",
+      "list (groups, headings, options with details, check)",
+      "description",
+      "error"
+    ],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "states": [
+      "placeholder (ink-3 value)",
+      "selected",
+      "open (the trigger keeps the field's focus edge while its list is open)",
+      "highlighted option (hover-2, flat)",
+      "invalid (red edge via the field role, icon and words under it; the list still opens)",
+      "disabled (--pui-opacity-disabled from the field frame)",
+      "option disabled (ink-3, skipped by the keyboard)"
+    ],
+    "keyboard": [
+      "Enter / Space / ↓ opens",
+      "↑ ↓ move",
+      "type to jump",
+      "Enter chooses",
+      "Escape closes"
+    ],
+    "motion": "The list grows from the field over --pui-motion-in; one highlight plate follows the option under the pointer or the arrow keys. Opens out of its trigger (_shared/overlay.module.css, source morph).",
+    "props": [
+      {
+        "name": "label",
+        "type": "ReactNode"
+      },
+      {
+        "name": "options",
+        "type": "(SelectOption | SelectGroup)[]"
+      },
+      {
+        "name": "value / defaultValue / onValueChange",
+        "type": "string"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "default": "\"Select\""
+      },
+      {
+        "name": "description / error",
+        "type": "ReactNode"
+      },
+      {
+        "name": "size",
+        "type": "\"sm\" | \"md\" | \"lg\"",
+        "default": "\"md\""
+      },
+      {
+        "name": "hideLabel / disabled / required / name",
+        "type": "boolean / string"
+      }
+    ],
+    "appearance": "Managed appearance changes preserve mounted controls and operational state. Instance design props override scoped defaults; classNames addresses documented slots."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "field wrapper (data-slot=field)",
+    "refTarget": "trigger button",
+    "slots": [
+      "root:field",
+      "label:label",
+      "trigger:select",
+      "value:select-value",
+      "icon:select-icon",
+      "list:select-list",
+      "item:select-item",
+      "groupLabel:select-group-label",
+      "separator:select-separator",
+      "description:field-description",
+      "error:field-error"
+    ],
+    "states": [
+      "placeholder",
+      "selected",
+      "open",
+      "invalid",
+      "disabled",
+      "option disabled"
+    ],
+    "roles": [
+      "m-field"
+    ],
+    "geometryInputs": [
+      "--pui-field-radius",
+      "--pui-overlay-radius",
+      "size"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/select"
+    ],
+    "features": []
+  }
+}

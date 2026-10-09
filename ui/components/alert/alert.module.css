@@ -1,0 +1,62 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* An alert is a surface like any other, so every look frames it (blueprint's rule, pop's ink outline, ink's pen,
+     mono's dashes, metal's pocket). The tone is a tint composed over the role's own fill, never a replacement, plus
+     the icon in the tone's colour and the words: colour is never the only signal. */
+  .alert {
+    composes: m-surface from global;
+    --_tint: transparent;
+    display: flex;
+    gap: var(--pui-space-3);
+    padding: var(--pui-space-3);
+    border-radius: var(--pui-radius-card);
+    background: linear-gradient(var(--_tint), var(--_tint)), var(--m-surface-bg);
+    color: var(--pui-ink-2);
+  }
+  .alert[data-tone="info"] {
+    --_tone: var(--pui-blue);
+  }
+  .alert[data-tone="success"] {
+    --_tone: var(--pui-green);
+  }
+  .alert[data-tone="warning"] {
+    --_tone: var(--pui-orange);
+  }
+  .alert[data-tone="danger"] {
+    --_tone: var(--pui-red);
+  }
+  .alert[data-tone="neutral"] {
+    --_tone: var(--pui-ink-3);
+  }
+  .alert:not([data-tone="neutral"]) {
+    --_tint: color-mix(in oklab, var(--_tone) 9%, transparent);
+  }
+  .icon {
+    flex: none;
+    margin-top: var(--pui-space-0-5);
+    color: var(--_tone);
+  }
+  .icon > svg {
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+  }
+  /* the fold: rows collapse to zero and the alert fades, then it unmounts */
+  .wrap {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition:
+      grid-template-rows var(--pui-duration-standard) var(--pui-ease-standard),
+      opacity var(--pui-duration-standard) var(--pui-ease-standard);
+  }
+  .wrap[data-state="closed"] {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  /* clips the fold, with room for the look's outer edge and shadow (pop's lip, soft's drop) so they are not cut */
+  .clip {
+    min-height: 0;
+    margin: calc(var(--pui-space-1-5) * -1);
+    padding: var(--pui-space-1-5);
+    overflow: hidden;
+  }
+}

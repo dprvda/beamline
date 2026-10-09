@@ -1,0 +1,135 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Avatar: a face (initials on the name's hue, or a photo) and an optional presence mark. The mark is cut out of the
+     face with a mask, so the gap around it is truly empty and reads on any ground: a card, a row hover, glass, a photo. */
+  .root {
+    --_s: 36px;
+    --_d: 10px;
+    --_g: 2px;
+    position: relative;
+    display: inline-grid;
+    flex: none;
+    width: var(--_s);
+    height: var(--_s);
+    place-items: center;
+    /* initials scale with the face (geometry), never below 80% of the smallest type step */
+    font-size: max(calc(var(--pui-text-2xs) * 0.8), calc(var(--_s) * 0.36));
+    font-weight: var(--pui-weight-medium);
+    line-height: 1;
+    user-select: none;
+  }
+  .xs {
+    --_s: 20px;
+    --_d: 6px;
+    --_g: 1.5px;
+  }
+  .sm {
+    --_s: 28px;
+    --_d: 8px;
+  }
+  .lg {
+    --_s: 44px;
+    --_d: 12px;
+  }
+  .xl {
+    --_s: 56px;
+    --_d: 14px;
+    --_g: 2.5px;
+  }
+  .face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--pui-avatar-hue) 24%, var(--pui-surface-2));
+    color: color-mix(in oklab, var(--pui-avatar-hue) 55%, var(--pui-ink));
+  }
+  /* a company tile takes the look's card corner, never more than a third of the face, so it stays a square at xs */
+  .root[data-shape="square"] .face {
+    /* nesting input (O1 §14.1, as Button): a parent that holds this near its rounded corner sets --pui-nest-radius and
+       --pui-nest-inset; the corner becomes radius − inset, clamped between a floor (chip) and the part's own role radius (or --pui-nest-ceiling: a pill container sets it to the pill radius). Unset, the declaration is invalid and the own corner
+       applies. --pui-avatar-radius wins over both. */
+    --_avatar-nest: clamp(
+      var(--pui-radius-chip),
+      calc(var(--pui-nest-radius) - var(--pui-nest-inset, 0px)),
+      var(--pui-nest-ceiling, min(var(--pui-radius-card), calc(var(--_s) / 3)))
+    );
+    --_r: var(--pui-avatar-radius, var(--_avatar-nest, min(var(--pui-radius-card), calc(var(--_s) / 3))));
+    border-radius: var(--_r);
+  }
+  .photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* The mark sits on the bottom inline-end corner; the face loses a disc one gap wider than the mark under it. */
+  .root[data-status] .face {
+    --_at: calc(var(--_d) / 2 - 1px);
+    mask: radial-gradient(
+      circle at calc(100% - var(--_at)) calc(100% - var(--_at)),
+      transparent calc(var(--_d) / 2 + var(--_g)),
+      black calc(var(--_d) / 2 + var(--_g) + 0.5px)
+    );
+  }
+  .root[data-status]:dir(rtl) .face {
+    mask: radial-gradient(
+      circle at var(--_at) calc(100% - var(--_at)),
+      transparent calc(var(--_d) / 2 + var(--_g)),
+      black calc(var(--_d) / 2 + var(--_g) + 0.5px)
+    );
+  }
+  .mark {
+    position: absolute;
+    inset-inline-end: -1px;
+    bottom: -1px;
+  }
+
+  /* Presence: colour and shape together, so it reads in greyscale (DESIGN-LANGUAGE: colour is never the only signal).
+     online a full disc · away a crescent · busy a disc with a bar through it · offline a hollow ring. */
+  .presence {
+    --_d: 10px;
+    display: inline-block;
+    flex: none;
+    width: var(--_d);
+    height: var(--_d);
+    border-radius: 50%;
+    background: var(--_c);
+  }
+  .presence[data-size="xs"] {
+    --_d: 6px;
+  }
+  .presence[data-size="sm"] {
+    --_d: 8px;
+  }
+  .presence[data-size="lg"] {
+    --_d: 12px;
+  }
+  .presence[data-size="xl"] {
+    --_d: 14px;
+  }
+  .presence[data-status="online"] {
+    --_c: var(--pui-green);
+  }
+  .presence[data-status="away"] {
+    --_c: var(--pui-orange);
+    mask: radial-gradient(circle at 18% 18%, transparent calc(var(--_d) * 0.36), black calc(var(--_d) * 0.36 + 0.5px));
+  }
+  .presence[data-status="away"]:dir(rtl) {
+    mask: radial-gradient(circle at 82% 18%, transparent calc(var(--_d) * 0.36), black calc(var(--_d) * 0.36 + 0.5px));
+  }
+  .presence[data-status="busy"] {
+    --_c: var(--pui-red);
+    mask:
+      linear-gradient(black 0 0) center / 56% max(1.5px, 22%) no-repeat,
+      linear-gradient(black 0 0);
+    mask-composite: exclude;
+  }
+  .presence[data-status="offline"] {
+    --_c: var(--pui-ink-3);
+    mask: radial-gradient(circle, transparent calc(var(--_d) * 0.24), black calc(var(--_d) * 0.24 + 0.5px));
+  }
+}

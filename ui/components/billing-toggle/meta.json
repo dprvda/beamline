@@ -1,0 +1,110 @@
+{
+  "name": "billing-toggle",
+  "title": "Billing toggle",
+  "description": "Monthly or yearly: a segmented control whose yearly note turns into what the choice saves.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [],
+  "tags": [
+    "pricing",
+    "billing",
+    "yearly"
+  ],
+  "whenToUse": [
+    "Switching monthly and yearly prices on pricing or plan pages."
+  ],
+  "notFor": [
+    "General two-way choices (segmented-control or switch)."
+  ],
+  "spec": {
+    "anatomy": [
+      "segmented control",
+      "note badge"
+    ],
+    "variants": {
+      "size": [
+        "md",
+        "lg"
+      ]
+    },
+    "states": [
+      "monthly",
+      "yearly"
+    ],
+    "keyboard": [
+      "Same as the segmented control"
+    ],
+    "motion": "Same as the segmented control.",
+    "props": [
+      {
+        "name": "value / onValueChange",
+        "type": "string"
+      },
+      {
+        "name": "options",
+        "type": "{ value, label, badge?, activeBadge? }[]",
+        "default": "Monthly, Yearly (−20%)"
+      },
+      {
+        "name": "size",
+        "type": "\"md\" | \"lg\""
+      },
+      {
+        "name": "classNames",
+        "type": "BillingToggleClassNames",
+        "description": "Classes for the documented parts."
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / Ref",
+        "description": "Visual root style; ref targets SegmentedControl radiogroup element."
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the visual root; classNames styles the documented parts. Internal measurement, keyboard and native ref wiring are preserved."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "SegmentedControl root (data-slot=segmented-control)",
+    "refTarget": "SegmentedControl radiogroup element",
+    "slots": [
+      "root:segmented-control",
+      "thumb:segmented-thumb",
+      "segment:segmented-item",
+      "badge:billing-toggle-badge"
+    ],
+    "states": [
+      "monthly",
+      "yearly",
+      "custom option values"
+    ],
+    "roles": [
+      "m-inset",
+      "m-control"
+    ],
+    "geometryInputs": [
+      "size"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/billing-toggle"
+    ],
+    "features": []
+  }
+}

@@ -1,0 +1,78 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Badge: a tinted label. The tone sets three local colours; the tag role lets a look outline it and ink its text
+     (pop turns badges into stickers), every other look leaves it a quiet tinted pill for dense tables. */
+  .root {
+    composes: m-tag from global;
+    --pui-badge-bg: var(--pui-hover);
+    --pui-badge-fg: var(--pui-ink-2);
+    --pui-badge-dot: var(--pui-ink-3);
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--pui-space-1);
+    height: 22px;
+    padding-inline: var(--pui-space-2);
+    /* nesting input (O1 §14.1, as Button): a parent that holds this near its rounded corner sets --pui-nest-radius and
+       --pui-nest-inset; the corner becomes radius − inset, clamped between a floor (chip) and the part's own role radius (or --pui-nest-ceiling: a pill container sets it to the pill radius). Unset, the declaration is invalid and the own corner
+       applies. --pui-badge-radius wins over both. */
+    --_badge-nest: clamp(
+      var(--pui-radius-chip),
+      calc(var(--pui-nest-radius) - var(--pui-nest-inset, 0px)),
+      var(--pui-nest-ceiling, var(--pui-radius-pill))
+    );
+    border-radius: var(--pui-badge-radius, var(--_badge-nest, var(--pui-radius-pill)));
+    background: var(--pui-badge-bg);
+    color: var(--m-tag-ink, var(--pui-badge-fg));
+    font-size: var(--pui-text-xs);
+    font-weight: var(--pui-weight-medium);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .root :where(svg) {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  .sm {
+    height: 20px;
+    padding-inline: var(--pui-space-1-5);
+    font-size: var(--pui-text-2xs);
+  }
+  .sm :where(svg) {
+    width: 12px;
+    height: 12px;
+  }
+  .accent {
+    --pui-badge-bg: var(--pui-accent-tint);
+    --pui-badge-fg: var(--pui-accent-ink);
+    --pui-badge-dot: var(--pui-accent);
+  }
+  .success {
+    --pui-badge-bg: var(--pui-green-tint);
+    --pui-badge-fg: var(--pui-green);
+    --pui-badge-dot: var(--pui-green);
+  }
+  .warning {
+    --pui-badge-bg: var(--pui-orange-tint);
+    --pui-badge-fg: var(--pui-orange);
+    --pui-badge-dot: var(--pui-orange);
+  }
+  .danger {
+    --pui-badge-bg: var(--pui-red-tint);
+    --pui-badge-fg: var(--pui-red);
+    --pui-badge-dot: var(--pui-red);
+  }
+  .info {
+    --pui-badge-bg: var(--pui-blue-tint);
+    --pui-badge-fg: var(--pui-blue);
+    --pui-badge-dot: var(--pui-blue);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--pui-radius-pill);
+    background: var(--pui-badge-dot);
+  }
+}

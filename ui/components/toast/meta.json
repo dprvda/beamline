@@ -1,0 +1,159 @@
+{
+  "name": "toast",
+  "title": "Toast",
+  "description": "Short results of an action stacked at an edge: point at the stack to fan it out and pause the timers; undo or retry in place; Alt+T, Escape and a swipe for the keyboard and touch.",
+  "kind": "component",
+  "category": "overlays",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [
+    "lucide-react"
+  ],
+  "tags": [
+    "notification",
+    "feedback",
+    "undo"
+  ],
+  "aliases": [
+    "toast-stack"
+  ],
+  "whenToUse": [
+    "Brief results of an action: saved, sent, failed with retry, undo, a long task finishing."
+  ],
+  "notFor": [
+    "Errors that need fixing (inline error or alert).",
+    "Anything people must read later (notification-center)."
+  ],
+  "spec": {
+    "anatomy": [
+      "ToastStackProvider",
+      "ToastStack (region)",
+      "card: icon, title, description, action",
+      "dismiss button",
+      "useToastStack(): toast, update, dismiss"
+    ],
+    "variants": {
+      "type": [
+        "success",
+        "error",
+        "warning",
+        "info",
+        "loading"
+      ],
+      "position": [
+        "bottom-right",
+        "bottom-left",
+        "bottom-center",
+        "top-right",
+        "top-left",
+        "top-center"
+      ]
+    },
+    "states": [
+      "entering",
+      "front",
+      "behind (peeking)",
+      "fanned out",
+      "paused",
+      "leaving",
+      "swiping"
+    ],
+    "keyboard": [
+      "Alt+T focuses the newest toast",
+      "Tab moves through toasts and their actions",
+      "Escape dismisses the focused toast"
+    ],
+    "motion": "Cards arrive from the edge and fan out on --pui-ease-drawer over --pui-duration-considered; leaving fades over --pui-motion-out; reduced motion makes both instant.",
+    "accessibility": "Each card is a status (errors an alert) so it is announced; timers pause while the stack is pointed at, focused or the tab is hidden.",
+    "props": [
+      {
+        "name": "toast(input)",
+        "type": "{ id?, type?, title, description?, action?: { label, onClick }, duration? } → id"
+      },
+      {
+        "name": "update(id, patch)",
+        "type": "Partial<ToastInput>"
+      },
+      {
+        "name": "dismiss(id?)",
+        "type": "string"
+      },
+      {
+        "name": "position",
+        "type": "ToastPosition",
+        "default": "\"bottom-right\""
+      },
+      {
+        "name": "contained",
+        "type": "boolean",
+        "default": "false"
+      },
+      {
+        "name": "visibleToasts",
+        "type": "number",
+        "default": "3"
+      },
+      {
+        "name": "hotkey",
+        "type": "boolean",
+        "default": "true"
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / native Ref"
+      },
+      {
+        "name": "classNames",
+        "type": "ToastStackClassNames"
+      }
+    ],
+    "appearance": "Native visual-root className/style/ref with internal measurement and state ownership preserved. ToastStack is the native section; ToastStackProvider remains headless. Typed card parts stay in the same stack. Dismissal waits for the actual card exit token, reduction removes displacement and settles immediately, provider timers are cleaned up, and a dismissed focused card returns focus to a surviving card/stack. Reading duration remains wall-clock."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "toast-stack",
+    "refTarget": "native section",
+    "slots": [
+      "root:toast-stack",
+      "list:toast-list",
+      "toast:toast",
+      "card:toast-card",
+      "body:toast-body",
+      "icon:toast-icon",
+      "content:toast-content",
+      "title:toast-title",
+      "description:toast-description",
+      "action:button",
+      "close:toast-close"
+    ],
+    "states": [
+      "entering",
+      "front",
+      "behind (peeking)",
+      "fanned out",
+      "paused",
+      "leaving",
+      "swiping"
+    ],
+    "roles": [
+      "m-overlay"
+    ],
+    "geometryInputs": [
+      "className",
+      "style"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/toast"
+    ],
+    "features": []
+  }
+}

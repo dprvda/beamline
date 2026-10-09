@@ -1,0 +1,294 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* Button. Every colour, size and duration is a token; a variant only sets the four local properties below. */
+  .root {
+    --_button-bg: transparent;
+    --_button-bg-hover: var(--pui-hover);
+    --_button-fg: var(--pui-ink);
+    --_button-edge: none;
+    --_button-height: var(--pui-control-height-md);
+    --_button-pad: 14px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pui-space-1-5);
+    flex-shrink: 0;
+    height: var(--_button-height);
+    min-width: var(--_button-height);
+    padding-inline: var(--_button-pad);
+    border: 0;
+    /* Nested context: a parent that holds buttons near its rounded corners sets --pui-nest-radius (its own radius) and
+       --pui-nest-inset (its padding); the button then takes the concentric radius, outer − inset, clamped between the chip
+       and the parent's ceiling (--pui-nest-ceiling; a pill container sets the pill radius), else its control radius (O1 §14 nesting input), so it follows the parent at any roundness and look. Without a parent context --_button-nest is invalid and the control
+       radius applies. --pui-button-radius still wins over both. */
+    --_button-nest: clamp(
+      var(--pui-radius-chip),
+      calc(var(--pui-nest-radius) - var(--pui-nest-inset, 0px)),
+      var(--pui-nest-ceiling, var(--pui-radius-control))
+    );
+    border-radius: var(--pui-button-radius, var(--_button-nest, var(--pui-radius-control)));
+    color: var(--_button-fg);
+    font-family: var(--pui-font-body);
+    font-size: var(--pui-text-sm);
+    font-weight: var(--pui-weight-medium);
+    line-height: 1;
+    letter-spacing: var(--pui-tracking-body);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    /* frequency law: hover arrives at 0ms (below), leaves over the ruled departure */
+    transition:
+      var(--m-transition),
+      background-color var(--pui-motion-out) var(--pui-ease-default),
+      color var(--pui-motion-out) var(--pui-ease-default);
+  }
+  /* the quiet variants paint themselves; filled and secondary variants are painted by their look role (m-solid,
+   m-control), which these zero-specificity rules can never override */
+  :where(.root) {
+    background: var(--_button-bg);
+    box-shadow: var(--_button-edge);
+  }
+  :where(.root:hover:not(:disabled, [aria-disabled="true"])) {
+    background: var(--_button-bg-hover);
+  }
+  .root:hover:not(:disabled, [aria-disabled="true"]) {
+    transition-duration: 0ms;
+  }
+  /* the asChild form has no motion: a CSS press instead */
+  .root:not(button):active {
+    transform: scale(0.97);
+  }
+  .root:disabled,
+  .root[aria-disabled="true"]:not([data-loading]) {
+    opacity: var(--pui-opacity-disabled);
+    cursor: not-allowed;
+  }
+  .root[data-loading] {
+    cursor: progress;
+  }
+
+  /* Icons: 16px unless the icon says otherwise (zero specificity, so size-5 or an inline size wins) */
+  :where(.root) :where(svg) {
+    width: var(--pui-icon-md);
+    height: var(--pui-icon-md);
+    flex-shrink: 0;
+  }
+
+  .sm {
+    --_button-height: var(--pui-control-height-sm);
+    --_button-pad: var(--pui-space-2-5);
+    /* the base gap (--pui-space-1-5); 5px had no scale step, and 6px also lets the loader's negative margin cancel
+       the gap exactly at every size */
+  }
+  .md {
+    --_button-height: var(--pui-control-height-md);
+    --_button-pad: 14px;
+  }
+  .lg {
+    --_button-height: var(--pui-control-height-lg);
+    --_button-pad: var(--pui-space-4);
+    font-size: var(--pui-text-base);
+  }
+  /* a bottom action bar on a phone: the 44 px touch target (a platform minimum, not a spacing step, so it holds when
+     the spacing parameter changes — O1 §14.2), the large label */
+  .touch {
+    --_button-height: calc(var(--pui-control-height-lg) + 0.25rem);
+    --_button-pad: var(--pui-space-5);
+    font-size: var(--pui-text-base);
+  }
+  .root[data-icon-only] {
+    padding-inline: 0;
+    width: var(--_button-height);
+  }
+
+  /* the main action: ink on the page, inverted per theme */
+  .primary {
+    --m-color: var(--pui-ink);
+    --_button-fg: var(--pui-ink-inverse);
+  }
+  .secondary {
+    --_button-fg: var(--pui-ink);
+  }
+  .outline {
+    --_button-edge: inset 0 0 0 1px var(--pui-line-strong);
+    --_button-bg-hover: var(--pui-hover);
+  }
+  .ghost {
+    --_button-fg: var(--pui-ink-2);
+    --_button-bg-hover: var(--pui-hover);
+  }
+  .ghost:hover:not(:disabled) {
+    color: var(--pui-ink);
+  }
+  .danger {
+    --_button-fg: var(--pui-red);
+    --_button-edge: inset 0 0 0 1px color-mix(in oklab, var(--pui-red) 42%, transparent);
+    --_button-bg-hover: var(--pui-red-tint);
+  }
+  .accent {
+    --m-color: var(--pui-accent);
+    --_button-fg: var(--pui-accent-foreground);
+  }
+
+  /* Market side. Declared after the variants so it wins: a filled variant takes the side's colour and its on-colour
+     ink; a quiet variant keeps its paint and colours the label. */
+  .up {
+    --m-color: var(--pui-up);
+    --_button-fg: var(--pui-up);
+  }
+  .down {
+    --m-color: var(--pui-down);
+    --_button-fg: var(--pui-down);
+  }
+  .ghost:is(.up, .down):hover:not(:disabled) {
+    color: var(--_button-fg);
+  }
+  .primary.up,
+  .accent.up {
+    --_button-fg: var(--pui-on-up);
+  }
+  .primary.down,
+  .accent.down {
+    --_button-fg: var(--pui-on-down);
+  }
+
+  /* The main actions' light, where the look provides one, as a spectrum. Glow spills a soft light in the brand's
+     spectrum from under the button's bottom edge (clipped at it, so it never tints the face) that brightens under the
+     pointer. Prism keeps it inside the glass (--m-solid-glow-fit: 1): the face the light leaves by, the bottom edge,
+     splits it into a crisp line with a faint wash rising into the face, only while pointed at. Every other look
+     leaves --m-solid-glow at none, so the layer does not exist. */
+  .primary::after,
+  .accent::after {
+    --_fit: var(--m-solid-glow-fit, 0);
+    content: var(--m-solid-glow);
+    position: absolute;
+    z-index: -1;
+    top: calc((1 - var(--_fit)) * (100% + var(--m-solid-glow-gap, 0px)));
+    inset-inline: var(--m-solid-glow-inset, 14%);
+    height: var(--m-solid-glow-height, 14px);
+    border-radius: calc(
+      var(--_fit) * var(--pui-button-radius, var(--_button-nest, var(--pui-radius-control))) + (1 - var(--_fit)) *
+        var(--pui-radius-pill)
+    );
+    background: var(--m-spectrum);
+    background-size: var(--m-spectrum-size, 100% 100%);
+    /* the part of the spectrum that shows: this button's own angle (--m-prism-seed, new at every press), turned by
+       where the pointer is across the face (--m-prism-x) in a look that turns it (--m-solid-glow-turn) */
+    background-position: calc((var(--m-prism-seed, 0.3) + var(--m-prism-x, 0.5) * var(--m-solid-glow-turn, 0)) * 100%) 0;
+    filter: blur(var(--m-solid-glow-blur, 9px));
+    clip-path: var(--m-solid-glow-clip, inset(0 -32px -32px -32px));
+    mask: var(--m-solid-glow-mask, none);
+    mask-position:
+      0 0,
+      calc(var(--m-prism-seed, 0.3) * 100%) 0;
+    mask-composite: intersect;
+    opacity: var(--m-solid-glow-rest, 0.75);
+    scale: var(--m-solid-glow-scale, 1) 1;
+    pointer-events: none;
+    transition:
+      opacity var(--pui-motion-out) var(--pui-ease-default),
+      scale var(--pui-motion-out) var(--pui-ease-default),
+      background-position var(--pui-duration-considered) var(--pui-ease-default),
+      mask-position var(--pui-duration-considered) var(--pui-ease-default);
+  }
+  /* pointed at: the light brightens (glow) or grows out from the centre and drifts along while the pointer stays
+     (prism) */
+  .primary:hover::after,
+  .accent:hover::after {
+    opacity: 1;
+    scale: 1 1;
+    transition-duration: var(--m-solid-glow-in, 0ms);
+    animation: var(--m-solid-glow-flow, none);
+  }
+  /* A change of word or colour (Save → Saved, a tone turning green) passes a band of split light across the face once,
+     in a look that has one (prism: --m-solid-shift-light; the pen hook's ::before is free on a solid otherwise). */
+  .primary[data-shift]::before,
+  .accent[data-shift]::before {
+    content: var(--m-solid-shift-light, none);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border: 0;
+    border-radius: inherit;
+    background: var(--m-spectrum) 0 0 / var(--m-spectrum-size, 100% 100%);
+    mask: linear-gradient(105deg, transparent 39%, #000 47.5%, #000 52.5%, transparent 61%) 0 0 / 300% 100% no-repeat;
+    opacity: 0;
+    animation: prism-shift calc(var(--pui-duration-considered) * 2.2) var(--pui-ease-default);
+    pointer-events: none;
+  }
+  @keyframes prism-shift {
+    from {
+      mask-position: 100% 0;
+      opacity: 0.25;
+    }
+    35% {
+      opacity: 0.55;
+    }
+    to {
+      mask-position: 0 0;
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .primary::after,
+    .accent::after {
+      transition: none;
+      animation: none !important;
+    }
+    .primary[data-shift]::before,
+    .accent[data-shift]::before {
+      content: none;
+    }
+  }
+  .root:disabled::after,
+  .root[aria-disabled="true"]::after {
+    content: none;
+  }
+
+  /* The loader opens its own width, and the negative margin cancels the gap so the label does not jump */
+  .loader {
+    display: inline-flex;
+    overflow: hidden;
+    margin-inline-end: calc(var(--pui-space-1-5) * -1);
+  }
+  .loader > * {
+    margin-inline-end: var(--pui-space-1-5);
+  }
+  .spinner {
+    color: currentColor;
+  }
+  .root[data-icon-only] .loader {
+    margin-inline-end: 0;
+  }
+  .root[data-icon-only] .loader > * {
+    margin-inline-end: 0;
+  }
+
+  /* The label holds its place while the text inside swaps; the leaving text pops out of flow against it */
+  .label {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    overflow: visible;
+  }
+  .text {
+    display: inline-block;
+    white-space: nowrap;
+  }
+}
+
+@layer components {
+  :global(.pui[data-motion="reduced"]) .root:not(button):active,
+  :global(.pui[data-motion="none"]) .root:not(button):active {
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .root:not(button):active {
+      transform: none;
+    }
+  }
+}

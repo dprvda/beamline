@@ -1,0 +1,151 @@
+{
+  "name": "segmented-control",
+  "title": "Segmented control",
+  "description": "Two to five views or ranges of the same content (1D / 1W / 1M, List / Board): a radio group whose raised thumb slides to the choice.",
+  "kind": "component",
+  "category": "forms",
+  "source": {
+    "from": "Beamline",
+    "license": "MIT",
+    "mode": "original"
+  },
+  "dependencies": [],
+  "tags": [
+    "toggle",
+    "range",
+    "view switch"
+  ],
+  "whenToUse": [
+    "Switching between two to five views or ranges of the same content.",
+    "A compact choice of two to five short options in a form (gender, level, frequency), as a field with its label, help and error."
+  ],
+  "notFor": [
+    "Moving between pages (tabs).",
+    "Options people must read as sentences or that carry a description each (radio-group, radio-cards)."
+  ],
+  "spec": {
+    "anatomy": [
+      "track",
+      "thumb",
+      "segment (icon, label, accessory)"
+    ],
+    "variants": {
+      "size": [
+        "sm",
+        "md"
+      ],
+      "fill": [
+        "false",
+        "true"
+      ],
+      "iconOnly": [
+        "false",
+        "true"
+      ]
+    },
+    "states": [
+      "chosen",
+      "other",
+      "hover",
+      "disabled"
+    ],
+    "keyboard": [
+      "Tab enters at the chosen segment",
+      "arrows move and choose",
+      "Home / End"
+    ],
+    "motion": "The thumb travels as matter (ui/lib/contour.ts), shaped by the look's mechanics (--m-morph-*): in soft its corner facing the new segment answers first, its leading edge rounds out a few pixels, the middle draws a slight neck and the corners round toward a capsule while it is stretched, then it gathers into its plain box. Nothing overshoots (critically damped, ~0.26 s, the far corner a little later). Metal, blueprint and mono stay rigid (it slides and stretches with straight edges); pop stretches most; glass is a little heavier; ink thins like a brush. The choice itself is made at once (state, colour, focus); only the decorative thumb settles. At rest: no clip and no frames. Reduced motion: it jumps.",
+    "props": [
+      {
+        "name": "options",
+        "type": "{ value, label, icon?, accessory?, disabled? }[]"
+      },
+      {
+        "name": "value / defaultValue / onValueChange",
+        "type": "string"
+      },
+      {
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "name": "onOptionIntent",
+        "type": "(value) => void"
+      },
+      {
+        "name": "size / fill",
+        "type": "\"sm\" | \"md\" / boolean"
+      },
+      {
+        "name": "iconOnly",
+        "type": "boolean",
+        "description": "Each segment shows its icon alone, as a square; the label stays its accessible name and tooltip."
+      },
+      {
+        "name": "classNames",
+        "type": "SegmentedControlClassNames",
+        "description": "Classes for the documented parts."
+      },
+      {
+        "name": "style / ref",
+        "type": "CSSProperties / Ref",
+        "description": "Visual root style; ref targets radiogroup element (composed with indicator measurement ref)."
+      },
+      {
+        "name": "field / hideLabel / description / error / required / name",
+        "type": "boolean / ReactNode / string",
+        "description": "A form field: label above, help or error below, on whenever the label shows; hideLabel for a view switch or quick filter (the label stays the accessible name). name submits with a native form."
+      }
+    ],
+    "scopeDefaults": {
+      "keys": [
+        "size"
+      ],
+      "precedence": "Instance prop, then nearest UIRoot.defaults entry, then existing component fallback. Only presentation keys are accepted; values, callbacks and operational state remain caller-owned.",
+      "types": "./defaults.ts"
+    },
+    "appearance": "className/style address the visual root; classNames styles the documented parts. Internal measurement, keyboard and native ref wiring are preserved."
+  },
+  "review": {
+    "status": "accepted",
+    "checked": "2026-10-01"
+  },
+  "visualContract": {
+    "version": 1,
+    "root": "data-slot=segmented-control",
+    "refTarget": "radiogroup element (composed with indicator measurement ref)",
+    "slots": [
+      "root:segmented-control",
+      "thumb:segmented-thumb",
+      "segment:segmented-item"
+    ],
+    "states": [
+      "checked",
+      "unchecked",
+      "disabled",
+      "focus"
+    ],
+    "roles": [
+      "m-inset",
+      "m-control"
+    ],
+    "geometryInputs": [
+      "size",
+      "fill",
+      "iconOnly",
+      "measured indicator bounds"
+    ],
+    "cssOwnership": [
+      "foundation",
+      "selected preset",
+      "components/segmented-control"
+    ],
+    "features": []
+  },
+  "usage": [
+    {
+      "name": "As a form field",
+      "code": "<SegmentedControl\n  label=\"Gender\"\n  required\n  fill\n  value={gender}\n  onValueChange={setGender}\n  error={submitted && !gender ? \"Choose one to continue.\" : undefined}\n  options={[\n    { value: \"female\", label: \"Female\" },\n    { value: \"male\", label: \"Male\" },\n    { value: \"other\", label: \"Another\" },\n  ]}\n/>"
+    }
+  ]
+}

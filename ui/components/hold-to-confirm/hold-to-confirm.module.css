@@ -1,0 +1,30 @@
+@layer properties, theme, base, components, utilities;
+@layer components {
+  /* The hold fill: the control's own text colour at a quarter strength (red for danger, ink for neutral), sweeping
+     from the inline start for exactly the hold time, linearly, so its edge is a true progress mark. It sits over the
+     hover tint, so held and not-yet-held parts stay distinct. Let go early and it drains back on the standard ease;
+     once confirmed it stays full. The sweep is information, so reduced motion keeps it; only the drain becomes instant. */
+  .fill {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in oklab, currentColor 24%, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--pui-duration-standard) var(--pui-ease-standard);
+    pointer-events: none;
+  }
+  .fill:dir(rtl) {
+    transform-origin: right;
+  }
+  :where([data-state="holding"]) > .fill {
+    transform: none;
+    transition: transform var(--_hold) linear;
+  }
+  :where([data-state="confirmed"]) > .fill {
+    transform: none;
+  }
+  :where([data-tone="neutral"]) > .fill {
+    background: color-mix(in oklab, currentColor 14%, transparent);
+  }
+}
