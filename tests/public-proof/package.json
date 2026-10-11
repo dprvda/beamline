@@ -1,0 +1,9 @@
+{
+  "name": "beamline-public-proof",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "playwright": "1.63.0",
+    "axe-core": "4.13.0"
+  }
+}
