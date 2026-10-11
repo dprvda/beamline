@@ -1,19 +1,18 @@
 # Beamline UI: free sample
 
+[Beamline UI: React UI components and complete screens for apps built with coding agents](https://beamline.io/). [The code is copied into your repo; your app never depends on our servers](https://beamline.io/docs/install). [Build your own style from any look; tokens, fonts, radii, motion; not only colours](https://beamline.io/docs/customize). [200+ components and 50+ complete screens](https://beamline.io/components/). [$49 launch price; one payment; your whole team, no seats. Lifetime updates: every new version of the complete system, for as long as we publish it, and every version you received stays yours](https://beamline.io/pricing). [React 19, TypeScript, Tailwind v4, Radix](https://beamline.io/docs/install). [Free MIT sample, commercial use included](https://github.com/dprvda/beamline). [Made by Danylo Pravda in Kyiv, Ukraine](https://beamline.io/about).
+
+This repository is Beamline's **free MIT sample**: the settings screen and the parts it uses as editable React source,
+with a starter app that runs them. Commercial use is included. The **Complete System** has its own
+[licence](https://beamline.io/licence); the counts and price above describe that complete product.
+
+Beamline installs editable source in `src/ui/beamline` or compiled archives in your app's own `.beamline/packages/`.
+Commit these files with your app. Your app runs without calls to Beamline servers; the MCP server helps your coding
+agent discover and install the parts.
+
 [![Public sample proof](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml/badge.svg)](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml)
 
 These checks run in public on every change and weekly; rerun them yourself with `npm ci --prefix tests/public-proof` and the [proof commands](tests/public-proof/README.md), with no account or secrets. Safari on macOS is a normal check; iOS Simulator is not yet qualified and runs [only on demand](.github/workflows/ios-qualification.yml) because its route interaction is unreliable.
-
-**React UI code in your repo, under your control.** Beamline installs editable source in `src/ui/beamline`
-or compiled archives in your app's own `.beamline/packages/`. Commit these files with your app. Your app runs
-without calls to Beamline servers; the MCP server helps your coding agent discover and install the parts.
-The free sample is MIT; the Complete System's [licence](https://beamline.io/licence) governs its code.
-
-This repository is Beamline's **free sample**: the settings screen and the parts it uses as editable React source,
-under MIT (commercial use included), with a starter app that runs them. The complete system, 200+ components and 50+ complete screens with
-610+ live examples (tables, charts, dashboards, AI agent workspaces, voice and trading), is at
-**[beamline.io](https://beamline.io)**: $49 launch price, one payment, lifetime updates, one licence for your whole
-team.
 
 - Complete System release: 0.2.0-rc.33, 11 October 2026 ([changelog](https://beamline.io/changelog))
 - Free-sample source: published 9 October 2026. This README update does not refresh that source or assign it the Complete System version.
