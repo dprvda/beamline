@@ -2,7 +2,7 @@
 
 [![Public sample proof](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml/badge.svg)](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml)
 
-These checks run in public on every change and weekly; rerun them yourself with `npm ci --prefix tests/public-proof` and the [proof commands](tests/public-proof/README.md), with no account or secrets.
+These checks run in public on every change and weekly; rerun them yourself with `npm ci --prefix tests/public-proof` and the [proof commands](tests/public-proof/README.md), with no account or secrets. Safari on macOS is a normal check; iOS Simulator is not yet qualified and runs [only on demand](.github/workflows/ios-qualification.yml) because its route interaction is unreliable.
 
 **React UI code in your repo, under your control.** Beamline installs editable source in `src/ui/beamline`
 or compiled archives in your app's own `.beamline/packages/`. Commit these files with your app. Your app runs
