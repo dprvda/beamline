@@ -189,7 +189,7 @@ async function playwright() {
               goto: (url) => page.goto(url),
               evaluate: (fn) => page.evaluate(fn),
               wait: (sel) => page.locator(sel).waitFor(),
-              until: (fn) => page.waitForFunction(fn),
+              until: (fn, arg) => page.waitForFunction(fn, arg),
               click: (sel) =>
                 phone ? page.locator(sel).tap() : page.locator(sel).click(),
               fill: (sel, value) => page.locator(sel).fill(value),
@@ -344,9 +344,12 @@ async function safari() {
           goto: (url) => command("POST", "/url", { url }),
           evaluate: (fn) => execute(`return (${fn.toString()})()`),
           wait: (sel) => element(sel),
-          until: async (fn) => {
+          until: async (fn, arg) => {
             for (let i = 0; i < 100; i++) {
-              if (await execute(`return (${fn.toString()})()`)) return;
+              if (
+                await execute(`return (${fn.toString()})(arguments[0])`, [arg])
+              )
+                return;
               await sleep(100);
             }
             throw new Error(`Condition timed out: ${fn}`);

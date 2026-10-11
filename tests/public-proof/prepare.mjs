@@ -66,6 +66,12 @@ try {
       ],
       work,
     );
+    // The sample's layered CSS Modules use composition. Next's Webpack pipeline supports this; Turbopack does not.
+    run("npm", ["install", "-D", "@tailwindcss/postcss"]);
+    write(
+      "postcss.config.mjs",
+      'export default { plugins: { "@tailwindcss/postcss": {} } };\n',
+    );
     // The proof tests installed UI, not Google's font network. Use the look's packaged fonts.
     write(
       "src/app/layout.tsx",
@@ -153,7 +159,11 @@ try {
     "--noEmit",
     ...(framework === "vite" ? ["-p", "tsconfig.app.json"] : []),
   ]);
-  run("npm", ["run", "build"]);
+  run("npm", [
+    "run",
+    "build",
+    ...(framework === "next" ? ["--", "--webpack"] : []),
+  ]);
   passed = true;
 } finally {
   const pkg = fs.existsSync(path.join(app, "package.json"))

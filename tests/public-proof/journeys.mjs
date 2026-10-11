@@ -20,10 +20,16 @@ export async function journey(d, base, screenshot, audit) {
   await d.wait('input[autocomplete="name"]');
   for (const route of routes) {
     await d.click(`[data-proof-route="${route}"]`);
+    const heading = {
+      profile: "Profile",
+      workspace: "Workspace",
+      notifications: "Notifications",
+    }[route];
     await d.until(
-      () =>
+      (expected) =>
         document.querySelector('[data-slot="settings-section-heading"]')
-          ?.textContent?.length > 0,
+          ?.textContent === expected,
+      heading,
     );
     await d.settle();
     check(
@@ -33,11 +39,7 @@ export async function journey(d, base, screenshot, audit) {
           document.querySelector('[data-slot="settings-section-heading"]')
             ?.textContent,
       ),
-      {
-        profile: "Profile",
-        workspace: "Workspace",
-        notifications: "Notifications",
-      }[route],
+      heading,
     );
     const size = await d.evaluate(() => ({
       scroll: document.documentElement.scrollWidth,
@@ -73,7 +75,9 @@ export async function journey(d, base, screenshot, audit) {
   if (audit) check("dialog: axe violations", await audit("dialog"), []);
   await d.escape();
   await d.until(() => !document.querySelector('[role="dialog"]'));
-  await d.until(() => document.activeElement?.getAttribute("data-proof") === "open-dialog");
+  await d.until(
+    () => document.activeElement?.getAttribute("data-proof") === "open-dialog",
+  );
   check(
     "dialog returns focus",
     await d.evaluate(() => document.activeElement?.getAttribute("data-proof")),
