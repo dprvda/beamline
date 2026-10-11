@@ -1,8 +1,9 @@
 # Beamline UI: free sample
 
-**React components built for AI coding agents.** Beamline gives Claude Code, Codex, Cursor or any MCP client a
-designed part for every job, tells the agent what each one is for and what to use instead, and installs only what a
-screen needs into your repo. The app your agent builds looks designed, because every part in it was.
+**React UI code in your repo, under your control.** Beamline installs editable source in `src/ui/beamline`
+or compiled archives in your app's own `.beamline/packages/`. Commit these files with your app. Your app runs
+without calls to Beamline servers; the MCP server helps your coding agent discover and install the parts.
+The free sample is MIT; the Complete System's [licence](https://beamline.io/licence) governs its code.
 
 This repository is Beamline's **free sample**: the settings screen and the parts it uses as editable React source,
 under MIT (commercial use included), with a starter app that runs them. The complete system, 200+ components and 50+ complete screens with
