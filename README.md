@@ -4,11 +4,22 @@
 designed part for every job, tells the agent what each one is for and what to use instead, and installs only what a
 screen needs into your repo. The app your agent builds looks designed, because every part in it was.
 
-This repository is Beamline's **free sample**: 26 components and a complete settings screen as editable React source,
-under MIT, with a starter app that runs them. The complete system (190 parts, including tables, charts, dashboards,
-AI agent workspaces, voice and trading screens) is at **[beamline.io](https://beamline.io)**.
+This repository is Beamline's **free sample**: the settings screen and the parts it uses as editable React source,
+under MIT (commercial use included), with a starter app that runs them. The complete system, 200+ components and 50+ complete screens with
+610+ live examples (tables, charts, dashboards, AI agent workspaces, voice and trading), is at
+**[beamline.io](https://beamline.io)**: $49 launch price, one payment, lifetime updates, one licence for your whole
+team.
 
-![Beamline: designed parts your coding agent snaps onto your app](https://beamline.io/components/og.png)
+- Complete System release: 0.2.0-rc.33, 11 October 2026 ([changelog](https://beamline.io/changelog))
+- Free-sample source: published 9 October 2026. This README update does not refresh that source or assign it the Complete System version.
+- Made by [Danylo Pravda](https://beamline.io/about) in Kyiv, Ukraine
+- Install with your agent ([connect](https://beamline.io/connect)) or with the shadcn CLI:
+  `npx shadcn@latest registry add @beamline=https://beamline.io/registry/{name}.json`, then
+  `npx shadcn@latest add @beamline/segmented-control`
+- Compiled packages inside their own `UIRoot` can sit alongside shadcn/ui without changing the tested host controls. This repository contains editable source: it needs Tailwind v4 and shares its global theme ([source-theme setup](https://beamline.io/docs/install)). Your app supplies the backend through props and handlers.
+- [How it's tested](https://beamline.io/tested) · [Pricing](https://beamline.io/pricing) · [Licence](https://beamline.io/licence)
+
+![Beamline UI: designed parts your coding agent snaps onto your app](https://beamline.io/components/og.png)
 
 ## Run it
 
@@ -36,7 +47,6 @@ saves to your browser. React 19, Vite, Tailwind v4.
 | [Switch](https://beamline.io/components/switch) | a setting that applies at once |
 | [Segmented control](https://beamline.io/components/segmented-control) | two to five views or ranges of the same content |
 | [Radio cards](https://beamline.io/components/radio-cards) | one choice among rich options, as cards |
-| [Billing toggle](https://beamline.io/components/billing-toggle) | monthly or yearly, saying what the choice saves |
 | [Hold to confirm](https://beamline.io/components/hold-to-confirm) | a costly action confirmed by holding, not clicking |
 | [Copy button](https://beamline.io/components/copy-button) | copies a value and confirms in place |
 | [Dialog](https://beamline.io/components/dialog) | a focused task over the page, focus trapped and returned |
@@ -93,6 +103,5 @@ Every agent's steps: [beamline.io/connect](https://beamline.io/connect).
 ## Licence
 
 The code in this repository is MIT ([LICENSE](LICENSE)); the packages and fonts it uses are listed in
-[NOTICE.md](NOTICE.md). The complete Beamline system is sold at [beamline.io](https://beamline.io): one payment, a year
-of updates, one licence for your whole team. Made by Danylo Pravda in Kyiv, Ukraine. Questions:
+[NOTICE.md](NOTICE.md). The [Complete System](https://beamline.io/pricing) is $49 launch price: one payment, lifetime updates to the purchased system, one licence for your whole team. Separate add-on packs may be sold separately; [terms](https://beamline.io/terms) apply. The free sample in this repository remains MIT, including commercial use. Made by Danylo Pravda in Kyiv, Ukraine. Questions:
 [hello@beamline.io](mailto:hello@beamline.io).
