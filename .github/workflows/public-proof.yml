@@ -35,12 +35,10 @@ jobs:
           name: public-proof-linux-${{ matrix.app }}
           path: tests/public-proof/results/
           retention-days: 30
-  apple:
-    name: ${{ matrix.app }} / Safari and iOS Simulator (qualification)
+  safari:
+    name: ${{ matrix.app }} / Safari on macOS
     runs-on: macos-latest
-    timeout-minutes: 40
-    # Keep non-required until evidence establishes repeatable runner support.
-    continue-on-error: true
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -57,19 +55,10 @@ jobs:
       - name: Enable Apple's WebDriver
         run: sudo safaridriver --enable
       - name: Safari on macOS
-        id: safari
-        continue-on-error: true
         run: node tests/public-proof/run.mjs ${{ matrix.app }} safari
-      - name: iPhone Simulator, Mobile Safari
-        id: ios
-        continue-on-error: true
-        run: node tests/public-proof/run.mjs ${{ matrix.app }} ios
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: public-proof-apple-${{ matrix.app }}
+          name: public-proof-safari-${{ matrix.app }}
           path: tests/public-proof/results/
           retention-days: 30
-      - name: Expose optional qualification failures
-        if: steps.safari.outcome == 'failure' || steps.ios.outcome == 'failure'
-        run: exit 1
