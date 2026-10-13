@@ -14,7 +14,7 @@ agent discover and install the parts.
 
 These checks run in public on every change and weekly; rerun them yourself with `npm ci --prefix tests/public-proof` and the [proof commands](tests/public-proof/README.md), with no account or secrets. Safari on macOS is a normal check; iOS Simulator is not yet qualified and runs [only on demand](.github/workflows/ios-qualification.yml) because its route interaction is unreliable.
 
-- Complete System release: 0.2.0-rc.33, 11 October 2026 ([changelog](https://beamline.io/changelog))
+- Complete System release: 0.2.0-rc.38, 13 October 2026 ([changelog](https://beamline.io/changelog))
 - Free-sample source: published 9 October 2026. This README update does not refresh that source or assign it the Complete System version.
 - Made by [Danylo Pravda](https://beamline.io/about) in Kyiv, Ukraine
 - Install with your agent ([connect](https://beamline.io/connect)) or with the shadcn CLI:
@@ -107,5 +107,5 @@ Every agent's steps: [beamline.io/connect](https://beamline.io/connect).
 ## Licence
 
 The code in this repository is MIT ([LICENSE](LICENSE)); the packages and fonts it uses are listed in
-[NOTICE.md](NOTICE.md). The [Complete System](https://beamline.io/pricing) is $49 launch price: one payment, lifetime updates to the purchased system, one licence for one person. Separate add-on packs may be sold separately; [terms](https://beamline.io/terms) apply. The free sample in this repository remains MIT, including commercial use. Made by Danylo Pravda in Kyiv, Ukraine. Questions:
+[NOTICE.md](NOTICE.md). The [Complete System](https://beamline.io/pricing) is $49 launch price, plus VAT or sales tax where it applies: one payment for one person's Beamline account, MCP, library, installs and updates. Teammates, contractors and clients may use, edit, build and ship the installed code as part of that app. They need their own licence for Beamline access or to take its parts into other apps. Lifetime updates cover every new version of the purchased system for as long as we publish it; every version you received stays yours. Separate add-on packs may be sold separately; [terms](https://beamline.io/terms) apply. The free sample in this repository remains MIT, including commercial use. Made by Danylo Pravda in Kyiv, Ukraine. Questions:
 [hello@beamline.io](mailto:hello@beamline.io).
