@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UIRoot } from "@beamline/runtime";
-import { prism } from "@beamline/look-prism";
+import { UIRoot } from "./ui/beamline/runtime/appearance";
+import { prism } from "./ui/beamline/looks/prism";
 import {
   Settings,
   type SettingsSection,

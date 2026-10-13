@@ -1,31 +1,18 @@
-# Beamline UI: free sample
+# Beamline UI
 
-[Beamline UI: React UI components and complete screens for apps built with coding agents](https://beamline.io/). [The code is copied into your repo; your app never depends on our servers](https://beamline.io/docs/install). [Build your own style from any look; tokens, fonts, radii, motion; not only colours](https://beamline.io/docs/customize). [250+ components and 50+ complete screens](https://beamline.io/components/). [$49 launch price, plus VAT or sales tax where it applies; one payment; one person's access; collaborators can work with the installed code in that app. Lifetime updates: every new version of the complete system, for as long as we publish it, and every version you received stays yours](https://beamline.io/pricing). [React 19, TypeScript, Tailwind v4, Radix](https://beamline.io/docs/install). [Free MIT sample, commercial use included](https://github.com/dprvda/beamline). [Made by Danylo Pravda in Kyiv, Ukraine](https://beamline.io/about).
+React components and complete screens, with code in your repo. Build directly in React or use an optional coding agent.
 
-This repository is Beamline's **free MIT sample**: the settings screen and the parts it uses as editable React source,
-with a starter app that runs them. Commercial use is included. The **Complete System** has its own
-[licence](https://beamline.io/licence); the counts and price above describe that complete product.
+[Live library](https://beamline.io/components/) · [Install](https://beamline.io/docs/install) · [Docs](https://beamline.io/docs) · [GitBook](https://beamline.gitbook.io/beamline-docs/)
 
-Beamline installs editable source in `src/ui/beamline` or compiled archives in your app's own `.beamline/packages/`.
-Commit these files with your app. Your app runs without calls to Beamline servers; the MCP server helps your coding
-agent discover and install the parts.
+[![The Beamline Settings screen in dark mode: profile, team navigation and appearance controls](assets/readme/settings-desktop.png)](https://beamline.io/components/settings)
 
-[![Public sample proof](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml/badge.svg)](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml)
+**Start with a working screen.** This repository is the **free MIT sample**: editable Settings code, the components it uses, and a runnable React app. Commercial use is included.
 
-These checks run in public on every change and weekly; rerun them yourself with `npm ci --prefix tests/public-proof` and the [proof commands](tests/public-proof/README.md), with no account or secrets. Safari on macOS is a normal check; iOS Simulator is not yet qualified and runs [only on demand](.github/workflows/ios-qualification.yml) because its route interaction is unreliable.
+The [Complete System](https://beamline.io/) has **200+ components and 50+ complete screens** for SaaS, dashboards, trading, AI and voice interfaces. It has a separate [commercial licence](https://beamline.io/docs/licence). Your app supplies its data, authentication, model and other backend services.
 
-- Complete System release: 0.2.0-rc.38, 13 October 2026 ([changelog](https://beamline.io/changelog))
-- Free-sample source: published 9 October 2026. This README update does not refresh that source or assign it the Complete System version.
-- Made by [Danylo Pravda](https://beamline.io/about) in Kyiv, Ukraine
-- Install with your agent ([connect](https://beamline.io/connect)) or with the shadcn CLI:
-  `npx shadcn@latest registry add @beamline=https://beamline.io/registry/{name}.json`, then
-  `npx shadcn@latest add @beamline/segmented-control`
-- Compiled packages inside their own `UIRoot` can sit alongside shadcn/ui without changing the tested host controls. This repository contains editable source: it needs Tailwind v4 and shares its global theme ([source-theme setup](https://beamline.io/docs/install)). Your app supplies the backend through props and handlers.
-- [How it's tested](https://beamline.io/tested) · [Pricing](https://beamline.io/pricing) · [Licence](https://beamline.io/licence)
+[![Public sample proof](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml/badge.svg?branch=main)](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml)
 
-![Beamline UI: designed parts your coding agent snaps onto your app](https://beamline.io/components/og.png)
-
-## Run it
+## Run the sample
 
 ```bash
 git clone https://github.com/dprvda/beamline.git
@@ -34,78 +21,72 @@ npm install
 npm run dev
 ```
 
-It opens the [settings](https://beamline.io/components/settings) screen in the Prism look, dark, on demo data that
-saves to your browser. React 19, Vite, Tailwind v4.
+React 19, TypeScript, Vite and Tailwind v4. Demo changes save in your browser; no account or API key is needed.
 
-## What is in the sample
-
-| part | what it is for |
-|---|---|
-| [Settings](https://beamline.io/components/settings) | the whole settings area: profile, workspace, members, billing, API keys, one draft and a real save handler |
-| [Button](https://beamline.io/components/button) | the action control: five weights and a brand fill, three sizes and a 44 px touch size |
-| [Input](https://beamline.io/components/input) | a text field with its label, help and error wired for assistive tech |
-| [Label](https://beamline.io/components/label) | the label tied to a control, with a required marker screen readers announce |
-| [Select](https://beamline.io/components/select) | one choice from a short known list |
-| [Combobox](https://beamline.io/components/combobox) | one value from a long list found by typing (time zones, countries, customers) |
-| [Tag input](https://beamline.io/components/tag-input) | short free-form values as tags; a pasted list adds them all |
-| [Switch](https://beamline.io/components/switch) | a setting that applies at once |
-| [Segmented control](https://beamline.io/components/segmented-control) | two to five views or ranges of the same content |
-| [Radio cards](https://beamline.io/components/radio-cards) | one choice among rich options, as cards |
-| [Hold to confirm](https://beamline.io/components/hold-to-confirm) | a costly action confirmed by holding, not clicking |
-| [Copy button](https://beamline.io/components/copy-button) | copies a value and confirms in place |
-| [Dialog](https://beamline.io/components/dialog) | a focused task over the page, focus trapped and returned |
-| [Alert dialog](https://beamline.io/components/alert-dialog) | a blocking confirmation that starts on the safe choice |
-| [Bottom sheet](https://beamline.io/components/bottom-sheet) | a phone panel that follows the finger |
-| [Dropdown menu](https://beamline.io/components/dropdown-menu) | actions behind a trigger, with shortcuts, checks and submenus |
-| [Toast](https://beamline.io/components/toast) | results of an action, stacked at an edge, with undo |
-| [Alert](https://beamline.io/components/alert) | a message that stays until it is dealt with |
-| [Badge](https://beamline.io/components/badge) | a short status, category or count |
-| [Avatar](https://beamline.io/components/avatar) | a person or account in a small space |
-| [Item](https://beamline.io/components/item) | the generic list row |
-| [Table](https://beamline.io/components/table) | a styled HTML table for small static data |
-| [Tabs](https://beamline.io/components/tabs) | switches between panels of one object |
-| [Spinner](https://beamline.io/components/spinner) | spins while work runs, closes into a check or a cross |
-| [Usage meter](https://beamline.io/components/usage-meter) | an allowance and what fills it |
-| [UI root](https://beamline.io/components/ui-root) | makes a region of any app a Beamline root: theme, brand, direction |
-
-Every part is live, with every example, in the [component library](https://beamline.io/components/).
-
-## How it is built
-
-- **Every part has the same API.** `variant`, `size` and `tone`; `value`, `defaultValue` and `onValueChange` for
-  anything stateful; `className` lands on the root and wins. Use one and you can use any other.
-- **One brand colour themes everything.** Set `brand` on `UIRoot` and the accent, hover, focus ring, selection and the
-  text on brand fills all follow, keeping 4.5:1 contrast. Nine looks change type, surfaces and motion at once
-  ([theming guide](https://beamline.io/guides/theme-react-components-brand-colour)).
-- **Dark first, keyboard first.** Designed dark at desktop width first; every part has its keyboard model and visible
-  focus.
-- **Honest data.** A missing value draws as unmeasured, never as zero, and colour is never the only signal.
-
-## Use it with your coding agent
-
-The complete system reaches your agent through Beamline's MCP server, `https://mcp.beamline.io/mcp`. Sign in with
-Google, GitHub or an e-mail code: the free sample opens at once.
+Or add the current published Settings source to an existing React app with the shadcn CLI:
 
 ```bash
-claude mcp add --transport http --scope user beamline https://mcp.beamline.io/mcp   # Claude Code
-codex mcp add beamline --url https://mcp.beamline.io/mcp                             # Codex
+npx shadcn@latest add https://beamline.io/registry/settings.json
 ```
 
-This repository's `.mcp.json` and `.cursor/mcp.json` already name the server, so Claude Code and Cursor offer it when
-you open the folder.
-Every agent's steps: [beamline.io/connect](https://beamline.io/connect).
+Follow the installer's local runtime, look and stylesheet instructions. [Full installation guide](https://beamline.io/docs/install).
 
-## Learn more
+## One screen, different rooms
 
-- [Docs](https://beamline.io/docs): install, customise, connect your data, conventions, design language
-  (also on [GitBook](https://beamline.gitbook.io/beamline-docs/))
-- [Guides](https://beamline.io/guides): give your agent a component system, build a trading terminal, an AI agent
-  interface, an analytics dashboard, a settings page, sign-in, a voice agent, a data grid
-- [How Beamline compares](https://beamline.io/compare) with shadcn/ui, Untitled UI and MUI
-- [Changelog](https://beamline.io/changelog)
+The Settings demo adapts its navigation and fields for a phone. Light and dark themes use the same components.
+
+<table>
+<tr>
+<td width="70%" valign="top"><a href="https://beamline.io/components/settings"><img src="assets/readme/settings-light.png" alt="The same Settings profile in the light theme" width="850"></a><br><strong>Light theme</strong> — the same screen and data.</td>
+<td width="30%" valign="top"><a href="https://beamline.io/components/settings"><img src="assets/readme/settings-phone.png" alt="Settings on a phone, with compact navigation and stacked profile fields" width="280"></a><br><strong>Phone layout</strong> — fields remain usable.</td>
+</tr>
+</table>
+
+Screenshots show the Settings example on demo data. This checkout's editable source snapshot was published on 9 October 2026; the live installer and its public checks use the current hosted sample.
+
+## What you can build with the complete system
+
+These examples are part of the paid Complete System, beyond this repository's free sample. Open each image to try its live demo.
+
+[![AI workspace with a cited answer, a plan awaiting approval, conversation history and sources](assets/readme/agent-workspace.png)](https://beamline.io/components/agent-workspace)
+
+**AI workspace.** Threads, reasoning, sources and approval controls. Connect your own model, storage and authorized actions. [AI interface guide](https://beamline.io/guides/ai-agent-interface).
+
+[![Trading terminal with a candlestick chart, watchlist, order book, order ticket and positions](assets/readme/trading-terminal.png)](https://beamline.io/components/trading-terminal)
+
+**Trading terminal.** Chart, market list, order book and order entry in one screen. The pictured prices and orders are demo data. [Trading UI guide](https://beamline.io/guides/react-trading-terminal).
+
+[Explore dashboards, forms, tables, charts, voice and more →](https://beamline.io/components/)
+
+## Make it yours
+
+- **Local code.** Choose editable source or compiled archives stored with your app. Installed UI does not call Beamline servers at runtime.
+- **Your style.** Start from a look, then adjust tokens, fonts, radii, density and motion. Keep custom style files in your app. [Customization](https://beamline.io/docs/customize).
+- **One component vocabulary.** Shared variants, sizes, tones and controlled/uncontrolled state. Component metadata documents the actual props.
+- **Optional agent help.** Claude Code, Codex, Cursor and other clients can discover and install the same parts. [Connect your agent](https://beamline.io/connect).
+- **Your application logic.** Data and actions pass through props and callbacks; permissions and persistence remain in your app.
+
+The sample includes Settings and the fields, choices, tables, dialogs, navigation, feedback and appearance controls it uses. [Browse the library](https://beamline.io/components/) for live examples and usage.
+
+## Public checks you can inspect
+
+The badge links to the actual workflow result. It installs the current public Settings source into fresh Vite and Next.js apps, typechecks and builds them, then exercises saving, reload, navigation, dialogs, focus and layout.
+
+Chromium, Firefox, WebKit and **Safari on macOS** are normal jobs. Phone sizes are browser emulation; a physical iPhone is not covered. The separate iOS Simulator workflow remains [on demand](.github/workflows/ios-qualification.yml) and is not yet qualified.
+
+[Rerun the checks](tests/public-proof/README.md) · [Workflow and retained results](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml) · [Dated product checks and limits](https://beamline.io/tested)
+
+## Documentation
+
+- [Installation](https://beamline.io/docs/install) · [Customization](https://beamline.io/docs/customize) · [Upgrades](https://beamline.io/docs/upgrade)
+- [Connect your data](https://beamline.io/docs/data-integration) · [Guides](https://beamline.io/guides)
+- [GitBook docs](https://beamline.gitbook.io/beamline-docs/) · [Comparisons](https://beamline.io/compare) · [Changelog](https://beamline.io/changelog)
+- [Current pricing](https://beamline.io/pricing) · [Referral credit in your account](https://beamline.io/account/referrals)
 
 ## Licence
 
-The code in this repository is MIT ([LICENSE](LICENSE)); the packages and fonts it uses are listed in
-[NOTICE.md](NOTICE.md). The [Complete System](https://beamline.io/pricing) is $49 launch price, plus VAT or sales tax where it applies: one payment for one person's Beamline account, MCP, library, installs and updates. Teammates, contractors and clients may use, edit, build and ship the installed code as part of that app. They need their own licence for Beamline access or to take its parts into other apps. Lifetime updates cover every new version of the purchased system for as long as we publish it; every version you received stays yours. Separate add-on packs may be sold separately; [terms](https://beamline.io/terms) apply. The free sample in this repository remains MIT, including commercial use. Made by Danylo Pravda in Kyiv, Ukraine. Questions:
-[hello@beamline.io](mailto:hello@beamline.io).
+The code in this repository is **MIT**, including commercial use: [LICENSE](LICENSE). Third-party packages and fonts are listed in [NOTICE.md](NOTICE.md).
+
+The Complete System gives one person Beamline account, library, MCP, install and update access. Teammates, contractors and clients may work with the code installed in that end product. They need their own licence for Beamline access or to take paid parts into other apps. Redistribution of paid parts as a kit, theme, template or starter is restricted. Lifetime updates cover new versions of the purchased system for as long as it is published; versions already received stay yours. [Current licence](https://beamline.io/docs/licence) and [terms](https://beamline.io/terms) govern the paid product.
+
+Made by [Danylo Pravda](https://beamline.io/about) in Kyiv, Ukraine. [hello@beamline.io](mailto:hello@beamline.io).
