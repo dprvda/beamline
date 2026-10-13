@@ -152,6 +152,16 @@ try {
     "https://beamline.io/registry/settings.json",
     "--yes",
   ]);
+  // Full-source registry installs put their base and look CSS in the app too.
+  // Follow the installer's printed stylesheet order after Tailwind.
+  const cssFile =
+    framework === "next" ? "src/app/globals.css" : "src/index.css";
+  const cssBase =
+    framework === "next" ? "../ui/beamline/styles" : "./ui/beamline/styles";
+  write(
+    cssFile,
+    `@import "tailwindcss";\n@import "${cssBase}/beamline.css";\n@import "${cssBase}/look-prism.css";\nbody { margin: 0; }\n`,
+  );
   write("src/proof-app.tsx", fs.readFileSync(path.join(root, "app.tsx")));
   if (framework === "next") run("npx", ["next", "typegen"]);
   run("npx", [
