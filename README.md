@@ -4,7 +4,9 @@ React components and complete screens, with code in your repo. Build directly in
 
 [Live library](https://beamline.io/components/) · [Install](https://beamline.io/docs/install) · [Docs](https://beamline.io/docs) · [GitBook](https://beamline.gitbook.io/beamline-docs/)
 
-[![The Beamline Settings screen in dark mode: profile, team navigation and appearance controls](assets/readme/settings-desktop.png)](https://beamline.io/components/settings)
+[![Beamline campaign dashboard with performance charts, campaign controls and an AI assistant](assets/readme/hero-final-frame.webp)](https://beamline.io/)
+
+Campaign dashboard from the [Complete System](https://beamline.io/), as seen in the homepage demo.
 
 **Start with a working screen.** This repository is the **free MIT sample**: editable Settings code, the components it uses, and a runnable React app. Commercial use is included.
 
