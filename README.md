@@ -1,6 +1,6 @@
 # Beamline UI
 
-React components and complete screens, with code in your repo. Build directly in React or use an optional coding agent.
+Polished, responsive React components and complete screens, with editable code in your app. Built for developers and coding agents.
 
 [Live library](https://beamline.io/components/) · [Install](https://beamline.io/docs/install) · [Docs](https://beamline.io/docs) · [GitBook](https://beamline.gitbook.io/beamline-docs/)
 
@@ -11,6 +11,8 @@ Campaign dashboard from the [Complete System](https://beamline.io/), as seen in 
 **Start with a working screen.** This repository is the **free MIT sample**: editable Settings code, the components it uses, and a runnable React app. Commercial use is included.
 
 The [Complete System](https://beamline.io/) has **200+ components and 50+ complete screens** for SaaS, dashboards, trading, AI and voice interfaces. It has a separate [commercial licence](https://beamline.io/docs/licence). Your app supplies its data, authentication, model and other backend services.
+
+Nine authored looks include [Prism](https://beamline.io/components/foundations/looks), with its cut-glass surfaces and focused edge light. Fluid [morphs](https://beamline.io/components/foundations/morph), micro-interactions, skeletons and loaders are designed with the rest of the system. Make it yours with custom fonts, colours, corners, density and motion.
 
 [![Public sample proof](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml/badge.svg?branch=main)](https://github.com/dprvda/beamline/actions/workflows/public-proof.yml)
 
